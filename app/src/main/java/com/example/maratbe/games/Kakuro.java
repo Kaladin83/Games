@@ -142,12 +142,20 @@ public class Kakuro extends AppCompatActivity implements Constants{
         ViewGroup.LayoutParams layoutParams = new TableRow.LayoutParams(width, height);
         if (mapOfCells.get("r"+i+"b"+j) == null)
         {
+            mapOfCells.put("r"+i+"b"+j, new Cell(i, j, "", true));
             return createButton("r"+i+"b"+j, layoutParams);
         }
         else
         {
-            return createTriangles("r"+i+"b"+j, layoutParams);
+            return createRelativeLayout("r"+i+"rl"+j,layoutParams);
+            //return createTriangles("r"+i+"b"+j, layoutParams);
         }
+    }
+
+    private View createRelativeLayout(String name ,ViewGroup.LayoutParams layoutParams) {
+        RelativeLayout rLayout = new RelativeLayout(this);
+        rLayout.setLayoutParams(layoutParams);
+        return rLayout;
     }
 
     private RelativeLayout createTriangles(String name, ViewGroup.LayoutParams layoutParams) {
@@ -601,7 +609,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
     }
 
     private void getPossibleNumbers() {
-        checkPart();
         checkHorizontal();
         checkVertical();
         fillUpMissing();
@@ -610,7 +617,7 @@ public class Kakuro extends AppCompatActivity implements Constants{
     private int findConflictNumber(int i, int j) {
         initAllNumbersNumbers();
         missing.clear();
-        checkPart();
+        checkHorizontal();
         fillUpMissing();
         return allNumbers.get(0);
     }
@@ -873,11 +880,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
         TableRow row = (TableRow) ((TableLayout)((TableRow) kakuroBoard.getChildAt(partRow)).
                 getChildAt(partCol)).getChildAt(y);
         getMissingFromRow(row);
-    }
-
-    private void checkPart() {
-        TableLayout partTable = ((TableLayout)((TableRow)kakuroBoard.getChildAt(cor.getPartRow())).getChildAt(cor.getPartCol()));
-        getMissingFromPart(partTable);
     }
 
     private void getMissingFromPart(TableLayout partTable) {
