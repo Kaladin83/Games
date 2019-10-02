@@ -1,0 +1,1836 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingVertical="5dp"
+    android:paddingHorizontal="20dp"
+    android:orientation="horizontal">
+
+    <TableLayout
+        android:id="@+id/sudokuBoard"
+        android:layout_width="303dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TableRow android:gravity="center">
+
+            <TableLayout
+                android:id="@+id/t00"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f000"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b000"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b000"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f001"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b001"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b001"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/f002"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b002"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b002"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f010"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b010"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b010"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f011"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b011"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b011"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f012"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b012"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b012"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f020"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b020"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b010"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f021"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b021"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b021"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f022"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b022"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b022"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t01"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f100"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b100"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b100"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f101"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b101"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b101"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f102"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b102"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b102"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f110"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b110"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b110"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f111"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b111"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b111"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f112"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b112"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b112"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f120"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b120"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b120"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f121"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b121"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b121"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f122"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b122"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b122"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t02"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f200"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b200"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b200"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f201"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b201"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b201"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f202"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b202"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b202"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f210"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b210"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b210"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f211"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b211"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b211"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f212"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b212"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b212"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f220"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b220"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b220"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f221"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b221"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b221"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f222"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b222"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b222"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <TableLayout
+                android:id="@+id/t10"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f300"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b300"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b300"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f301"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b301"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b301"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f302"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b302"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b302"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f310"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b310"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b310"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f311"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b311"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b311"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f312"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b312"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b312"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f320"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b320"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b320"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f321"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b321"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b321"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f322"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b322"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b322"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t11"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f400"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b400"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b400"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f401"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b401"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b401"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f402"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b402"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b402"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f410"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b410"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b410"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f411"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b411"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b411"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f412"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b412"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b412"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f420"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b420"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b420"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f421"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b421"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b421"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f422"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b422"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b422"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t12"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f500"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b500"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b500"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f501"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b501"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b501"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f502"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b502"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b502"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f510"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b510"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b510"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f511"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b511"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b511"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f512"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b512"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b512"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f520"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b520"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b520"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f521"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b521"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b521"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f522"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b522"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b522"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <TableLayout
+                android:id="@+id/t20"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f600"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b600"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b600"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f601"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b601"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b601"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f602"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b602"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b602"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f610"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b610"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b610"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f611"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b611"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b611"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f612"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b612"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b612"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f620"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b620"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b620"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f621"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b621"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b621"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f622"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b622"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b622"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t21"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f700"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b700"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b700"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f701"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b701"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b701"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f702"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b702"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b702"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f710"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b710"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b710"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f711"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b711"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b711"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f712"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b712"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b712"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f720"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b720"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b720"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f721"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b721"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b721"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f722"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b722"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b722"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/t22"
+                android:layout_width="@dimen/part"
+                android:layout_height="@dimen/part"
+                android:gravity="center">
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f800"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b800"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b800"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f801"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b801"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b801"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f802"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b802"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b802"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:gravity="center">
+
+                    <FrameLayout
+                        android:id="@+id/f810"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b810"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b810"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f811"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b811"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b811"
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f812"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b812"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b812"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                </TableRow>
+
+                <TableRow android:gravity="center">
+                    <FrameLayout
+                        android:id="@+id/f820"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b820"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b820"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f821"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b821"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b821"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/f822"
+                        android:background="@color/green1"
+                        android:layout_width="@dimen/cell"
+                        android:layout_height="@dimen/cell">
+                        <Button
+                            android:id="@+id/b822"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="@dimen/cellButton"
+                            android:layout_height="@dimen/cellButton"
+                            android:background="@color/green1"
+                            android:layout_gravity="center"
+                            android:tag="b822"
+                            android:text=""
+                            android:textColor="@color/lightBlack"
+                            android:textSize="16sp" />
+                    </FrameLayout>
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:id="@+id/levelRadioGroup"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
+
+            <RadioButton
+                android:id="@+id/easyRadio"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/easy_level" />
+
+            <RadioButton
+                android:id="@+id/moderateRadio"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:checked="true"
+                android:text="@string/moderate_level" />
+
+            <RadioButton
+                android:id="@+id/hardRadio"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/hard_level" />
+        </RadioGroup>
+
+        <TableLayout
+            android:id="@+id/choiceButtonsLayout"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="75dp"
+            android:layout_centerInParent="true">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/n1"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:layout_marginEnd="10dp"
+                    android:text="1"
+                    android:tag="1"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n2"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:layout_marginEnd="10dp"
+                    android:tag="2"
+                    android:text="2"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n3"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:layout_marginEnd="10dp"
+                    android:text="3"
+                    android:tag="3"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n4"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:tag="4"
+                    android:layout_marginEnd="10dp"
+                    android:text="4"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n5"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:text="5"
+                    android:tag="5"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingTop="5dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/n6"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:tag="6"
+                    android:layout_marginEnd="10dp"
+                    android:text="6"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n7"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:layout_marginEnd="10dp"
+                    android:tag="7"
+                    android:text="7"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n8"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:tag="8"
+                    android:layout_marginEnd="10dp"
+                    android:text="8"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/n9"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@color/lightBlue"
+                    android:tag="9"
+                    android:text="9"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/revert"
+                    android:tag="revert"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:background="@drawable/revert"
+                    android:textSize="16sp" />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingTop="0dp"
+            android:gravity="center"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="match_parent"
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:textColor="@color/red"
+                android:id="@+id/startGameBtn"
+                android:text="@string/start_game"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="match_parent"
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:textColor="@color/red"
+                android:id="@+id/newGameBtn"
+                android:text="@string/new_game"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    </LinearLayout>
+<!--</android.support.design.widget.CoordinatorLayout>-->

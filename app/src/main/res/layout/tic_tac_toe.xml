@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_weight="0.7"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:id="@+id/aiChoiceLayout"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/compRadio"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:checked="true"
+            android:text="@string/comp_player" />
+
+        <RadioButton
+            android:id="@+id/humanRadio"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/human_player" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_weight="0.7"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:id="@+id/signChoiceLayout"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/xRadio"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/x_sign" />
+
+        <RadioButton
+            android:id="@+id/oRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/o_sign" />
+    </RadioGroup>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tiTacToeBoard">
+
+        <TableRow>
+            <Button
+                android:id="@+id/b00"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b01"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b02"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button" />
+        </TableRow>
+
+        <TableRow>
+            <Button
+                android:id="@+id/b10"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b11"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b12"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+        </TableRow>
+
+        <TableRow>
+            <Button
+                android:id="@+id/b20"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b21"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <Button
+                android:id="@+id/b22"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:textSize="22sp"
+                android:textColor="@color/lightBlack"
+                android:background="@color/green1"
+                android:gravity="center"
+                android:layout_margin="8dp"
+                style="@style/Widget.AppCompat.Button"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="20dp"
+        android:gravity="center"
+        android:layout_weight="2">
+
+        <Button
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:textColor="@color/red"
+            android:id="@+id/startGameBtn"
+            android:text="@string/start_game"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:textColor="@color/red"
+            android:id="@+id/newGameBtn"
+            android:text="@string/new_game"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

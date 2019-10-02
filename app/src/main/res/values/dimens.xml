@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cell">33dp</dimen>
+    <dimen name="cellButton">30dp</dimen>
+    <dimen name="button">35dp</dimen>
+    <dimen name="resetButton">60dp</dimen>
+    <dimen name="part">101dp</dimen>
+</resources>
