@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -148,43 +150,59 @@ public class Kakuro extends AppCompatActivity implements Constants{
         }
     }
 
-    private Triangles createTriangles(String name, ViewGroup.LayoutParams layoutParams) {
-        //        TextView txt1 = new TextView(context);
-//        txt1.setText("5");
-//        TextView txt2 = new TextView(context);
-//        txt2.setText("26");
-//        TextView txt3 = new TextView(context);
-//        txt3.setText("12");
-//        TextView txt4 = new TextView(context);
-//        txt4.setText("37");
-//        RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(size/2, size/2);
-//        rParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//        rParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-//        rParams.setMargins(0,3,0,0);
-//        this.addView(txt1, rParams);
-//
-//        rParams = new RelativeLayout.LayoutParams(size/2, size/2);
-//        rParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//        rParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        rParams.setMargins(0,0,0,3);
-//        this.addView(txt2, rParams);
-//
-//        rParams = new RelativeLayout.LayoutParams(size/2, size/2);
-//        rParams.addRule(RelativeLayout.CENTER_VERTICAL);
-//        rParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-//        rParams.setMargins(3,0,0,0);
-//        this.addView(txt3, rParams);
-//
-//        rParams = new RelativeLayout.LayoutParams(size/2, size/2);
-//        rParams.addRule(RelativeLayout.CENTER_VERTICAL);
-//        rParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-//        rParams.setMargins(3,0,3,0);
-//        this.addView(txt4, rParams);
+    private RelativeLayout createTriangles(String name, ViewGroup.LayoutParams layoutParams) {
+
         Triangles triangles = new Triangles(this);
         triangles.setSize(layoutParams.height);
         triangles.setTag(name);
         triangles.setLayoutParams(layoutParams);
-        return triangles;
+
+        return combineIntoLayout(triangles, layoutParams);
+    }
+
+    private RelativeLayout combineIntoLayout(Triangles triangles, ViewGroup.LayoutParams layoutParams) {
+        RelativeLayout rLayout = new RelativeLayout(this);
+        rLayout.setLayoutParams(layoutParams);
+        rLayout.addView(triangles);
+        //createTextField();
+        TextView txt1 = new TextView(this);
+        txt1.setText("5");
+        txt1.setTextSize(10);
+        txt1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        TextView txt2 = new TextView(this);
+        txt2.setText("26");
+        txt2.setTextSize(10);
+        TextView txt3 = new TextView(this);
+        txt3.setText("12");
+        txt3.setTextSize(10);
+        TextView txt4 = new TextView(this);
+        txt4.setText("37");
+        txt4.setTextSize(10);
+        int size = (int)(layoutParams.height/2.5);
+        RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(size, size);
+        rParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        rParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        rParams.setMargins(0,1,0,0);
+        rLayout.addView(txt1, rParams);
+
+        rParams = new RelativeLayout.LayoutParams(size, size);
+        rParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        rParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        rParams.setMargins(0,0,0,1);
+        rLayout.addView(txt2, rParams);
+
+        rParams = new RelativeLayout.LayoutParams(size, size);
+        rParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        rParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+        rParams.setMargins(1,0,0,0);
+        rLayout.addView(txt3, rParams);
+
+        rParams = new RelativeLayout.LayoutParams(size, size);
+        rParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        rParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        rParams.setMargins(0,0,1,0);
+        rLayout.addView(txt4, rParams);
+        return rLayout;
     }
 
     private Button createButton(String name, ViewGroup.LayoutParams layoutParams) {
