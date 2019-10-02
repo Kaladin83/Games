@@ -23,6 +23,10 @@
         <activity android:name=".Sudoku"
             android:configChanges="keyboardHidden">
         </activity>
+
+        <activity android:name=".Kakuro"
+            android:configChanges="keyboardHidden">
+        </activity>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.example.maratbe.games;
 import android.graphics.Color;
 
 public interface Constants {
+    int WHITE = Color.parseColor("#ffffff");
     int BLACK_1 = Color.parseColor("#716e72");
     int BLACK_2 = Color.parseColor("#767477");
     int GRAY_1 = Color.parseColor("#e0e0e0");
@@ -19,6 +20,7 @@ public interface Constants {
     int GREEN_3 = Color.parseColor("#87f295");
     int GREEN_4 = Color.parseColor("#eafcd1");
     int GREEN_5 = Color.parseColor("#e8f4e0");
+    int GREEN_6 = Color.parseColor("#fff9fff0");
 
     int BLUE_1 = Color.parseColor("#2e79f4");
     int BLUE_2 = Color.parseColor("#7fa9ef");
@@ -55,4 +57,5 @@ public interface Constants {
     int DIFFICULTY_RANGE_MODERATE = 3;
     int DIFFICULTY_RANGE_HARD = 3;
 
+    int KAKURO_CELL = 33;
 }
