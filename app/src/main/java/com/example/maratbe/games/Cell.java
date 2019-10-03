@@ -1,5 +1,6 @@
 package com.example.maratbe.games;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 class Cell {
@@ -7,6 +8,7 @@ class Cell {
     private int y;
     private String value;
     private boolean enable;
+    private ArrayList<Sum> sum = new ArrayList<>();
 
     public Cell()
     {
@@ -50,6 +52,14 @@ class Cell {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public ArrayList<Sum> getSum() {
+        return sum;
+    }
+
+    public void setSum(ArrayList<Sum> sum) {
+        this.sum = sum;
     }
 
     @Override

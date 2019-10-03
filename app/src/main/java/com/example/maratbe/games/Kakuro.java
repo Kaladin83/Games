@@ -46,8 +46,8 @@ public class Kakuro extends AppCompatActivity implements Constants{
     private String chosenNumber = "";
     private String previousNumber = "";
     private int[][] matrix = new int[0][0];
-    int MAX_COLS;
-    int[] newCoordinatesToCompare = new int[]{-1,-1,-1,-1};
+    private int MAX_COLS;
+    private int[] newCoordinatesToCompare = new int[]{-1,-1,-1,-1};
 
     private String prevConflict = "No Conflict";
 
@@ -57,7 +57,10 @@ public class Kakuro extends AppCompatActivity implements Constants{
 
         setContentView(R.layout.kakuro);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getSupportActionBar().hide();
+            if (getSupportActionBar() != null)
+            {
+                getSupportActionBar().hide();
+            }
         }
         LinearLayout l = findViewById(R.id.mainLayout);
         l.setBackgroundColor(WHITE);
@@ -135,6 +138,35 @@ public class Kakuro extends AppCompatActivity implements Constants{
     private void createBoard() {
         createButtons();
         populateButtons();
+        populateSums();
+    }
+
+    private void populateSums() {
+        for (int i = 0; i < MAX_COLS; i++)
+        {
+            int sum = 0, stop = 0;
+            for (int j = 0; j < MAX_COLS; j++)
+            {
+                if (matrix[i][j] == -1)
+                {
+                    Cell c = mapOfCells.get("r"+i+"b"+j);
+                    ArrayList<Sum> sums = c.getSum();
+                    sums.add(new Sum(sum, getDirection(i, j)));
+                    c.setSum(new ArrayList<>());
+                    stop = j;
+                    sum = 0;
+                }
+                else
+                {
+                    sum += matrix[i][j];
+                }
+            }
+        }
+    }
+
+    private String getDirection(int i, int j) {
+        //TODO add logic calculating direction
+        return  "";
     }
 
     private void createButtons() {
@@ -440,10 +472,8 @@ public class Kakuro extends AppCompatActivity implements Constants{
     }
 
     private void openButtons() {
-        cellsMap.forEach((key,value) -> {
-            getButton(value.getPartRow(), value.getPartCol(), value.getX(), value.getY()).setEnabled(true);
-        });
-
+        cellsMap.forEach((key,value) ->
+            getButton(value.getPartRow(), value.getPartCol(), value.getX(), value.getY()).setEnabled(true));
     }
 
     private void closeButtons() {
@@ -481,72 +511,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
         opened.add("2,2");
     }
 
-    private void createBoard(boolean clearBoard) {
-        if (clearBoard)
-        {
-            if (previousChoice.getValue() > 0)
-            {
-                colorFrame(previousChoice, GREEN_4);
-            }
-            iterateTableView(FUNCTION_EMPTY_BOARD, new ArrayList<>());
-        }
-
-        initMatrix();
-        for (int i = 0; i < kakuroBoard.getChildCount(); i++)
-        {
-            Object o =  kakuroBoard.getChildAt(i);
-            if (o instanceof TableRow)
-            {
-                TableRow groupRow = (TableRow)o;
-                for (int j = 0; j < groupRow.getChildCount();j++)
-                {
-                    o = groupRow.getChildAt(j);
-
-                    if (o instanceof TableLayout)
-                    {
-                        TableLayout group = (TableLayout)o;
-                        group.setBackground(Utils.createBorder(1, Color.WHITE, 1, Color.BLACK));
-                        for (int k = 0; k < group.getChildCount(); k++)
-                        {
-                            yIndex = 0;
-                            o = group.getChildAt(k);
-                            if (o instanceof TableRow)
-                            {
-                                TableRow rowInGroup = (TableRow)o;
-                                for (; yIndex < rowInGroup.getChildCount();)
-                                {
-                                    o = ((FrameLayout)rowInGroup.getChildAt(yIndex)).getChildAt(0);
-                                    if (o instanceof Button)
-                                    {
-                                        Button b = (Button) o;
-                                        b.setBackground(Utils.createBorder(1, Color.WHITE, 1, Color.BLACK));
-                                        b.setTextColor(Color.BLACK);
-                                        b.setEnabled(false);
-                                        if (b.getText().toString().equals("") || b.getText().toString().equals("0") )
-                                        {
-                                            putValue(i, j, k, yIndex, b);
-                                            b.setOnClickListener(v ->
-                                                handleClick((String) v.getTag()));
-                                        }
-                                        else
-                                        {
-                                            yIndex++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        iterateTableView(FUNCTION_FILL_UP_CELL_MAP, new ArrayList<>());
-        if (!checkForVictory())
-        {
-            createBoard(true);
-        }
-    }
     private void iterateTableView(int function, List<Object> params)
     {
         for (int i = 0; i < 3; i++)
@@ -619,16 +583,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
         cellsMap.put(b.getTag().toString(), c);
     }
 
-    private void initMatrix() {
-        for (int m = 0; m < MAX_COLS; m++)
-        {
-            for (int n = 0; n < 9; n++)
-            {
-                matrix[m][n] = 0;
-            }
-        }
-    }
-
     private void putValue(int x, int y, Button b) {
         missing.clear();
         cor.setX(x);
@@ -648,30 +602,7 @@ public class Kakuro extends AppCompatActivity implements Constants{
         }
         else
         {
-            conflictNumber = findConflictNumber(cor.getPartRow(), cor.getPartCol());
-            backTrack();
-        }
-    }
-    private void putValue(int partRow, int partColumn, int x, int y, Button b) {
-        missing.clear();
-        cor.setPartRow(partRow);
-        cor.setPartCol(partColumn);
-        cor.setX(x);
-        cor.setY(y);
-        getPossibleNumbers();
-        if (allNumbers.size() > 0 )
-        {
-            Random rand = new Random();
-            int n = rand.nextInt(allNumbers.size());
-            int number = allNumbers.get(n);
-
-            b.setText(String.valueOf(number));
-            fillUpTempMatrix(partRow, partColumn, x, y, number);
-            yIndex++;
-        }
-        else
-        {
-            conflictNumber = findConflictNumber(cor.getPartRow(), cor.getPartCol());
+            conflictNumber = findConflictNumber();
             backTrack();
         }
     }
@@ -682,7 +613,7 @@ public class Kakuro extends AppCompatActivity implements Constants{
         fillUpMissing();
     }
 
-    private int findConflictNumber(int i, int j) {
+    private int findConflictNumber() {
         initAllNumbersNumbers();
         missing.clear();
         checkHorizontal();
@@ -738,102 +669,10 @@ public class Kakuro extends AppCompatActivity implements Constants{
         return false;
     }
 
-
-
-//    private String findConflict(int row, int col, int x, int y, int conflictNumber) {
-//        if(checkVerticalConflict(col, y, conflictNumber))
-//        {
-//            return VERTICAL;
-//        }
-//        if (checkHorizontalConflict(row, x, conflictNumber))
-//        {
-//            return HORIZONTAL;
-//        }
-//
-//        return NO_CONFLICT;
-//    }
-
-//    private boolean checkHorizontalConflict(int row, int x, int conflictNumber) {
-//        for (int i = 0; i < 3; i++)
-//        {
-//            if (checkHorizontalConflict(row, i, x, conflictNumber))
-//            {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-
-
-    private boolean checkHorizontalConflict(int row, int col, int x, int conflictNumber) {
-        TableRow currentRow = (TableRow)((TableLayout)((TableRow)kakuroBoard.getChildAt(row)).getChildAt(col)).getChildAt(x);
-        for (int i = 0; i < 3; i++)
-        {
-            Button b = (Button) ((FrameLayout)currentRow.getChildAt(i)).getChildAt(0);
-            if (b != null && !b.getText().toString().equals("") )
-            {
-                if (Integer.parseInt(b.getText().toString()) == conflictNumber && !(newCoordinatesToCompare[0] == row && newCoordinatesToCompare[1] == col && newCoordinatesToCompare[2] == x ))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-//    private boolean checkVerticalConflict(int col, int y, int conflictNumber) {
-//        for (int i = 0; i < 3; i++)
-//        {
-//            if (checkVerticalConflict(i, col, y, conflictNumber))
-//            {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-    private boolean checkVerticalConflict(int row, int col, int y, int conflictNumber) {
-        TableLayout table = (TableLayout)((TableRow)kakuroBoard.getChildAt(row)).getChildAt(col);
-        for (int i = 0; i < 3; i++)
-        {
-            Button b = (Button)((FrameLayout)((TableRow)table.getChildAt(i)).getChildAt(y)).getChildAt(0);
-            if (b != null && !b.getText().toString().equals(""))
-            {
-                if (Integer.parseInt(b.getText().toString()) == conflictNumber  && !(newCoordinatesToCompare[0] == row && newCoordinatesToCompare[1] == col  && newCoordinatesToCompare[3] == y))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     private void backTrack() {
         prevConflict = findConflict(cor.getX(), cor.getY(), conflictNumber);
         switchData(conflictNumber, new int[]{cor.getX(), cor.getY()}, -1);
-        try {
-            Process process = new ProcessBuilder()
-                    .command("logcat", "-c")
-                    .redirectErrorStream(true)
-                    .start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
-
-//    private void backTrack() {
-//        prevConflict = findConflict(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY(), conflictNumber);
-//        switchData(conflictNumber, new int[]{cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY()}, -1);
-//        try {
-//            Process process = new ProcessBuilder()
-//                    .command("logcat", "-c")
-//                    .redirectErrorStream(true)
-//                    .start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void putNumberInButton(int partRow, int partCol, int x, int y, String number) {
         Button b = getButton(partRow, partCol, x, y);
@@ -843,13 +682,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
     private void putNumberInButton(int x, int y, String number) {
         getButton(x, y).setText(number);
         matrix[x][y] = number.equals("")? 0: Integer.parseInt(number);
-    }
-
-
-    private String getNumberFromButton(int partRow, int partCol, int x, int y)
-    {
-        Button b = getButton(partRow, partCol, x, y);
-        return b.getText().toString();
     }
 
     private String getNumberFromButton(int x, int y)
@@ -1005,7 +837,8 @@ public class Kakuro extends AppCompatActivity implements Constants{
                 {
                     values = findNextAvailableNumbersFromStartInColumn(i);
                 }
-                return checkHorizontalConflict(values.get(0), x, conflictNumber)? new int[]{i, values.get(1), x}: new int[]{i, values.get(0), x};
+                return checkHorizontalConflict(values.get(0), x, conflictNumber)?
+                        new int[]{i, values.get(1), x}: new int[]{i, values.get(0), x};
             }
         }
         return new int[]{0,0,0};
@@ -1097,17 +930,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
                 missing.add(matrix[cor.getX()][i]);
             }
         }
-//        checkMissingInRow(cor.getPartRow(), 0, cor.getX());
-//
-//        if (cor.getPartCol() == 1)
-//        {
-//            checkMissingInRow(cor.getPartRow(), 1, cor.getX());
-//        }
-//        else if (cor.getPartCol() == 2)
-//        {
-//            checkMissingInRow(cor.getPartRow(), 1, cor.getX());
-//            checkMissingInRow(cor.getPartRow(), 2, cor.getX());
-//        }
     }
 
     private void checkVertical() {
@@ -1117,58 +939,6 @@ public class Kakuro extends AppCompatActivity implements Constants{
             {
                 missing.add(matrix[i][cor.getY()]);
             }
-        }
-//        checkMissingInColumn(0, cor.getPartCol(), cor.getY());
-//
-//        if (cor.getPartRow() == 1)
-//        {
-//            checkMissingInColumn(1, cor.getPartCol(), cor.getY());
-//        }
-//        else if (cor.getPartRow() == 2)
-//        {
-//            checkMissingInColumn(1, cor.getPartCol(), cor.getY());
-//            checkMissingInColumn(2, cor.getPartCol(), cor.getY());
-//        }
-    }
-
-    private void checkMissingInColumn(int partRow, int partCol, int x) {
-        getFromRow(0, partRow, partCol, x);
-        getFromRow(1, partRow, partCol, x);
-        getFromRow(2, partRow, partCol, x);
-    }
-
-    private void getFromRow(int i, int partRow, int partCol, int x) {
-        TableRow row = (TableRow) ((TableLayout)((TableRow) kakuroBoard.getChildAt(partRow)).
-                getChildAt(partCol)).getChildAt(i);
-        getMissingFromRow(row, x);
-    }
-
-    private void checkMissingInRow(int partRow, int partCol, int y) {
-        TableRow row = (TableRow) ((TableLayout)((TableRow) kakuroBoard.getChildAt(partRow)).
-                getChildAt(partCol)).getChildAt(y);
-        getMissingFromRow(row);
-    }
-
-    private void getMissingFromPart(TableLayout partTable) {
-        for (int i = 0; i < 3; i++)
-        {
-            TableRow row = (TableRow) partTable.getChildAt(i);
-            getMissingFromRow(row);
-        }
-    }
-
-    private void getMissingFromRow(TableRow row) {
-        for (int i = 0; i < 3; i++)
-        {
-            getMissingFromRow(row, i);
-        }
-    }
-
-    private void getMissingFromRow(TableRow row, int i) {
-        String num = ((Button)((FrameLayout)row.getChildAt(i)).getChildAt(0)).getText().toString();
-        if (!num.equals(""))
-        {
-            missing.add(Integer.parseInt(num));
         }
     }
 
