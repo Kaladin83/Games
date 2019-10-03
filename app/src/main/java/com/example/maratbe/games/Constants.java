@@ -58,4 +58,5 @@ public interface Constants {
     int DIFFICULTY_RANGE_HARD = 3;
 
     int KAKURO_CELL = 33;
+    int MAX_COLS = 9;
 }
