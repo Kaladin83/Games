@@ -8,47 +8,79 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class Triangles extends View implements Constants {
 
     public enum Triangle {
         RIGHT, LEFT, TOP, BOTTOM
     }
 
-    private final Paint rightPaint = new Paint();
-    private final Paint leftPaint = new Paint();
     private final Paint topPaint = new Paint();
     private final Paint bottomPaint = new Paint();
 
-    private final Path rightPath = new Path();
-    private final Path leftPath = new Path();
     private final Path topPath = new Path();
     private final Path bottomPath = new Path();
 
     private Context context;
     private int size;
+    private ArrayList<Sum> sums;
 
     private OnTriangleTouchedListener triangleTouchedListener;
 
     public Triangles(Context context) {
         super(context);
         this.context = context;
-        init();
     }
 
     public Triangles(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public Triangles(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     public void setSize(int size)
     {
         this.size = size;
-        init();
+    }
+
+    public void setDirections(ArrayList<Sum> sums)
+    {
+        this.sums = sums;
+    }
+
+    public void buildCell()
+    {
+        sums.forEach(s-> {
+            if (s.getDirection().equals(UPPER)) {
+                buildUpperTriangle();
+            } else {
+                buildLowerTriangle();
+            }
+        });
+    }
+
+    private void buildLowerTriangle() {
+        bottomPaint.setColor(BLUE_6);
+        bottomPaint.setAntiAlias(true);
+
+        bottomPath.moveTo(0, size);
+        bottomPath.lineTo(0, 0);
+        bottomPath.lineTo(size, size);
+        bottomPath.lineTo(0, size);
+    }
+
+    private void buildUpperTriangle() {
+        topPaint.setColor(BLUE_4);
+        topPaint.setAntiAlias(true);
+
+        topPath.moveTo(size, 0);
+        topPath.lineTo(0, 0);
+        topPath.lineTo(size, size);
+        topPath.lineTo(size, 0);
+
     }
 
     public void setOnTriangleTouchedListener(OnTriangleTouchedListener triangleTouchedListener) {
@@ -58,9 +90,6 @@ public class Triangles extends View implements Constants {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawPath(rightPath, rightPaint);
-        canvas.drawPath(leftPath, leftPaint);
         canvas.drawPath(topPath, topPaint);
         canvas.drawPath(bottomPath, bottomPaint);
     }
@@ -90,39 +119,6 @@ public class Triangles extends View implements Constants {
         if (triangleTouchedListener != null) {
             triangleTouchedListener.onTriangleTouched(triangle);
         }
-    }
-
-    private void init() {
-        rightPaint.setColor(0xffff0000);
-        leftPaint.setColor(0xff00ff00);
-        topPaint.setColor(0xff0000ff);
-        bottomPaint.setColor(0xffffff00);
-
-
-        rightPaint.setAntiAlias(true);
-        leftPaint.setAntiAlias(true);
-        topPaint.setAntiAlias(true);
-        bottomPaint.setAntiAlias(true);
-
-        rightPath.moveTo(size, 0);
-        rightPath.lineTo(size, size);
-        rightPath.lineTo(size/2, size/2);
-        rightPath.lineTo(size, 0);
-
-        leftPath.moveTo(0, 0);
-        leftPath.lineTo(size/2, size/2);
-        leftPath.lineTo(0, size);
-        leftPath.lineTo(0, 0);
-
-        topPath.moveTo(0, 0);
-        topPath.lineTo(size, 0);
-        topPath.lineTo(size/2, size/2);
-        topPath.lineTo(0, 0);
-
-        bottomPath.moveTo(size, size);
-        bottomPath.lineTo(0, size);
-        bottomPath.lineTo(size/2, size/2);
-        bottomPath.lineTo(size, size);
     }
 
     public interface OnTriangleTouchedListener {

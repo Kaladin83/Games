@@ -19,15 +19,15 @@
         android:gravity="center"
         android:layout_weight="13">
 
-        <TableRow android:gravity="center" android:id="@+id/r00"/>
-        <TableRow android:gravity="center" android:id="@+id/r01"/>
-        <TableRow android:gravity="center" android:id="@+id/r02"/>
-        <TableRow android:gravity="center" android:id="@+id/r03"/>
-        <TableRow android:gravity="center" android:id="@+id/r04"/>
-        <TableRow android:gravity="center" android:id="@+id/r05"/>
-        <TableRow android:gravity="center" android:id="@+id/r06"/>
-        <TableRow android:gravity="center" android:id="@+id/r07"/>
-        <TableRow android:gravity="center" android:id="@+id/r08"/>
+<!--        <TableRow android:gravity="center" android:id="@+id/r00"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r01"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r02"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r03"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r04"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r05"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r06"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r07"/>-->
+<!--        <TableRow android:gravity="center" android:id="@+id/r08"/>-->
 
     </TableLayout>
 

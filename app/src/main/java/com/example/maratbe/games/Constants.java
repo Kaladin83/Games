@@ -27,7 +27,7 @@ public interface Constants {
     int BLUE_3 = Color.parseColor("#ceebef");
     int BLUE_4 = Color.parseColor("#dae3f2");
     int BLUE_5 = Color.parseColor("#f4f9fc");
-    int BLUE_6 = Color.parseColor("#eaebed");
+    int BLUE_6 = Color.parseColor("#deebfc");
 
     int YELLOW_1 = Color.parseColor("#d3f713");
     int YELLOW_2 = Color.parseColor("#f4ec58");
@@ -43,6 +43,9 @@ public interface Constants {
     String HORIZONTAL = "Horizontal";
     String VERTICAL = "Vertical";
     String NO_CONFLICT = "No Conflict";
+
+    String UPPER = "Upper";
+    String LOWER = "Lower";
     int FUNCTION_FILL_UP_CELL_MAP = 1;
     int FUNCTION_COLOR_CELL_VICTORY = 3;
     int FUNCTION_EMPTY_BOARD = 4;
@@ -56,9 +59,4 @@ public interface Constants {
     int DIFFICULTY_RANGE_EASY = 2;
     int DIFFICULTY_RANGE_MODERATE = 3;
     int DIFFICULTY_RANGE_HARD = 3;
-
-    int KAKURO_CELL = 33;
-
-    String DOWN = "down";
-    String UP = "up";
 }
