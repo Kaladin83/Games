@@ -1,9 +1,9 @@
-package com.example.maratbe.games;
+package com.example.maratbe.domain;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-class Cell {
+public class Cell {
     private int x;
     private int y;
     private String value;

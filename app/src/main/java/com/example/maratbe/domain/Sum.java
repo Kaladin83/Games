@@ -1,4 +1,4 @@
-package com.example.maratbe.games;
+package com.example.maratbe.domain;
 
 import java.util.Objects;
 

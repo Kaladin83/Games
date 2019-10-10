@@ -1,14 +1,32 @@
-package com.example.maratbe.games;
+package com.example.maratbe.other;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
+import com.example.maratbe.dataBase.DataBase;
+import com.example.maratbe.games.Kakuro;
+import com.example.maratbe.games.R;
+import com.example.maratbe.games.Sudoku;
+import com.example.maratbe.games.TicTacToe;
+
 public class MainActivity extends AppCompatActivity {
 
     private static int screenWidth, screenHeight, logicalDensity, toolbarHeight;
+
+    private static DataBase db;
+
+    public static DataBase getDb() {
+        return db;
+    }
+
+    public static void setDb(DataBase db1) {
+        db = db;
+    }
 
     public static int getScreenHeight()
     {
@@ -34,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "Games database").build();
         setDimensions();
 
         Button ticTacToeBtn = findViewById(R.id.ticTacToeBtn);

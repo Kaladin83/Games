@@ -3,7 +3,6 @@ package com.example.maratbe.games;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +14,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.maratbe.domain.*;
+import com.example.maratbe.other.Constants;
+import com.example.maratbe.other.MainActivity;
+import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,6 +169,10 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private void populateSums() {
         for (HashMap.Entry<String, Cell> entry : mapOfCells.entrySet()) {
             Cell cell = entry.getValue();
+            if (cell.isEnable())
+            {
+                continue;
+            }
             ArrayList<Sum> sums = new ArrayList<>();
 
             if (cell.getX() == 0 && cell.getY() > 0) {
@@ -237,6 +247,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         ViewGroup.LayoutParams layoutParams = new TableRow.LayoutParams(width, height);
         if (mapOfCells.get("r" + i + "b" + j) == null) {
             matrix[i][j] = 0;
+            mapOfCells.put("r" + i + "b" + j, new Cell(i, j, "", true));
             return createButton("r" + i + "b" + j, layoutParams);
         } else {
             matrix[i][j] = -1;

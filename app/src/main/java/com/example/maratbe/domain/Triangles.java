@@ -1,4 +1,4 @@
-package com.example.maratbe.games;
+package com.example.maratbe.domain;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,6 +7,8 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.maratbe.other.Constants;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.maratbe.games;
+package com.example.maratbe.other;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;

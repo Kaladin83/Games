@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.maratbe.domain.Counters;
+
 public class TicTacToe extends AppCompatActivity{
 
     private Button b00, b01, b02, b10, b11, b12, b20, b21, b22, startGameBtn;

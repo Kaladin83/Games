@@ -11,6 +11,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.example.maratbe.domain.Coordinates;
+import com.example.maratbe.other.Constants;
+import com.example.maratbe.other.Utils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class Sudoku extends AppCompatActivity implements Constants{
+public class Sudoku extends AppCompatActivity implements Constants {
     private TableLayout sudokuBoard;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();

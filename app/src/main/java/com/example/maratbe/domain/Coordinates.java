@@ -1,11 +1,11 @@
-package com.example.maratbe.games;
+package com.example.maratbe.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Objects;
 
-class Coordinates implements Parcelable {
+public class Coordinates implements Parcelable {
     private int x;
     private int y;
     private int partRow;

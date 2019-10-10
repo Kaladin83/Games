@@ -1,4 +1,4 @@
-package com.example.maratbe.games;
+package com.example.maratbe.domain;
 
 public class Counters {
     private char sign = ' ';
@@ -12,7 +12,7 @@ public class Counters {
     private int[] counters0 = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
     private char[][] matrix = new char[3][3];
 
-    Counters()
+    public Counters()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -27,19 +27,19 @@ public class Counters {
         this.i = i;
     }
 
-    void setJ(int j) {
+    public void setJ(int j) {
         this.j = j;
     }
 
 
-    void setSign(char sign) {
+    public void setSign(char sign) {
         counter++;
         this.sign = sign;
         matrix[i][j] = sign;
         setCounters();
     }
 
-    int[] setFirstMove(char sign)
+    public int[] setFirstMove(char sign)
     {
         if (sign == 'X' && counter == 0)
         {
@@ -49,7 +49,7 @@ public class Counters {
         return new int[]{-1,-1};
     }
 
-    int[] setSpecialMove()
+    public int[] setSpecialMove()
     {
         if (firstMove)
         {
@@ -73,7 +73,7 @@ public class Counters {
         return new int[]{-1,-1};
     }
 
-    int[] getBestChoice(char sign)
+    public int[] getBestChoice(char sign)
     {
         if (sign == 'X')
         {
@@ -235,12 +235,12 @@ public class Counters {
         }
     }
 
-    String getResult()
+    public String getResult()
     {
         return result;
     }
 
-    int getNumOfTurns()
+    public int getNumOfTurns()
     {
         return counter;
     }

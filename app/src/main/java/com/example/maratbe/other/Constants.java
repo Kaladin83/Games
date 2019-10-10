@@ -1,4 +1,4 @@
-package com.example.maratbe.games;
+package com.example.maratbe.other;
 
 import android.graphics.Color;
 
@@ -46,6 +46,9 @@ public interface Constants {
 
     String UPPER = "Upper";
     String LOWER = "Lower";
+
+    String KAKURO = "Kakuro";
+    String SUDOKU = "Sudoku";
     int FUNCTION_FILL_UP_CELL_MAP = 1;
     int FUNCTION_COLOR_CELL_VICTORY = 3;
     int FUNCTION_EMPTY_BOARD = 4;
