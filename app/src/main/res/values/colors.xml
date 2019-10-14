@@ -7,6 +7,11 @@
     <color name="green1">#eafcd1</color>
     <color name="lightBlack">#666262</color>
     <color name="lightBlue">#E2F3FA</color>
+    <color name="lightBlue2">#deebfc</color>
+    <color name="blue">#1A6C91</color>
     <color name="white">#ffffff</color>
-
+    <color name="Yellow1">#FAE848</color>
+    <color name="red1">#F81118</color>
+    <color name="orange">#FF6636</color>
+    <color name="gray">#CCC7C5</color>
 </resources>

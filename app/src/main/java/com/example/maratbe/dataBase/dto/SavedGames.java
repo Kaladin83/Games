@@ -15,6 +15,16 @@ public class SavedGames {
     @ColumnInfo(name = "game_name")
     private String gameName;
 
+
+    public SavedGames(String name, String gameName) {
+        this.name = name;
+        this.gameName = gameName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    tools:context="com.example.maratbe.other.MainActivity">
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/ticTacToeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/Yellow1"
+        android:text="@string/tic_tac_toe"
+        android:textAllCaps="false"
+        android:textSize="@dimen/buttonTextSizeLarge" />
+
+    <Button
+        android:id="@+id/sudokuBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/sudoku"
+
+        android:background="@color/orange"
+        android:textAllCaps="false"
+        android:textSize="@dimen/buttonTextSizeLarge" />
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/kakuroBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+
+        android:background="@color/red1"
+        android:text="@string/kakuro"
+        android:textAllCaps="false"
+        android:textSize="@dimen/buttonTextSizeLarge" />
+
+</LinearLayout>

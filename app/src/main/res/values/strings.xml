@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Games</string>
+    <string name="more">More</string>
     <string name="new_game">New game</string>
     <string name="start_game">Start game</string>
     <string name="tic_tac_toe">Tic Tac Toe</string>
@@ -21,4 +22,16 @@
     <string name="number7">7</string>
     <string name="number8">8</string>
     <string name="number9">9</string>
+    <string name="save_game">Save the game</string>
+    <string name="load_game">Load a game</string>
+    <string name="start_new_game">Start a new game</string>
+    <string name="name_to_save">Please choose a name to save with</string>
+    <string name="name_to_load">Please choose a game to load</string>
+    <string name="save_name_hint">game name</string>
+    <string name="save_button">Save</string>
+    <string name="load_button">Load</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="no_loaded_games">Sorry, there are no saved games yet &#8230;</string>
+
+
 </resources>

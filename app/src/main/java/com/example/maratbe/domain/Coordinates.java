@@ -3,26 +3,31 @@ package com.example.maratbe.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Coordinates implements Parcelable {
+    private int index;
     private int x;
     private int y;
     private int partRow;
     private int partCol;
-    private int value;
+    private ArrayList<Integer> value = new ArrayList<>();
     private int color;
     private boolean enabled;
 
+
     public Coordinates()
     {
-        value = 0;
+        value.add(0);
     }
 
     public Coordinates(int x, int y)
     {
         this.x = x;
         this.y = y;
+        enabled = true;
     }
 
     public Coordinates(int x, int y, int partRow, int partCol)
@@ -31,6 +36,8 @@ public class Coordinates implements Parcelable {
         this.y = y;
         this.partRow = partRow;
         this.partCol = partCol;
+        enabled = true;
+        setValue(0);
     }
 
     public Coordinates(int x, int y, int partRow, int partCol, int value, int color)
@@ -40,18 +47,31 @@ public class Coordinates implements Parcelable {
         this.partRow = partRow;
         this.partCol = partCol;
         this.color = color;
-        this.value = value;
+        this.value.add(value);
     }
 
     protected Coordinates(Parcel in) {
+        index = in.readInt();
         x = in.readInt();
         y = in.readInt();
         partRow = in.readInt();
         partCol = in.readInt();
         color = in.readInt();
-        value = in.readInt();
-        enabled = in.readInt() == 1;
+        enabled = in.readByte() != 0;
+        value = in.readArrayList(null);
     }
+
+    public static final Creator<Coordinates> CREATOR = new Creator<Coordinates>() {
+        @Override
+        public Coordinates createFromParcel(Parcel in) {
+            return new Coordinates(in);
+        }
+
+        @Override
+        public Coordinates[] newArray(int size) {
+            return new Coordinates[size];
+        }
+    };
 
     public int getPartRow() {
         return partRow;
@@ -93,12 +113,12 @@ public class Coordinates implements Parcelable {
         this.color = color;
     }
 
-    public int getValue() {
+    public List<Integer> getValue() {
         return value;
     }
 
     public void setValue(int value) {
-        this.value = value;
+        this.value.add(value);
     }
 
     public boolean isEnabled() {
@@ -109,33 +129,14 @@ public class Coordinates implements Parcelable {
         this.enabled = enabled;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getIndex() {
+        return index;
     }
 
-    public static final Creator<Coordinates> CREATOR = new Creator<Coordinates>() {
-        @Override
-        public Coordinates createFromParcel(Parcel in) {
-            return new Coordinates(in);
-        }
-
-        @Override
-        public Coordinates[] newArray(int size) {
-            return new Coordinates[size];
-        }
-    };
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(x);
-        dest.writeInt(y);
-        dest.writeInt(partRow);
-        dest.writeInt(partCol);
-        dest.writeInt(value);
-        dest.writeInt(color);
-        dest.writeInt(enabled? 1: 0);
+    public void setIndex(int index) {
+        this.index = index;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -145,13 +146,29 @@ public class Coordinates implements Parcelable {
         return getX() == that.getX() &&
                 getY() == that.getY() &&
                 getPartRow() == that.getPartRow() &&
-                getPartCol() == that.getPartCol() &&
-                getValue() == that.getValue();
+                getPartCol() == that.getPartCol();
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(getX(), getY(), getPartRow(), getPartCol(), getValue());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(index);
+        parcel.writeInt(x);
+        parcel.writeInt(y);
+        parcel.writeInt(partRow);
+        parcel.writeInt(partCol);
+        parcel.writeInt(color);
+        parcel.writeByte((byte) (enabled ? 1 : 0));
+        parcel.writeList(value);
     }
 }

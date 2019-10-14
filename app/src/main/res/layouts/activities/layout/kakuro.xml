@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content" android:id="@+id/mainRelayiveLayout" android:layout_height="wrap_content" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+        android:gravity="center" android:paddingVertical="7dp" android:paddingHorizontal="7dp"
+        android:id="@+id/mainLayout" android:layout_alignParentTop="true"
+        android:orientation="vertical">
+        <TableLayout android:id="@+id/kakuroBoard" android:layout_width="wrap_content"
+            android:layout_height="0dp" android:layout_marginTop="10dp"
+            android:layout_gravity="center" android:gravity="center" android:layout_weight="13" />
+
+        <include layout="@layout/controls"/>
+
+        <Button android:layout_width="wrap_content" android:layout_height="40dp"
+            android:textSize="@dimen/buttonTextSize" android:textAllCaps="false"
+            android:textColor="@color/red" android:id="@+id/moreBtn" android:text="@string/more"
+            android:padding="10dp" style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_gravity="center" />
+    </LinearLayout>
+    <!--    <include layout="@layout/menu"/>-->
+</RelativeLayout>
+

@@ -13,6 +13,7 @@ import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
 import com.example.maratbe.games.Sudoku;
 import com.example.maratbe.games.TicTacToe;
+import com.example.maratbe.listeners.MenuListenerImpl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "Games database").build();
         setDimensions();
+
+
 
         Button ticTacToeBtn = findViewById(R.id.ticTacToeBtn);
         ticTacToeBtn.setOnClickListener(v -> {

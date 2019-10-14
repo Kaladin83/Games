@@ -3,6 +3,7 @@ package com.example.maratbe.games;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,11 +19,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.maratbe.domain.*;
+import com.example.maratbe.listeners.MenuListener;
+import com.example.maratbe.listeners.MenuListenerImpl;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -30,14 +34,16 @@ import java.util.Random;
 
 public class Kakuro extends AppCompatActivity implements Constants {
     private TableLayout kakuroBoard;
+    private LinearLayout menuLayout, mainLayout;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();
     private ArrayList<Integer> missing = new ArrayList<>();
     private ArrayList<String> opened = new ArrayList<>();
     private ArrayList<String> closed = new ArrayList<>();
-    private ArrayList<Coordinates> coordinatesList = new ArrayList<>();
+    private List<Coordinates> coordinatesList = new ArrayList<>();
+    private List<Cell> listOfCells = new ArrayList<>();
     private HashMap<String, Coordinates> cellsMap = new HashMap<>();
-    private HashMap<String, Cell> mapOfCells = new HashMap<>();
+//    private HashMap<String, Cell> mapOfCells = new HashMap<>();
     private HashMap<String, Button> numbersMap = new HashMap<>();
     private HashMap<String, Integer> numberColors = new HashMap<>();
     private Coordinates cor = new Coordinates();
@@ -45,48 +51,97 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private Coordinates previousChoice = new Coordinates();
     private int conflictNumber = 0, yIndex = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE;
     private int emptyCells = 0;
+    private int menuHeight = 0;
     private String chosenNumber = "";
     private String previousNumber = "";
     private int[][] matrix = new int[0][0];
     private int MAX_COLS = 10, KAKURO_CELL;
     private int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
+    private MenuListener menuListener;
 
     private String prevConflict = "No Conflict";
+
+    public void setMenuListener(MenuListener menuListener) {
+        this.menuListener = menuListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.kakuro);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
         }
-        LinearLayout l = findViewById(R.id.mainLayout);
-        l.setBackgroundColor(WHITE);
+        new MenuListenerImpl(this);
+        mainLayout = findViewById(R.id.mainLayout);
+        mainLayout.setBackgroundColor(WHITE);
 
+        calculateDimensions();
+        setupMenuLayout();
         initColorMap();
         buildGui(savedInstanceState);
 
-        Button newGameBtn = findViewById(R.id.newGameBtn);
-        newGameBtn.setOnClickListener(v ->
-                resetBoard(true)
+        Button moreBtn = findViewById(R.id.moreBtn);
+        moreBtn.setOnClickListener(v ->
+                showMenu()
         );
+    }
+
+    private void setupMenuLayout() {
+        RelativeLayout relativeLayout = findViewById(R.id.mainRelayiveLayout);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        menuLayout = (LinearLayout) inflater.inflate(R.layout.menu, findViewById(R.id.mainMenuLayout));
+        menuLayout.setBackground(Utils.createGradientBackground(GREEN_4, WHITE));
+
+        RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, menuHeight);
+        lparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, menuLayout.getId());
+        relativeLayout.addView(menuLayout, lparams);
+    }
+
+    private void calculateDimensions() {
+        menuHeight = MainActivity.getScreenHeight()/3;
+    }
+
+    private void showMenu() {
+        Utils.slideToTop(menuLayout);
+        Button startGameButton = findViewById(R.id.startButton);
+        Button saveButton = findViewById(R.id.saveButton);
+        Button loadButton = findViewById(R.id.loadButton);
+        startGameButton.setOnClickListener(v ->{
+            menuListener.startNewGame(this, this);
+            Utils.slideToBottom(menuLayout);
+        });
+        saveButton.setOnClickListener(v ->{
+            menuListener.saveGame(this, this, Collections.singletonList(listOfCells));
+            Utils.slideToBottom(menuLayout);
+        });
+        loadButton.setOnClickListener(v ->{
+            menuListener.loadGame(this,this);
+            Utils.slideToBottom(menuLayout);
+        });
     }
 
     private void initGlobalVariables() {
         KAKURO_CELL = calculateCellSize(MainActivity.getScreenWidth());
         matrix = new int[MAX_COLS][MAX_COLS];
+        listOfCells.clear();
         initMatrix();
     }
 
     private void initMatrix() {
         for (int i = 0; i < MAX_COLS; i++) {
-            matrix[i][0] = -1;
-            matrix[0][i] = -1;
-            mapOfCells.put("r" + 0 + "b" + i, new Cell(0, i, "", false));
-            mapOfCells.put("r" + i + "b" + 0, new Cell(i, 0, "", false));
+            for (int j = 0; j < MAX_COLS; j++) {
+                if (i == 0 || j == 0)
+                {
+                    updateValue(new int[]{i, j}, "", false);
+                }
+                else {
+                    matrix[i][j] = 0;
+                }
+            }
         }
     }
 
@@ -105,14 +160,16 @@ public class Kakuro extends AppCompatActivity implements Constants {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("coordinatesList", coordinatesList);
+        outState.putParcelableArrayList("coordinatesList", (ArrayList)coordinatesList);
         outState.putParcelable("currentCoordinates", currentCoordinates);
         outState.putParcelable("previousChoice", previousChoice);
     }
 
-    private void resetBoard(boolean clearBoard) {
+    public void resetBoard(boolean clearBoard) {
+        initGlobalVariables();
         outlineBoard();
         createBoard();
         deleteValues();
@@ -138,8 +195,14 @@ public class Kakuro extends AppCompatActivity implements Constants {
         emptyCells = rand.nextInt(2) + 1;
         for (int j = 0; j < emptyCells; j++) {
             int[] coordinates = findRandomCoordinates(rand, i, direction);
-            mapOfCells.put("r" + coordinates[0] + "b" + coordinates[1], new Cell(coordinates[0], coordinates[1], "", false));
+            updateValue(coordinates, "", false);
+            //mapOfCells.put("r" + coordinates[0] + "b" + coordinates[1], new Cell(coordinates[0], coordinates[1], "", false));
         }
+    }
+
+    private void updateValue(int[] coordinates, String value, boolean enabled) {
+        matrix[coordinates[0]][coordinates[1]] = enabled? (value.equals("")? 0: Integer.parseInt(value)): -1;
+        listOfCells.add( new Cell(coordinates[0], coordinates[1], value, enabled));
     }
 
     private int[] findRandomCoordinates(Random rand, int row, String direction) {
@@ -148,12 +211,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
         if (direction.equals(HORIZONTAL)) {
             coordinates = new int[]{row, num};
-            if (mapOfCells.get("r" + row + "b" + num) != null) {
+            if (matrix[row][num] == -1) {
                 coordinates = findRandomCoordinates(rand, row, direction);
             }
         } else {
             coordinates = new int[]{num, row};
-            if (mapOfCells.get("r" + num + "b" + row) != null) {
+            if (matrix[num][row] == -1) {
                 coordinates = findRandomCoordinates(rand, row, direction);
             }
         }
@@ -161,48 +224,49 @@ public class Kakuro extends AppCompatActivity implements Constants {
     }
 
     private void createBoard() {
+        if (kakuroBoard.getChildCount() > 0)
+        {
+            kakuroBoard.removeAllViews();
+        }
         createButtons();
         populateButtons();
         populateSums();
     }
 
     private void populateSums() {
-        for (HashMap.Entry<String, Cell> entry : mapOfCells.entrySet()) {
-            Cell cell = entry.getValue();
-            if (cell.isEnable())
-            {
-                continue;
-            }
-            ArrayList<Sum> sums = new ArrayList<>();
+        listOfCells.forEach(c -> {if (!c.isEnable()) populateSums(c);});
+    }
 
-            if (cell.getX() == 0 && cell.getY() > 0) {
-                if (matrix[cell.getX() + 1][cell.getY()] > -1) {
-                    int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
-                    sums = cell.getSum();
-                    sums.add(new Sum(sum, LOWER));
-                }
-            }
-            if (cell.getX() > 0) {
-                if (cell.getY() > 0 && cell.getX() < MAX_COLS - 1 && matrix[cell.getX() + 1][cell.getY()] > -1) {
-                    int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
-                    sums = cell.getSum();
-                    sums.add(new Sum(sum, LOWER));
-                }
-                if (cell.getY() > 0 && cell.getY() < MAX_COLS - 1 && matrix[cell.getX()][cell.getY() + 1] > -1) {
-                    int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
-                    sums.add(new Sum(sum, UPPER));
-                }
-                if (cell.getY() == 0 && matrix[cell.getX()][cell.getY() + 1] > -1) {
-                    int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
-                    sums = cell.getSum();
-                    sums.add(new Sum(sum, UPPER));
-                }
-            }
+    private void populateSums(Cell cell) {
+        ArrayList<Sum> sums = new ArrayList<>();
 
-            cell.setSum(sums);
-            RelativeLayout relativeLayout = (RelativeLayout) getCell(getBoardRow(cell.getX()), cell.getY());
-            createTriangles(entry, getBoardRow(cell.getX()).getLayoutParams(), relativeLayout);
+        if (cell.getX() == 0 && cell.getY() > 0) {
+            if (matrix[cell.getX() + 1][cell.getY()] > -1) {
+                int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
+                sums = cell.getSum();
+                sums.add(new Sum(sum, LOWER));
+            }
         }
+        if (cell.getX() > 0) {
+            if (cell.getY() > 0 && cell.getX() < MAX_COLS - 1 && matrix[cell.getX() + 1][cell.getY()] > -1) {
+                int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
+                sums = cell.getSum();
+                sums.add(new Sum(sum, LOWER));
+            }
+            if (cell.getY() > 0 && cell.getY() < MAX_COLS - 1 && matrix[cell.getX()][cell.getY() + 1] > -1) {
+                int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
+                sums.add(new Sum(sum, UPPER));
+            }
+            if (cell.getY() == 0 && matrix[cell.getX()][cell.getY() + 1] > -1) {
+                int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
+                sums = cell.getSum();
+                sums.add(new Sum(sum, UPPER));
+            }
+        }
+
+        cell.setSum(sums);
+        RelativeLayout relativeLayout = (RelativeLayout) getCell(getBoardRow(cell.getX()), cell.getY());
+        createTriangles(cell, getBoardRow(cell.getX()).getLayoutParams(), relativeLayout);
     }
 
     private int sumHorizontalNumbers(int x, int y) {
@@ -245,12 +309,10 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private View createButton(int i, int j, int width, int height) {
         ViewGroup.LayoutParams layoutParams = new TableRow.LayoutParams(width, height);
-        if (mapOfCells.get("r" + i + "b" + j) == null) {
-            matrix[i][j] = 0;
-            mapOfCells.put("r" + i + "b" + j, new Cell(i, j, "", true));
+        if (matrix[i][j] == 0) {
+            updateValue(new int[] {i,j}, "", true);
             return createButton("r" + i + "b" + j, layoutParams);
         } else {
-            matrix[i][j] = -1;
             return createRelativeLayout("r" + i + "rl" + j, layoutParams);
         }
     }
@@ -261,14 +323,14 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return rLayout;
     }
 
-    private void createTriangles(HashMap.Entry<String, Cell> entry, ViewGroup.LayoutParams layoutParams, RelativeLayout relativeLayout) {
+    private void createTriangles(Cell cell, ViewGroup.LayoutParams layoutParams, RelativeLayout relativeLayout) {
         Triangles triangles = new Triangles(this);
         triangles.setSize(relativeLayout.getLayoutParams().height);
-        triangles.setDirections(entry.getValue().getSum());
+        triangles.setDirections(cell.getSum());
         triangles.buildCell();
-        triangles.setTag(entry.getKey());
+        triangles.setTag("r"+cell.getX()+"rl"+cell.getY());
         triangles.setLayoutParams(layoutParams);
-        combineIntoLayout(triangles, relativeLayout, entry.getValue());
+        combineIntoLayout(triangles, relativeLayout, cell);
     }
 
     private void combineIntoLayout(Triangles triangles, RelativeLayout relativeLayout, Cell cell) {
@@ -378,7 +440,6 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void buildGui(Bundle savedInstanceState) {
         kakuroBoard = findViewById(R.id.kakuroBoard);
-        initGlobalVariables();
         //setRadios();
 //        if (savedInstanceState != null)
 //        {
@@ -432,12 +493,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
                             }
 
                             if (v.getTag().toString().equals("revert")) {
-                                if (previousChoice.getValue() > 0) {
-                                    putNumberInButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY(), String.valueOf(previousChoice.getValue()));
-                                    Button b = getButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY());
-                                    b.setTextColor(BLUE_1);
-                                    ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
-                                }
+//                                if (previousChoice.getValue() > 0) {
+//                                    putNumberInButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY(), String.valueOf(previousChoice.getValue()));
+//                                    Button b = getButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY());
+//                                    b.setTextColor(BLUE_1);
+//                                    ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
+//                                }
 
                                 v.setSelected(!v.isSelected());
                             } else {
@@ -497,9 +558,6 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void handleFunction(int function, Button b, Coordinates c, List<Object> params) {
         switch (function) {
-            case FUNCTION_FILL_UP_CELL_MAP:
-                fillUpCellsMap(b, c, false);
-                break;
             case FUNCTION_COLOR_CELL_VICTORY:
                 b.setTextColor(numberColors.get(b.getText().toString()));
                 break;
@@ -927,6 +985,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
             previousChoice.setValue(Integer.parseInt(chosenNumber));
             currentCoordinates.setValue(Integer.parseInt(chosenNumber));
             coordinatesList.add(currentCoordinates);
+            updateValue(new int[]{i, j}, chosenNumber, true);
             if (checkForVictory()) {
                 colorGrid();
             }

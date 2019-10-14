@@ -49,12 +49,17 @@ public interface Constants {
 
     String KAKURO = "Kakuro";
     String SUDOKU = "Sudoku";
-    int FUNCTION_FILL_UP_CELL_MAP = 1;
+
+    int NUMBER_OF_COLS = 9;
+    int NUMBER_OF_ROWS_PART = 3;
+
     int FUNCTION_COLOR_CELL_VICTORY = 3;
     int FUNCTION_EMPTY_BOARD = 4;
     int FUNCTION_POPULATE_LIST_OF_SAVED_INSTANCE = 5;
     int FUNCTION_READ_LIST_FROM_SAVED_INSTANCE = 6;
     int FUNCTION_POPULATE_MATRIX = 7;
+    int FUNCTION_MENU_SET = 8;
+    int FUNCTION_MENU_START_GAME = 9;
 
     int DIFFICULTY_START_EASY = 3;
     int DIFFICULTY_START_MODERATE = 4;

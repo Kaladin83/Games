@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/choiceButtonsLayout"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_height="85dp"
+    android:layout_centerInParent="true">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/n1"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number1"
+            android:tag="@string/number1"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n2"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:layout_marginEnd="10dp"
+            android:tag="@string/number2"
+            android:text="@string/number2"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n3"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number3"
+            android:tag="@string/number3"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n4"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:tag="@string/number4"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number4"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n5"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number5"
+            android:tag="@string/number5"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:id="@+id/revert"
+            android:tag="revert"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@drawable/revert"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingTop="5dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/n6"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:tag="@string/number6"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number6"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n7"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:layout_marginEnd="10dp"
+            android:tag="@string/number7"
+            android:text="@string/number7"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n8"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:tag="@string/number8"
+            android:layout_marginEnd="10dp"
+            android:text="@string/number8"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/n9"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button"
+            android:background="@color/lightBlue2"
+            android:tag="@string/number9"
+            android:text="@string/number9"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/lightBlack"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/hintLayout"
+            android:tag="hint"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="@dimen/button"
+            android:layout_height="@dimen/button">
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/hint"
+                android:tag="revert"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/hint" />
+            <TextView
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:textAlignment="center"
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:text="5"/>
+        </RelativeLayout>
+
+    </TableRow>
+
+</TableLayout>

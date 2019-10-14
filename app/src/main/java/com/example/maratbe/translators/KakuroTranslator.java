@@ -1,6 +1,6 @@
 package com.example.maratbe.translators;
 
-import com.example.maratbe.dataBase.dto.Kakuro;
+import com.example.maratbe.dataBase.dto.KakuroTable;
 import com.example.maratbe.domain.Cell;
 import com.example.maratbe.domain.Sum;
 
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class KakuroTranslator {
 
-    public Kakuro daoObjectFromKakuroCell(Cell cell, int id)
+    public KakuroTable daoObjectFromKakuroCell(Cell cell, int id)
     {
-        Kakuro kakuro = new Kakuro();
+        KakuroTable kakuro = new KakuroTable();
         kakuro.setX(cell.getX());
         kakuro.setY(cell.getY());
         kakuro.setId(id);
@@ -33,7 +33,7 @@ public class KakuroTranslator {
         return sums.size() > 0? sb.toString(): value;
     }
 
-    public Cell cellFromDaoObject(Kakuro daoCell)
+    public Cell cellFromDaoObject(KakuroTable daoCell)
     {
         Cell cell = new Cell();
         cell.setX(daoCell.getX());

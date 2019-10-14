@@ -6,4 +6,7 @@
     <dimen name="resetButton">60dp</dimen>
     <dimen name="part">101dp</dimen>
     <dimen name="tool_bar">50dp</dimen>
+    <dimen name="buttonTextSizeLarge">20sp</dimen>
+    <dimen name="buttonTextSize">17sp</dimen>
+    <dimen name="headerTextSize">17sp</dimen>
 </resources>

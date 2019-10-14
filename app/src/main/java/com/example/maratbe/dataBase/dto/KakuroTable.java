@@ -4,7 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Kakuro{
+public class KakuroTable{
     @PrimaryKey
     private int id;
     private int x;
