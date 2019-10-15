@@ -53,6 +53,7 @@ public interface Constants {
     int NUMBER_OF_COLS = 9;
     int NUMBER_OF_ROWS_PART = 3;
 
+    int FUNCTION_COLOR_CELLS_HINT = 2;
     int FUNCTION_COLOR_CELL_VICTORY = 3;
     int FUNCTION_EMPTY_BOARD = 4;
     int FUNCTION_POPULATE_LIST_OF_SAVED_INSTANCE = 5;

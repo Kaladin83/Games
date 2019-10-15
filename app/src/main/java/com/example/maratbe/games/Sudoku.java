@@ -30,6 +30,7 @@ import java.util.Stack;
 
 public class Sudoku extends AppCompatActivity implements Constants {
     private TableLayout sudokuBoard;
+    private TextView hintTextView;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();
     private ArrayList<Integer> missing = new ArrayList<>();
@@ -46,7 +47,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private int SUDOKU_CELL = 0;
     private String chosenNumber = "";
     private String previousNumber = "";
+    private Boolean hintPressed = false;
     private int[][] matrix = new int[9][9];
+    private int[][] hintMatrix = new int[9][9];
     int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
 
     private String prevConflict = "No Conflict";
@@ -88,6 +91,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private void resetBoard(boolean clearBoard) {
         setDifficulty(getStartDifficulty(), getRangeDifficulty(), false);
         populateBoard(clearBoard);
+        fillUpHintMatrix();
         deleteValues();
         populateCoordinatesList();
 //        if (checkForVictory())
@@ -239,6 +243,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
                         button = (Button) row.getChildAt(j);
                         numbersMap.put(button.getTag().toString(), button);
                         button.setOnClickListener(v -> {
+                            hintPressed = false;
                             if (!previousNumber.equals("")) {
                                 Objects.requireNonNull(numbersMap.get(previousNumber)).setBackgroundColor(BLUE_6);
                             }
@@ -272,6 +277,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
                     }
                     else{
                         RelativeLayout rLayout = (RelativeLayout) row.getChildAt(j);
+                        hintTextView = (TextView) rLayout.getChildAt(1);
                         rLayout.setOnClickListener(v -> createHint(rLayout));
                     }
                 }
@@ -280,14 +286,14 @@ public class Sudoku extends AppCompatActivity implements Constants {
     }
 
     private void createHint(RelativeLayout rLayout) {
-        TextView txtView = (TextView) rLayout.getChildAt(1);
-        int numOfHints = Integer.parseInt(txtView.getText().toString());
+        int numOfHints = Integer.parseInt(hintTextView.getText().toString());
         if (numOfHints > 0)
         {
-            //TODO call a method for highlighting fields
+            iterateTableView(FUNCTION_COLOR_CELLS_HINT);
             Button hint = (Button) rLayout.getChildAt(0);
             hint.setEnabled(!hint.isEnabled());
-            txtView.setText(String.valueOf(numOfHints - 1));
+            hintPressed = true;
+            hintTextView.setText(String.valueOf(numOfHints - 1));
         }
     }
 
@@ -416,6 +422,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private void handleFunction(int function, Button b, Coordinates c) {
         switch (function) {
+            case FUNCTION_COLOR_CELLS_HINT:
+                if (b.getText().toString().equals(""))
+                {
+                    colorFrame(c, hintPressed? BLUE_3: GREEN_4);
+                }
+                break;
             case FUNCTION_COLOR_CELL_VICTORY:
                 b.setTextColor(numberColors.get(b.getText().toString()));
                 break;
@@ -757,16 +769,39 @@ public class Sudoku extends AppCompatActivity implements Constants {
         matrix[y][x] = value;
     }
 
+    private String getValueFromHintMatrix(int partRow, int partColumn, int i, int j)
+    {
+        int x = partColumn * 3 + j;
+        int y = partRow * 3 + i;
+        return String.valueOf(hintMatrix[y][x]);
+    }
+
+    private void fillUpHintMatrix() {
+        for(int i = 0; i < NUMBER_OF_COLS; i++)
+        {
+            for(int j = 0; j < NUMBER_OF_COLS; j++)
+            {
+                hintMatrix[i][j] = matrix[i][j];
+            }
+        }
+    }
+
     private void handleClick(String name) {
         currentCoordinates = getCoordinatesFromList(name);
         turns.push(currentCoordinates);
 
-        if (currentCoordinates.isEnabled() && !chosenNumber.equals("")) {
+        if (currentCoordinates.isEnabled() && (!chosenNumber.equals("") || hintPressed)) {
             previousChoice = coordinatesList.get(coordinatesList.size() - 1);
             if (previousChoice.getValue().get(previousChoice.getValue().size() - 1) > 0 && previousChoice.isEnabled()) {
                 colorFrame(previousChoice, GREEN_4);
             }
             Button button = getButton(currentCoordinates.getPartRow(), currentCoordinates.getPartCol(), currentCoordinates.getX(), currentCoordinates.getY());
+
+            if (hintPressed)
+            {
+                chosenNumber = getValueFromHintMatrix(currentCoordinates.getPartRow(), currentCoordinates.getPartCol(), currentCoordinates.getX(), currentCoordinates.getY());
+                updateHints();
+            }
             button.setText(chosenNumber);
             button.setTextColor(BLUE_1);
             colorFrame(currentCoordinates, GREEN_1);
@@ -788,6 +823,13 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 colorGrid();
             }
         }
+    }
+
+    private void updateHints() {
+        hintPressed = false;
+        iterateTableView(FUNCTION_COLOR_CELLS_HINT);
+        int hints = Integer.parseInt(hintTextView.getText().toString());
+        hintTextView.setText(String.valueOf(hints -1));
     }
 
     private Coordinates getCoordinatesFromList(String name) {
