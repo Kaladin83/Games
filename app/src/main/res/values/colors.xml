@@ -14,4 +14,6 @@
     <color name="red1">#F81118</color>
     <color name="orange">#FF6636</color>
     <color name="gray">#CCC7C5</color>
+    <color name="b">#EBF8FF</color>
+    <color name="bl">#FFFFFF</color>
 </resources>

@@ -26,7 +26,7 @@ public interface Constants {
     int BLUE_2 = Color.parseColor("#7fa9ef");
     int BLUE_3 = Color.parseColor("#ceebef");
     int BLUE_4 = Color.parseColor("#dae3f2");
-    int BLUE_5 = Color.parseColor("#f4f9fc");
+    int BLUE_5 = Color.parseColor("#ebf8ff");
     int BLUE_6 = Color.parseColor("#deebfc");
 
     int YELLOW_1 = Color.parseColor("#d3f713");
