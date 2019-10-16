@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -30,7 +31,7 @@ import java.util.Stack;
 
 public class Sudoku extends AppCompatActivity implements Constants {
     private TableLayout sudokuBoard;
-    private TextView hintTextView;
+    private TextView hintTextView, hintImage ;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();
     private ArrayList<Integer> missing = new ArrayList<>();
@@ -277,21 +278,22 @@ public class Sudoku extends AppCompatActivity implements Constants {
                     }
                     else{
                         RelativeLayout rLayout = (RelativeLayout) row.getChildAt(j);
+                        hintImage = (TextView) rLayout.getChildAt(0);
                         hintTextView = (TextView) rLayout.getChildAt(1);
-                        rLayout.setOnClickListener(v -> createHint(rLayout));
+                        hintImage.setOnClickListener(v -> createHint());
+                        hintTextView.setOnClickListener(v -> createHint());
                     }
                 }
             }
         }
     }
 
-    private void createHint(RelativeLayout rLayout) {
+    private void createHint() {
         int numOfHints = Integer.parseInt(hintTextView.getText().toString());
         if (numOfHints > 0)
         {
             iterateTableView(FUNCTION_COLOR_CELLS_HINT);
-            Button hint = (Button) rLayout.getChildAt(0);
-            hint.setEnabled(!hint.isEnabled());
+            hintImage.setEnabled(!hintImage.isEnabled());
             hintPressed = true;
             hintTextView.setText(String.valueOf(numOfHints - 1));
         }
