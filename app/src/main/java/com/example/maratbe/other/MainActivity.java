@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -58,19 +59,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Button ticTacToeBtn = findViewById(R.id.ticTacToeBtn);
+        ImageButton ticTacToeBtn = findViewById(R.id.ticTacToeBtn);
         ticTacToeBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, TicTacToe.class);
             startActivity(myIntent);
         });
 
-        Button sudokuBtn = findViewById(R.id.sudokuBtn);
+        ImageButton sudokuBtn = findViewById(R.id.sudokuBtn);
         sudokuBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, Sudoku.class);
             startActivity(myIntent);
         });
 
-        Button kakuroBtn = findViewById(R.id.kakuroBtn);
+        ImageButton kakuroBtn = findViewById(R.id.kakuroBtn);
         kakuroBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, Kakuro.class);
             startActivity(myIntent);
