@@ -363,24 +363,25 @@ public class Sudoku extends AppCompatActivity implements Constants {
     }
 
     private void setTableBackground(int i, int j, TableLayout group, TableRow groupRow) {
-        if ((i== 0 && j ==2) || (i== 1 && j ==2))
+        int margin = 2, tableSize = SUDOKU_CELL*3, doubleMargin = margin*2;
+        if ((i== 0 && j ==1) || (i== 2 && j ==1))
         {
-            group.setBackground(getDrawable(R.drawable.sudoku_right));
-            groupRow.addView(group, SUDOKU_CELL*3, SUDOKU_CELL*3+3);
+            group.setBackground(getDrawable(R.drawable.sudoku_side));
+            groupRow.addView(group, tableSize, tableSize+doubleMargin);
         }
-        else if ((i== 2 && j ==0) || (i== 2 && j ==1))
+        else if ((i== 1 && j ==0) || (i== 1 && j ==2))
         {
-            group.setBackground(getDrawable(R.drawable.sudoku_bottom));
-            groupRow.addView(group, SUDOKU_CELL*3+3, SUDOKU_CELL*3);
+            group.setBackground(getDrawable(R.drawable.sudoku_middle));
+            groupRow.addView(group, tableSize+doubleMargin, tableSize);
         }
-        else if (i== 2 && j ==2)
+        else if (i== 1 && j ==1)
         {
-            groupRow.addView(group, SUDOKU_CELL*3, SUDOKU_CELL*3);
+            groupRow.addView(group, tableSize, tableSize);
         }
         else
         {
-            group.setBackground(getDrawable(R.drawable.sudoku_side));
-            groupRow.addView(group, SUDOKU_CELL*3+3, SUDOKU_CELL*3+3);
+            group.setBackground(getDrawable(R.drawable.sudoku_corners));
+            groupRow.addView(group, tableSize+doubleMargin, tableSize+doubleMargin);
         }
     }
 
