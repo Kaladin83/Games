@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.example.maratbe.dataBase.DataLayer;
 import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
+import com.example.maratbe.games.Sudoku;
+import com.example.maratbe.games.TicTacToe;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.Utils;
 
@@ -24,40 +26,58 @@ public class MenuListenerImpl implements Constants, MenuListener {
     private Context context;
     private static Tasks task;
     private List<String> listOfStrings;
+    private Kakuro kakuro;
+    private Sudoku sudoku;
+    private TicTacToe ticTacToe;
 
     private enum Tasks{
         FETCH_NAMES, FETCH_DATA
     }
 
-    public MenuListenerImpl(Object gameInstance)
+    public MenuListenerImpl(MenuHandler menuHandler, Object gameInstance)
     {
-        setMenuListener(gameInstance);
+        setMenuListener(menuHandler);
+        getContext(gameInstance);
     }
 
-    private void setMenuListener(Object gameInstance) {
+    private void setMenuListener(MenuHandler menuHandler) {
+        menuHandler.setMenuListener(this);
+
+    }
+
+    private void getContext(Object gameInstance) {
         if (gameInstance instanceof Kakuro)
         {
-            Kakuro kakuro = (Kakuro) gameInstance;
-            kakuro.setMenuListener(this);
+            kakuro = (Kakuro)gameInstance;
+            context = kakuro;
         }
-    }
-
-    private void startGame(Object gameInstance) {
-        if (gameInstance instanceof Kakuro)
+        else if (gameInstance instanceof Sudoku)
         {
-            Kakuro kakuro = (Kakuro) gameInstance;
-            kakuro.resetBoard(true);
+            sudoku = (Sudoku)gameInstance;
+            context = sudoku;
+        }
+        else
+        {
+            ticTacToe = (TicTacToe)gameInstance;
+            context = ticTacToe;
         }
     }
 
     @Override
-    public void startNewGame(Object gameInstance, Context context) {
-        startGame(gameInstance);
+    public void startNewGame() {
+        if (kakuro != null)
+        {
+            kakuro.resetBoard();
+        }
+        else
+        {
+            sudoku.resetBoard(true);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void saveGame(Object gameInstance, Context context, List<Object> list) {
+    public void saveGame(List<Object> list) {
 //        if (gameInstance instanceof Kakuro)
 //        {
 //            //Kakuro kakuro = (Kakuro) gameInstance;
@@ -66,7 +86,6 @@ public class MenuListenerImpl implements Constants, MenuListener {
 //            dialog.setContentView(R.layout.save_game);
 //            dialog.show();
 //        }
-        this.context = context;
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.save_game);
         Button saveButton = dialog.findViewById(R.id.saveButton);
@@ -86,10 +105,13 @@ public class MenuListenerImpl implements Constants, MenuListener {
     }
 
     @Override
-    public void loadGame(Object gameInstance, Context context) {
-        this.context = context;
+    public void loadGame() {
         task = Tasks.FETCH_NAMES;
         new AsyncTaskAgent().execute(KAKURO);
+    }
+
+    @Override
+    public void backToGame() {
     }
 
     private void loadListOfNames() {

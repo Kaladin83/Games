@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.room.Room;
 
 import com.example.maratbe.dataBase.DataBase;
@@ -59,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        ImageButton ticTacToeBtn = findViewById(R.id.ticTacToeBtn);
+        CardView ticTacToeBtn = findViewById(R.id.tictactoeCardView);
         ticTacToeBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, TicTacToe.class);
             startActivity(myIntent);
         });
 
-        ImageButton sudokuBtn = findViewById(R.id.sudokuBtn);
+        CardView sudokuBtn = findViewById(R.id.sudokuCardView);
         sudokuBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, Sudoku.class);
             startActivity(myIntent);
         });
 
-        ImageButton kakuroBtn = findViewById(R.id.kakuroBtn);
+        CardView kakuroBtn = findViewById(R.id.kakuroCardView);
         kakuroBtn.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, Kakuro.class);
             startActivity(myIntent);

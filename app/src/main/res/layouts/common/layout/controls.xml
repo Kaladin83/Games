@@ -146,13 +146,14 @@
 
             <Button
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/hint"
+                android:id="@+id/hintButton"
                 android:tag="hint"
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/hint" />
             <TextView
+                android:id="@+id/hintTextView"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:textAlignment="center"

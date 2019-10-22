@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mainMenuLayout"
     android:visibility="invisible"
-    android:weightSum="3">
+    android:weightSum="4">
 
     <Button
         android:id="@+id/saveButton"
@@ -29,6 +29,15 @@
     <Button
         android:id="@+id/startButton"
         android:text="@string/start_new_game"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textAllCaps="false"
+        android:textSize="@dimen/buttonTextSize"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/backButton"
+        android:text="@string/back_to_game"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAllCaps="false"

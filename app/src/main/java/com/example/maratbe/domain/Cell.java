@@ -1,81 +1,127 @@
 package com.example.maratbe.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class Cell {
-    private int x;
-    private int y;
-    private String value;
-    private boolean enable;
-    private ArrayList<Sum> sum = new ArrayList<>();
+public class Cell implements Parcelable {
+    private int index;
+    private Coordinates coordinates;
+    private ArrayList<Integer> value = new ArrayList<>();
+    private ArrayList<Sum> sums = new ArrayList<>();
+    private int color;
+    private boolean enabled;
 
-    public Cell()
-    {
-
+    public Cell(){
+        enabled = true;
+        value.add(0);
     }
 
-    public Cell(int x, int y, String value, boolean enable) {
-        this.x = x;
-        this.y = y;
+    public Cell(Coordinates coordinates, int value) {
+        this.coordinates = coordinates;
+        this.value.add(value);
+    }
+
+    public Cell(Coordinates coordinates, Integer value, int color, boolean enabled) {
+        this.coordinates = coordinates;
+        this.value.add(value);
+        this.color = color;
+        this.enabled = enabled;
+    }
+
+    public Cell(Coordinates coordinates, ArrayList<Integer> value, ArrayList<Sum> sums, boolean enabled) {
+        this.coordinates = coordinates;
         this.value = value;
-        this.enable = enable;
+        this.sums = sums;
+        this.enabled = enabled;
     }
 
-    public int getX() {
-        return x;
+    protected Cell(Parcel in) {
+        index = in.readInt();
+        coordinates = in.readParcelable(Coordinates.class.getClassLoader());
+        color = in.readInt();
+        enabled = in.readByte() != 0;
+        in.readList(sums, ArrayList.class.getClassLoader());
+        in.readList(value, ArrayList.class.getClassLoader());
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public static final Creator<Cell> CREATOR = new Creator<Cell>() {
+        @Override
+        public Cell createFromParcel(Parcel in) {
+            return new Cell(in);
+        }
+
+        @Override
+        public Cell[] newArray(int size) {
+            return new Cell[size];
+        }
+    };
+
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
-    public int getY() {
-        return y;
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public String getValue() {
+    public ArrayList<Integer> getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(ArrayList<Integer> value) {
         this.value = value;
     }
 
-    public boolean isEnable() {
-        return enable;
+    public void setValue(int value) {
+        this.value.add(value);
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public ArrayList<Sum> getSums() {
+        return sums;
     }
 
-    public ArrayList<Sum> getSum() {
-        return sum;
+    public void setSums(ArrayList<Sum> sums) {
+        this.sums = sums;
     }
 
-    public void setSum(ArrayList<Sum> sum) {
-        this.sum = sum;
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cell)) return false;
-        Cell cell = (Cell) o;
-        return getX() == cell.getX() &&
-                getY() == cell.getY() &&
-                isEnable() == cell.isEnable() &&
-                Objects.equals(getValue(), cell.getValue());
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public int hashCode() {
-
-        return Objects.hash(getX(), getY(), getValue(), isEnable());
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(index);
+        parcel.writeParcelable(coordinates, i);
+        parcel.writeInt(color);
+        parcel.writeByte((byte) (enabled ? 1 : 0));
+        parcel.writeList(sums);
+        parcel.writeList(value);
     }
 }

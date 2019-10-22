@@ -3,10 +3,12 @@ package com.example.maratbe.games;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -17,39 +19,37 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.maratbe.domain.Cell;
 import com.example.maratbe.domain.Coordinates;
+import com.example.maratbe.listeners.ClickHandler;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
+import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
-import java.util.Stack;
 
 public class Sudoku extends AppCompatActivity implements Constants {
     private TableLayout sudokuBoard;
-    private TextView hintTextView, hintBurron ;
+    private Chronometer chronometer;
+    private Button timeButton;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();
     private ArrayList<Integer> missing = new ArrayList<>();
     private ArrayList<String> opened = new ArrayList<>();
     private ArrayList<String> closed = new ArrayList<>();
-    private ArrayList<Coordinates> coordinatesList = new ArrayList<>();
-    private HashMap<String, Button> numbersMap = new HashMap<>();
     private HashMap<String, Integer> numberColors = new HashMap<>();
     private Coordinates cor = new Coordinates();
-    private Coordinates currentCoordinates = new Coordinates();
-    private Coordinates previousChoice = new Coordinates();
-    private Stack<Coordinates> turns = new Stack<>();
+
     private int conflictNumber = 0, yIndex = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE, numOfHints;
     private int SUDOKU_CELL = 0;
-    private String chosenNumber = "";
-    private String previousNumber = "";
-    private Boolean hintPressed = false;
+    private long pauseOffset;
     private int[][] matrix = new int[9][9];
     private int[][] hintMatrix = new int[9][9];
     int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
+
+    private ClickHandler clickHandler;
 
     private String prevConflict = "No Conflict";
 
@@ -62,10 +62,13 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
         initColorMap();
         buildGui(savedInstanceState);
-
-        Button moreBtn = findViewById(R.id.moreBtn);
+        TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
-                resetBoard(true)
+                clickHandler.onMenuButtonClicked()
+        );
+        timeButton = findViewById(R.id.timeBtn);
+        timeButton.setOnClickListener(v ->
+                clickHandler.onTimeButtonClicked(v.isSelected())
         );
     }
 
@@ -82,17 +85,71 @@ public class Sudoku extends AppCompatActivity implements Constants {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("coordinatesList", coordinatesList);
-        outState.putParcelable("currentCoordinates", currentCoordinates);
-        outState.putParcelable("previousChoice", previousChoice);
+        outState.putParcelableArrayList("listOfCells", clickHandler.getListOfCells());
+        outState.putParcelableArrayList("turns", clickHandler.getTurns());
+        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(hintMatrix, NUMBER_OF_COLS));
+        outState.putParcelable("currentCell", clickHandler.getCurrentCell());
+        outState.putParcelable("previousCell", clickHandler.getPreviousCell());
+        outState.putInt("numOfHints", clickHandler.getNumberOfHints());
+        outState.putBoolean("isHintPressed", clickHandler.isHintPressed());
     }
 
-    private void resetBoard(boolean clearBoard) {
+    private void setupClickHandler() {
+        RelativeLayout relativeLayout = findViewById(R.id.mainRelativeLayout);
+        clickHandler = new ClickHandler(relativeLayout, this) {
+            @Override
+            protected void colorCellsForHints() {
+                iterateTableView(FUNCTION_COLOR_CELLS_HINT);
+            }
+
+            @Override
+            protected void updateCellRevertValue(Cell previous) {
+                Coordinates coordinates = previous.getCoordinates();
+                Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
+                b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0? "":
+                        String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
+                b.setTextColor(BLUE_1);
+                ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
+            }
+
+            @Override
+            protected void updateCellNewValue(boolean isPreviousExists) {
+                Coordinates coordinates = clickHandler.getCurrentCell().getCoordinates();
+                if (isPreviousExists)
+                {
+                    colorFrame(clickHandler.getPreviousCell().getCoordinates(), GREEN_4);
+                }
+
+                String chosenNumber = Utils.updateValueWhenHintPressed(clickHandler,
+                        getValueFromHintMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY()));
+
+                Button button = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
+                button.setText(chosenNumber);
+                button.setTextColor(BLUE_1);
+                button.setBackgroundColor(Color.WHITE);
+                colorFrame(coordinates, GREEN_1);
+
+                fillUpTempMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY(),
+                        Integer.parseInt(button.getText().toString()));
+                if (checkForVictory()) {
+                    colorGrid();
+                }
+            }
+
+            @Override
+            protected void handleChronometer(boolean isPaused) {
+                pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
+            }
+        };
+        clickHandler.createControlPanel(findViewById(R.id.choiceButtonsLayout));
+    }
+
+    public void resetBoard(boolean clearBoard) {
         setDifficulty(getStartDifficulty(), getRangeDifficulty(), false);
         populateBoard(clearBoard);
         fillUpHintMatrix();
         deleteValues();
-        populateCoordinatesList();
+        populateListOfCells();
 //        if (checkForVictory())
 //        {
 //
@@ -120,8 +177,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
         return DIFFICULTY_RANGE_HARD;
     }
 
-    private void populateCoordinatesList() {
-        coordinatesList.clear();
+    private void populateListOfCells() {
+        clickHandler.getListOfCells().clear();
         iterateTableView(FUNCTION_POPULATE_LIST_OF_SAVED_INSTANCE);
     }
 
@@ -194,19 +251,26 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void buildGui(Bundle savedInstanceState) {
         sudokuBoard = findViewById(R.id.sudokuBoard);
+        chronometer = findViewById(R.id.chronometer);
         createBoard();
+        setupClickHandler();
         setRadios();
         if (savedInstanceState != null) {
-            currentCoordinates = (Coordinates) savedInstanceState.get("currentCoordinates");
-            previousChoice = (Coordinates) savedInstanceState.get("previousChoice");
-            coordinatesList = (ArrayList<Coordinates>) savedInstanceState.get("coordinatesList");
+            clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
+            clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
+            clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
+            clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
+            clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
+            Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
+
             iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE);
+            clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
         } else {
             resetBoard(false);
         }
-        createChoiceNumbers();
     }
 
     private void setRadios() {
@@ -229,89 +293,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
 
     }
-
-    private void createChoiceNumbers() {
-        TableLayout numberLayout = findViewById(R.id.choiceButtonsLayout);
-        TableRow row;
-        Button button;
-        for (int i = 0; i < numberLayout.getChildCount(); i++) {
-            if (numberLayout.getChildAt(i) instanceof TableRow) {
-                row = (TableRow) numberLayout.getChildAt(i);
-                for (int j = 0; j < row.getChildCount(); j++) {
-                    if (row.getChildAt(j) instanceof Button) {
-                        button = (Button) row.getChildAt(j);
-                        numbersMap.put(button.getTag().toString(), button);
-                        button.setOnClickListener(v -> {
-                            updateHints(false);
-                            updatePreviousControl();
-
-                            if (v.getTag().toString().equals("revert")) {
-                                if (!turns.isEmpty()) {
-                                    int index = turns.pop().getIndex();
-                                    Coordinates previous = coordinatesList.get(index);
-                                    if (previous.getValue().size() > 1)
-                                    {
-                                        previous.getValue().remove(previous.getValue().size() - 1);
-                                    }
-                                    else {
-                                        previous.setValue(0);
-                                    }
-                                    coordinatesList.set(index, previous);
-                                    Button b = getButton(previous.getPartRow(), previous.getPartCol(), previous.getX(), previous.getY());
-                                    b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0? "":
-                                            String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
-                                    b.setTextColor(BLUE_1);
-                                    ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
-                                    v.setSelected(!v.isSelected());
-                                }
-                            } else {
-                                v.setBackgroundColor(GREEN_5);
-                                Objects.requireNonNull(numbersMap.get("revert")).setSelected(false);
-                                chosenNumber = ((Button) v).getText().toString();
-                            }
-                            previousNumber = ((Button) v).getText().toString();
-                        });
-                    }
-                    else{
-                        RelativeLayout rLayout = (RelativeLayout) row.getChildAt(j);
-                        hintBurron = (Button) rLayout.getChildAt(0);
-                        hintTextView = (TextView) rLayout.getChildAt(1);
-                        hintBurron.setOnClickListener(v -> createHint());
-                        hintTextView.setOnClickListener(v -> createHint());
-                    }
-                }
-            }
-        }
-    }
-
-    private void updatePreviousControl() {
-        if (!previousNumber.equals("")) {
-            Objects.requireNonNull(numbersMap.get(previousNumber)).setBackgroundColor(BLUE_6);
-        }
-    }
-
-    private void updateHints(boolean pressed) {
-        hintPressed = false;
-        iterateTableView(FUNCTION_COLOR_CELLS_HINT);
-        hintBurron.setSelected(false);
-        if (pressed)
-        {
-            int hints = Integer.parseInt(hintTextView.getText().toString());
-            hintTextView.setText(String.valueOf(hints -1));
-        }
-    }
-
-    private void createHint() {
-        updatePreviousControl();
-        numOfHints = Integer.parseInt(hintTextView.getText().toString());
-        if (numOfHints > 0)
-        {
-            hintBurron.setSelected(!hintPressed);
-            hintPressed = !hintPressed;
-            iterateTableView(FUNCTION_COLOR_CELLS_HINT);
-        }
-    }
-
 
     private void initAllNumbersNumbers() {
         allNumbers.clear();
@@ -339,7 +320,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         opened.add("2,2");
     }
 
-    private void createBoard() {
+    public void createBoard() {
         for (int i = 0; i < NUMBER_OF_ROWS_PART; i++) {
             TableRow groupRow = new TableRow(this);
             groupRow.setGravity(Gravity.CENTER);
@@ -398,11 +379,11 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private View createButton(int i, int j, int k, int l) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(SUDOKU_CELL-7, SUDOKU_CELL - 7);
         params.gravity = Gravity.CENTER;
-        Button button = new Button(this);
+        Button button = new Button(sudokuBoard.getContext());
         button.setLayoutParams(params);
         button.setTag("b"+i+""+j+""+k+""+l);
         button.setBackgroundColor(WHITE);
-        button.setOnClickListener(view -> handleClick(button.getTag().toString()));
+        button.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
         button.setPadding(0,0,0,0);
         button.setGravity(Gravity.CENTER);
         return button;
@@ -410,8 +391,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private void populateBoard(boolean clearBoard) {
         if (clearBoard) {
-            if (previousChoice.getValue().get(previousChoice.getValue().size() - 1) > 0) {
-                colorFrame(previousChoice, GREEN_4);
+            if (clickHandler.getPreviousCell() != null && clickHandler.getPreviousCell().getValue() != null &&
+                    clickHandler.getPreviousCell().getValue().get(clickHandler.getPreviousCell().getValue().size() - 1) > 0) {
+                colorFrame(clickHandler.getPreviousCell().getCoordinates(), GREEN_4);
             }
             iterateTableView(FUNCTION_EMPTY_BOARD);
         }
@@ -482,34 +464,39 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private void setBackgroundColor(Button b) {
         if (b.getText().toString().equals(""))
         {
-            b.setBackgroundColor(hintPressed? BLUE_5: WHITE);
+            b.setBackgroundColor(clickHandler.isHintPressed()? BLUE_5: WHITE);
         }
     }
 
     private void populateList(Button button, Coordinates c) {
-        if (!button.getText().toString().equals("")) {
-            c.setValue(Integer.parseInt(button.getText().toString()));
-            c.setColor(Color.BLACK);
-            c.setEnabled(false);
-            coordinatesList.add(c);
-        }
+        String value = button.getText().toString();
+        Cell cell = new Cell();
+        cell.setCoordinates(c);
+        cell.setValue(value.equals("")? 0: Integer.parseInt(button.getText().toString()));
+        cell.setColor(value.equals("")? BLUE_1: Color.BLACK);
+        cell.setIndex(clickHandler.getListOfCells().size());
+        cell.setEnabled(value.equals(""));
+        clickHandler.getListOfCells().add(cell);
     }
 
-    private void populateBoardFromList(Button button, Coordinates c1) {
+    private void populateBoardFromList(Button button, Coordinates c) {
         button.setOnClickListener(v ->
-                handleClick((String) v.getTag()));
-        fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), 0);
+                clickHandler.onCellClick((String) v.getTag()));
+        fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), 0);
         button.setBackgroundColor(WHITE);
-        coordinatesList.stream().filter(c -> c.equals(c1)).
-                forEach(c -> populateBoard(button, c));
+        clickHandler.getListOfCells().stream().filter(c1 -> c1.getCoordinates().equals(c)).
+                forEach(c1 -> populateBoard(button, c1));
     }
 
-    private void populateBoard(Button button, Coordinates c) {
-        button.setText(String.valueOf(c.getValue().get(c.getValue().size() - 1)));
+    private void populateBoard(Button button, Cell c) {
+        button.setText(c.getValue().get(c.getValue().size() - 1) == 0? "": String.valueOf(c.getValue().get(c.getValue().size() - 1)));
         button.setTextColor(c.getColor());
-        fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), Integer.parseInt(button.getText().toString()));
-        if (currentCoordinates != null && currentCoordinates.equals(c)) {
-            colorFrame(currentCoordinates, GREEN_1);
+        Coordinates c1 = c.getCoordinates();
+        fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), c.getValue().get(c.getValue().size() - 1));
+        if (clickHandler.getCurrentCell() != null && clickHandler.getCurrentCell().isEnabled() &&
+                clickHandler.getCurrentCell().getCoordinates() != null &&
+                clickHandler.getCurrentCell().getCoordinates().equals(c.getCoordinates())) {
+            colorFrame(clickHandler.getCurrentCell().getCoordinates(), GREEN_1);
         }
     }
 
@@ -808,6 +795,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         matrix[y][x] = value;
     }
 
+
     private String getValueFromHintMatrix(int partRow, int partColumn, int i, int j)
     {
         int x = partColumn * 3 + j;
@@ -823,62 +811,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 hintMatrix[i][j] = matrix[i][j];
             }
         }
-    }
-
-    private void handleClick(String name) {
-        currentCoordinates = getCoordinatesFromList(name);
-        turns.push(currentCoordinates);
-
-        if (currentCoordinates.isEnabled() && (!chosenNumber.equals("") || hintPressed)) {
-            previousChoice = coordinatesList.get(coordinatesList.size() - 1);
-            if (previousChoice.getValue().get(previousChoice.getValue().size() - 1) > 0 && previousChoice.isEnabled()) {
-                colorFrame(previousChoice, GREEN_4);
-            }
-            Button button = getButton(currentCoordinates.getPartRow(), currentCoordinates.getPartCol(), currentCoordinates.getX(), currentCoordinates.getY());
-
-            if (hintPressed)
-            {
-                chosenNumber = getValueFromHintMatrix(currentCoordinates.getPartRow(), currentCoordinates.getPartCol(), currentCoordinates.getX(), currentCoordinates.getY());
-                updateHints(true);
-            }
-            button.setText(chosenNumber);
-            button.setTextColor(BLUE_1);
-            colorFrame(currentCoordinates, GREEN_1);
-
-            currentCoordinates.setColor(BLUE_1);
-            if (currentCoordinates.getValue().get(currentCoordinates.getValue().size() - 1) > 0 && currentCoordinates.isEnabled())
-            {
-                coordinatesList.get(currentCoordinates.getIndex()).getValue().add(Integer.parseInt(chosenNumber));
-            }
-            else
-            {
-                currentCoordinates.setValue(Integer.parseInt(chosenNumber));
-                coordinatesList.add(currentCoordinates);
-            }
-
-            fillUpTempMatrix(currentCoordinates.getPartRow(), currentCoordinates.getPartCol(), currentCoordinates.getX(), currentCoordinates.getY(),
-                    Integer.parseInt(button.getText().toString()));
-            if (checkForVictory()) {
-                colorGrid();
-            }
-        }
-    }
-
-    private Coordinates getCoordinatesFromList(String name) {
-        int partRow = Integer.parseInt(name.substring(1,2));
-        int partCol = Integer.parseInt(name.substring(2,3));
-        int x = Integer.parseInt(name.substring(3,4));
-        int y = Integer.parseInt(name.substring(4,5));
-        for (Coordinates c: coordinatesList)
-        {
-            if(c.getX() == x && c.getY() == y && c.getPartRow() == partRow && c.getPartCol() == partCol)
-            {
-                return c;
-            }
-        }
-        Coordinates c =  new Coordinates(x, y, partRow, partCol);
-        c.setIndex(coordinatesList.size());
-        return c;
     }
 
     private void colorFrame(Coordinates coordinates, int color) {

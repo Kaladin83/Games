@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRelativeLayout"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:paddingVertical="10dp"
-    android:paddingHorizontal="22dp"
-    android:orientation="vertical">
-
+    android:layout_height="match_parent">
     <RadioGroup
-        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="250dp"
-        android:layout_height="0dp"
+        android:layout_height="30dp"
         android:id="@+id/levelRadioGroup"
         android:gravity="center"
         android:layout_gravity="center"
@@ -46,31 +44,26 @@
 
     <TableLayout
         android:id="@+id/sudokuBoard"
+        android:layout_below="@+id/levelRadioGroup"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight="13"/>
+        android:gravity="center" />
 
-    <include layout="@layout/controls"/>
-
-    <LinearLayout
+    <include layout="@layout/controls"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingTop="0dp"
-        android:gravity="center"
-        android:layout_weight="1.5">
+        android:layout_height="88dp"
+        android:layout_below="@+id/sudokuBoard"
+        android:layout_marginTop="20dp" />
 
-        <Button
-            android:layout_width="140dp"
-            android:layout_height="match_parent"
-            android:textSize="@dimen/buttonTextSize"
-            android:textAllCaps="false"
-            android:textColor="@color/red"
-            android:id="@+id/moreBtn"
-            android:text="@string/more"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-</LinearLayout>
+    <include layout="@layout/time_and_menu"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

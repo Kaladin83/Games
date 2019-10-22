@@ -1,14 +1,11 @@
 package com.example.maratbe.games;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.Chronometer;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -17,53 +14,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.maratbe.domain.*;
-import com.example.maratbe.listeners.MenuListener;
-import com.example.maratbe.listeners.MenuListenerImpl;
+import com.example.maratbe.listeners.ClickHandler;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class Kakuro extends AppCompatActivity implements Constants {
     private TableLayout kakuroBoard;
-    private LinearLayout menuLayout, mainLayout;
+    private Chronometer chronometer;
+    private Button timeButton;
     private RadioButton easyRadio, moderateRadio, hardRadio;
     private ArrayList<Integer> allNumbers = new ArrayList<>();
     private ArrayList<Integer> missing = new ArrayList<>();
-    private ArrayList<String> opened = new ArrayList<>();
-    private ArrayList<String> closed = new ArrayList<>();
-    private List<Coordinates> coordinatesList = new ArrayList<>();
-    private List<Cell> listOfCells = new ArrayList<>();
-    private HashMap<String, Coordinates> cellsMap = new HashMap<>();
-//    private HashMap<String, Cell> mapOfCells = new HashMap<>();
-    private HashMap<String, Button> numbersMap = new HashMap<>();
     private HashMap<String, Integer> numberColors = new HashMap<>();
     private Coordinates cor = new Coordinates();
-    private Coordinates currentCoordinates = new Coordinates();
-    private Coordinates previousChoice = new Coordinates();
-    private int conflictNumber = 0, yIndex = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE;
+    private int conflictNumber = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE;
     private int emptyCells = 0;
-    private int menuHeight = 0;
-    private String chosenNumber = "";
-    private String previousNumber = "";
-    private int[][] matrix = new int[0][0];
+    private long pauseOffset;
+
     private int MAX_COLS = 10, KAKURO_CELL;
-    private int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
-    private MenuListener menuListener;
+    private int[][] matrix = new int[MAX_COLS][MAX_COLS];
+    private int[][] hintMatrix = new int[MAX_COLS][MAX_COLS];
+    private ClickHandler clickHandler;
 
     private String prevConflict = "No Conflict";
-
-    public void setMenuListener(MenuListener menuListener) {
-        this.menuListener = menuListener;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,60 +53,84 @@ public class Kakuro extends AppCompatActivity implements Constants {
                 getSupportActionBar().hide();
             }
         }
-        new MenuListenerImpl(this);
-        mainLayout = findViewById(R.id.mainLayout);
-        mainLayout.setBackgroundColor(WHITE);
-
-        calculateDimensions();
-        setupMenuLayout();
         initColorMap();
         buildGui(savedInstanceState);
 
-        Button moreBtn = findViewById(R.id.moreBtn);
+        TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
-                showMenu()
+                clickHandler.onMenuButtonClicked()
+        );
+
+        timeButton = findViewById(R.id.timeBtn);
+        timeButton.setOnClickListener(v ->
+                clickHandler.onTimeButtonClicked(v.isSelected())
         );
     }
 
-    private void setupMenuLayout() {
-        RelativeLayout relativeLayout = findViewById(R.id.mainRelayiveLayout);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        menuLayout = (LinearLayout) inflater.inflate(R.layout.menu, findViewById(R.id.mainMenuLayout));
-        menuLayout.setBackground(Utils.createGradientBackground(GREEN_4, WHITE));
-
-        RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, menuHeight);
-        lparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, menuLayout.getId());
-        relativeLayout.addView(menuLayout, lparams);
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void calculateDimensions() {
-        menuHeight = MainActivity.getScreenHeight()/3;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("listOfCells", clickHandler.getListOfCells());
+        outState.putParcelableArrayList("turns", clickHandler.getTurns());
+        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(hintMatrix, MAX_COLS));
+        outState.putParcelable("currentCell", clickHandler.getCurrentCell());
+        outState.putParcelable("previousCell", clickHandler.getPreviousCell());
+        outState.putInt("numOfHints", clickHandler.getNumberOfHints());
+        outState.putBoolean("isHintPressed", clickHandler.isHintPressed());
     }
 
-    private void showMenu() {
-        Utils.slideToTop(menuLayout);
-        Button startGameButton = findViewById(R.id.startButton);
-        Button saveButton = findViewById(R.id.saveButton);
-        Button loadButton = findViewById(R.id.loadButton);
-        startGameButton.setOnClickListener(v ->{
-            menuListener.startNewGame(this, this);
-            Utils.slideToBottom(menuLayout);
-        });
-        saveButton.setOnClickListener(v ->{
-            menuListener.saveGame(this, this, Collections.singletonList(listOfCells));
-            Utils.slideToBottom(menuLayout);
-        });
-        loadButton.setOnClickListener(v ->{
-            menuListener.loadGame(this,this);
-            Utils.slideToBottom(menuLayout);
-        });
+    private void setupClickHandler() {
+        RelativeLayout relativeLayout = findViewById(R.id.mainRelativeLayout);
+        clickHandler = new ClickHandler(relativeLayout, this) {
+            @Override
+            protected void colorCellsForHints() {
+                iterateTableView(FUNCTION_COLOR_CELLS_HINT);
+            }
+
+            @Override
+            protected void updateCellRevertValue(Cell previous) {
+                Coordinates coordinates = previous.getCoordinates();
+                Button b = getButton(coordinates.getX(), coordinates.getY());
+                b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0? "":
+                        String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
+                b.setTextColor(BLUE_1);
+            }
+
+            @Override
+            protected void updateCellNewValue(boolean isPreviousExists) {
+                Coordinates coordinates = clickHandler.getCurrentCell().getCoordinates();
+                String chosenNumber = Utils.updateValueWhenHintPressed(clickHandler,
+                        getValueFromHintMatrix(coordinates.getX(), coordinates.getY()));
+
+                Button button = getButton(coordinates.getX(), coordinates.getY());
+                button.setText(chosenNumber);
+                button.setBackground(Utils.createBorder(1, GREEN_6, 1, BLUE_1));
+                button.setTextColor(BLUE_1);
+                matrix[coordinates.getX()][coordinates.getY()] =
+                        clickHandler.getCurrentCell().getValue().get(clickHandler.getCurrentCell().getValue().size() - 1);
+            }
+
+            @Override
+            protected void handleChronometer(boolean isPaused) {
+                pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
+            }
+        };
+        clickHandler.createControlPanel(findViewById(R.id.choiceButtonsLayout));
     }
 
     private void initGlobalVariables() {
-        KAKURO_CELL = calculateCellSize(MainActivity.getScreenWidth());
         matrix = new int[MAX_COLS][MAX_COLS];
-        listOfCells.clear();
+        clickHandler.getListOfCells().clear();
         initMatrix();
     }
 
@@ -149,38 +152,14 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return screenWidth / (MAX_COLS + 1);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("coordinatesList", (ArrayList)coordinatesList);
-        outState.putParcelable("currentCoordinates", currentCoordinates);
-        outState.putParcelable("previousChoice", previousChoice);
-    }
-
-    public void resetBoard(boolean clearBoard) {
+    public void resetBoard() {
         initGlobalVariables();
         outlineBoard();
-        createBoard();
+        createBoard(false);
+        populateButtons();
+        fillUpHintMatrix();
+        populateSums();
         deleteValues();
-        //createBoard(clearBoard);
-
-        //populateCoordinatesList();
-//        if (checkForVictory())
-//        {
-//
-//            colorGrid();
-//        }
     }
 
     private void outlineBoard() {
@@ -196,13 +175,15 @@ public class Kakuro extends AppCompatActivity implements Constants {
         for (int j = 0; j < emptyCells; j++) {
             int[] coordinates = findRandomCoordinates(rand, i, direction);
             updateValue(coordinates, "", false);
-            //mapOfCells.put("r" + coordinates[0] + "b" + coordinates[1], new Cell(coordinates[0], coordinates[1], "", false));
         }
     }
 
     private void updateValue(int[] coordinates, String value, boolean enabled) {
-        matrix[coordinates[0]][coordinates[1]] = enabled? (value.equals("")? 0: Integer.parseInt(value)): -1;
-        listOfCells.add( new Cell(coordinates[0], coordinates[1], value, enabled));
+        int i = coordinates[0], j = coordinates[1];
+        matrix[i][j] = enabled? (value.equals("")? 0: Integer.parseInt(value)): -1;
+        Cell c = new Cell(new Coordinates(i, j), matrix[i][j], BLUE_1, enabled);
+        c.setIndex(clickHandler.getListOfCells().size());
+        clickHandler.getListOfCells().add(c);
     }
 
     private int[] findRandomCoordinates(Random rand, int row, String direction) {
@@ -223,50 +204,49 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return coordinates;
     }
 
-    private void createBoard() {
+    private void createBoard(boolean loadFromList) {
         if (kakuroBoard.getChildCount() > 0)
         {
             kakuroBoard.removeAllViews();
         }
-        createButtons();
-        populateButtons();
-        populateSums();
+        createButtons(loadFromList);
     }
 
     private void populateSums() {
-        listOfCells.forEach(c -> {if (!c.isEnable()) populateSums(c);});
+        clickHandler.getListOfCells().forEach(c -> {if (!c.isEnabled()) populateSums(c);});
     }
 
     private void populateSums(Cell cell) {
         ArrayList<Sum> sums = new ArrayList<>();
-
-        if (cell.getX() == 0 && cell.getY() > 0) {
-            if (matrix[cell.getX() + 1][cell.getY()] > -1) {
-                int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
-                sums = cell.getSum();
+        Coordinates c = cell.getCoordinates();
+        if (c.getX() == 0 && c.getY() > 0) {
+            if (matrix[c.getX() + 1][c.getY()] > -1) {
+                int sum = sumVerticalNumbers(c.getX() + 1, c.getY());
+                sums = cell.getSums();
                 sums.add(new Sum(sum, LOWER));
             }
         }
-        if (cell.getX() > 0) {
-            if (cell.getY() > 0 && cell.getX() < MAX_COLS - 1 && matrix[cell.getX() + 1][cell.getY()] > -1) {
-                int sum = sumVerticalNumbers(cell.getX() + 1, cell.getY());
-                sums = cell.getSum();
+        if (c.getX() > 0) {
+            if (c.getY() > 0 && c.getX() < MAX_COLS - 1 && matrix[c.getX() + 1][c.getY()] > -1) {
+                int sum = sumVerticalNumbers(c.getX() + 1, c.getY());
+                sums = cell.getSums();
                 sums.add(new Sum(sum, LOWER));
             }
-            if (cell.getY() > 0 && cell.getY() < MAX_COLS - 1 && matrix[cell.getX()][cell.getY() + 1] > -1) {
-                int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
+            if (c.getY() > 0 && c.getY() < MAX_COLS - 1 && matrix[c.getX()][c.getY() + 1] > -1) {
+                int sum = sumHorizontalNumbers(c.getX(), c.getY() + 1);
                 sums.add(new Sum(sum, UPPER));
             }
-            if (cell.getY() == 0 && matrix[cell.getX()][cell.getY() + 1] > -1) {
-                int sum = sumHorizontalNumbers(cell.getX(), cell.getY() + 1);
-                sums = cell.getSum();
+            if (c.getY() == 0 && matrix[c.getX()][c.getY() + 1] > -1) {
+                int sum = sumHorizontalNumbers(c.getX(), c.getY() + 1);
+                sums = cell.getSums();
                 sums.add(new Sum(sum, UPPER));
             }
         }
 
-        cell.setSum(sums);
-        RelativeLayout relativeLayout = (RelativeLayout) getCell(getBoardRow(cell.getX()), cell.getY());
-        createTriangles(cell, getBoardRow(cell.getX()).getLayoutParams(), relativeLayout);
+        cell.setSums(sums);
+
+        RelativeLayout rLayout = (RelativeLayout) getCell(getBoardRow(c.getX()), c.getY());
+        createTriangles(cell, getBoardRow(c.getX()).getLayoutParams(), rLayout);
     }
 
     private int sumHorizontalNumbers(int x, int y) {
@@ -293,12 +273,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return sum;
     }
 
-    private void createButtons() {
+    private void createButtons(boolean loadFromList) {
         for (int i = 0; i < MAX_COLS; i++) {
             TableRow row = new TableRow(this);
             kakuroBoard.addView(row);
             for (int j = 0; j < MAX_COLS; j++) {
-                row.addView(createButton(i, j, KAKURO_CELL, KAKURO_CELL));
+                row.addView(createButton(loadFromList, i, j, KAKURO_CELL, KAKURO_CELL));
             }
         }
     }
@@ -307,35 +287,72 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return (TableRow) kakuroBoard.getChildAt(i);
     }
 
-    private View createButton(int i, int j, int width, int height) {
+    private View createButton(boolean loadFromList, int i, int j, int width, int height) {
         ViewGroup.LayoutParams layoutParams = new TableRow.LayoutParams(width, height);
+        if (loadFromList)
+        {
+            return createCellsFromList(i, j, layoutParams);
+        }
+        else
+        {
+            return createNewCells(i, j, layoutParams);
+        }
+    }
+
+    private View createCellsFromList(int i, int j, ViewGroup.LayoutParams layoutParams) {
+        String name = "c00" + i + "" + j;
+        Cell cell = clickHandler.getCoordinatesFromList(name);
+        matrix[i][j] = cell.getValue().get(cell.getValue().size() - 1);
+        if (cell.isEnabled()) {
+            return populateButtonFromList(matrix[i][j], name, layoutParams);
+        } else {
+            return populateRelativeLayoutFromCell(cell, name, layoutParams);
+        }
+    }
+
+    private Button populateButtonFromList(int value, String name, ViewGroup.LayoutParams layoutParams) {
+        Button b = createButton(name, layoutParams);
+        b.setText(value == 0? "": String.valueOf(value));
+        return b;
+    }
+
+    private View populateRelativeLayoutFromCell(Cell cell, String name, ViewGroup.LayoutParams layoutParams) {
+        RelativeLayout rLayout = (RelativeLayout) createRelativeLayout(name, layoutParams);
+        if (cell.getSums().size() > 0) {
+            createTriangles(cell, getBoardRow(cell.getCoordinates().getX()).getLayoutParams(), rLayout);
+        }
+        return rLayout;
+    }
+
+    private View createNewCells(int i, int j, ViewGroup.LayoutParams layoutParams) {
         if (matrix[i][j] == 0) {
             updateValue(new int[] {i,j}, "", true);
-            return createButton("r" + i + "b" + j, layoutParams);
+            return createButton("c00" + i + "" + j, layoutParams);
         } else {
-            return createRelativeLayout("r" + i + "rl" + j, layoutParams);
+            return createRelativeLayout("c00" + i + "" + j, layoutParams);
         }
     }
 
     private View createRelativeLayout(String name, ViewGroup.LayoutParams layoutParams) {
         RelativeLayout rLayout = new RelativeLayout(this);
         rLayout.setLayoutParams(layoutParams);
+        rLayout.setTag(name);
         return rLayout;
     }
 
     private void createTriangles(Cell cell, ViewGroup.LayoutParams layoutParams, RelativeLayout relativeLayout) {
         Triangles triangles = new Triangles(this);
         triangles.setSize(relativeLayout.getLayoutParams().height);
-        triangles.setDirections(cell.getSum());
+        triangles.setDirections(cell.getSums());
         triangles.buildCell();
-        triangles.setTag("r"+cell.getX()+"rl"+cell.getY());
+        triangles.setTag("r"+cell.getCoordinates().getX()+"rl"+cell.getCoordinates().getY());
         triangles.setLayoutParams(layoutParams);
         combineIntoLayout(triangles, relativeLayout, cell);
     }
 
     private void combineIntoLayout(Triangles triangles, RelativeLayout relativeLayout, Cell cell) {
         relativeLayout.addView(triangles);
-        cell.getSum().forEach(s -> {
+        cell.getSums().forEach(s -> {
             if (s.getDirection().equals(UPPER)) {
                 addTextViewToRelativeLayout(s, relativeLayout, new int[]{RelativeLayout.ALIGN_PARENT_END, RelativeLayout.CENTER_VERTICAL});
             } else {
@@ -347,6 +364,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private void addTextViewToRelativeLayout(Sum sum, RelativeLayout relativeLayout, int[] rules) {
         TextView txt = new TextView(this);
         txt.setText(String.valueOf(sum.getValue()));
+        txt.setTag(sum.getDirection());
         txt.setTextSize(10);
         txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
@@ -362,7 +380,9 @@ public class Kakuro extends AppCompatActivity implements Constants {
         button.setTag(name);
         button.setPadding(0, 0, 0, 0);
         button.setLayoutParams(layoutParams);
-        button.setBackground(Utils.createBorder(1, GREEN_6, 1, Color.BLACK));
+        button.setBackground(Utils.createBorder(1, GREEN_6, 1, BLUE_1));
+        button.setTextColor(BLUE_1);
+        button.setOnClickListener(v -> clickHandler.onCellClick(name));
         return button;
     }
 
@@ -380,40 +400,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
             Button b = (Button) v;
             if (b.getText().toString().equals("")) {
                 putValue(i, j, b);
-                b.setOnClickListener(v1 -> handleClick(i, j));
-            } else {
-                yIndex++;
             }
         }
     }
 
     private View getCell(TableRow row, int j) {
         return row.getChildAt(j);
-    }
-
-    private int getStartDifficulty() {
-        if (easyRadio.isChecked()) {
-            return DIFFICULTY_START_EASY;
-        }
-        if (moderateRadio.isChecked()) {
-            return DIFFICULTY_START_MODERATE;
-        }
-        return DIFFICULTY_START_HARD;
-    }
-
-    private int getRangeDifficulty() {
-        if (easyRadio.isChecked()) {
-            return DIFFICULTY_RANGE_EASY;
-        }
-        if (moderateRadio.isChecked()) {
-            return DIFFICULTY_RANGE_MODERATE;
-        }
-        return DIFFICULTY_RANGE_HARD;
-    }
-
-    private void populateCoordinatesList() {
-        coordinatesList.clear();
-        iterateTableView(FUNCTION_POPULATE_LIST_OF_SAVED_INSTANCE, new ArrayList<>());
     }
 
     private void deleteValues() {
@@ -428,105 +420,25 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
     }
 
-    private int findCoordinatesToClose(Integer[] closedArray) {
-        Random rand = new Random();
-        int m = rand.nextInt(9);
-        if (closedArray[m] != null) {
-            m = findCoordinatesToClose(closedArray);
-        }
-        closedArray[m] = m;
-        return m;
-    }
-
+    @SuppressWarnings("unchecked")
     private void buildGui(Bundle savedInstanceState) {
         kakuroBoard = findViewById(R.id.kakuroBoard);
-        //setRadios();
-//        if (savedInstanceState != null)
-//        {
-//            currentCoordinates = (Coordinates) savedInstanceState.get("currentCoordinates");
-//            previousChoice = (Coordinates) savedInstanceState.get("previousChoice");
-//            coordinatesList = (ArrayList<Coordinates>) savedInstanceState.get("coordinatesList");
-//            iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE, new ArrayList<>());
-//        }
-//        else
-//        {
-//            resetBoard(false);
-//        }
-        resetBoard(false);
-        createChoiceNumbers();
-    }
+        chronometer = findViewById(R.id.chronometer);
+        KAKURO_CELL = calculateCellSize(MainActivity.getScreenWidth());
+        setupClickHandler();
+        if (savedInstanceState != null) {
+            clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
+            clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
+            clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
+            clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
+            clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
+            Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
 
-    private void setRadios() {
-        easyRadio = findViewById(R.id.easyRadio);
-        easyRadio.setOnClickListener(v ->
-                setDifficulty(DIFFICULTY_START_EASY, DIFFICULTY_RANGE_EASY, true));
-        moderateRadio = findViewById(R.id.moderateRadio);
-        moderateRadio.setOnClickListener(v ->
-                setDifficulty(DIFFICULTY_START_MODERATE, DIFFICULTY_RANGE_MODERATE, true));
-        hardRadio = findViewById(R.id.hardRadio);
-        hardRadio.setOnClickListener(v ->
-                setDifficulty(DIFFICULTY_START_HARD, DIFFICULTY_RANGE_HARD, true));
-    }
-
-    private void setDifficulty(int start, int range, boolean toReset) {
-        difficultyStart = start;
-        difficultyRange = range;
-        if (toReset) {
-            resetBoard(true);
+            createBoard(true);
+            clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
+        } else {
+            resetBoard();
         }
-    }
-
-    private void createChoiceNumbers() {
-        TableLayout numberLayout = findViewById(R.id.choiceButtonsLayout);
-        TableRow row;
-        Button button;
-        for (int i = 0; i < numberLayout.getChildCount(); i++) {
-            if (numberLayout.getChildAt(i) instanceof TableRow) {
-                row = (TableRow) numberLayout.getChildAt(i);
-                for (int j = 0; j < row.getChildCount(); j++) {
-                    if (row.getChildAt(j) instanceof Button) {
-                        button = (Button) row.getChildAt(j);
-                        numbersMap.put(button.getTag().toString(), button);
-                        button.setOnClickListener(v -> {
-                            if (!previousNumber.equals("")) {
-                                Objects.requireNonNull(numbersMap.get(previousNumber)).setBackgroundColor(BLUE_6);
-                            }
-
-                            if (v.getTag().toString().equals("revert")) {
-//                                if (previousChoice.getValue() > 0) {
-//                                    putNumberInButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY(), String.valueOf(previousChoice.getValue()));
-//                                    Button b = getButton(previousChoice.getPartRow(), previousChoice.getPartCol(), previousChoice.getX(), previousChoice.getY());
-//                                    b.setTextColor(BLUE_1);
-//                                    ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
-//                                }
-
-                                v.setSelected(!v.isSelected());
-                            } else {
-                                openButtons();
-                                v.setBackgroundColor(GREEN_5);
-                                Objects.requireNonNull(numbersMap.get("revert")).setSelected(false);
-                                chosenNumber = ((Button) v).getText().toString();
-                            }
-                            previousNumber = ((Button) v).getText().toString();
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    private void openButtons() {
-        cellsMap.forEach((key, value) ->
-                getButton(value.getPartRow(), value.getPartCol(), value.getX(), value.getY()).setEnabled(true));
-    }
-
-    private void closeButtons() {
-        cellsMap.forEach((key, value) -> {
-            //   Coordinates c = value.getCoordinates();
-            Button b = getButton(value.getPartRow(), value.getPartCol(), value.getX(), value.getY());
-            b.setEnabled(false);
-        });
-
     }
 
     private void initAllNumbers() {
@@ -542,71 +454,76 @@ public class Kakuro extends AppCompatActivity implements Constants {
         allNumbers.add(9);
     }
 
-    private void iterateTableView(int function, List<Object> params) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    for (int l = 0; l < 3; l++) {
-                        Button button = getButton(i, j, k, l);
-                        Coordinates coordinates = new Coordinates(k, l, i, j);
-                        handleFunction(function, button, coordinates, params);
-                    }
-                }
+    private void iterateTableView(int function) {
+        for (int i = 0; i < MAX_COLS; i++) {
+            for (int j = 0; j < MAX_COLS; j++) {
+                handleFunction(function, i, j);
             }
         }
     }
 
-    private void handleFunction(int function, Button b, Coordinates c, List<Object> params) {
+    private void handleFunction(int function, int i, int j) {
         switch (function) {
-            case FUNCTION_COLOR_CELL_VICTORY:
-                b.setTextColor(numberColors.get(b.getText().toString()));
-                break;
-            case FUNCTION_EMPTY_BOARD:
-                b.setText("");
+            case FUNCTION_COLOR_CELLS_HINT:
+                setBackgroundColor(i, j);
                 break;
             case FUNCTION_POPULATE_LIST_OF_SAVED_INSTANCE:
-                populateList(b, c);
-                break;
-            case FUNCTION_READ_LIST_FROM_SAVED_INSTANCE:
-                populateBoardFromList(b, c);
-                break;
-            case FUNCTION_POPULATE_MATRIX:
-                fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), b.getText().toString().equals("") ? 0 : Integer.parseInt(b.getText().toString()));
+                populateList(i, j);
                 break;
         }
     }
 
-    private void populateList(Button button, Coordinates c) {
-        if (!button.getText().toString().equals("")) {
-            c.setValue(Integer.parseInt(button.getText().toString()));
-            c.setColor(Color.BLACK);
-            coordinatesList.add(c);
+    private void setBackgroundColor(int i, int j) {
+        View view = getCell(getBoardRow(i), j);
+        if (view instanceof Button)
+        {
+            Button b = (Button) view;
+            if (b.getText().toString().equals(""))
+            {
+                b.setBackground(Utils.createBorder(1,
+                        clickHandler.isHintPressed()? YELLOW_4: GREEN_6, 1, BLUE_1));
+            }
         }
     }
 
-    private void populateBoardFromList(Button button, Coordinates c1) {
-        button.setOnClickListener(v ->
-                handleClick(c1.getX(), c1.getY()));
-        fillUpCellsMap(button, c1, true);
-        fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), 0);
-        button.setBackground(Utils.createBorder(1, Color.WHITE, 1, Color.BLACK));
-        coordinatesList.stream().filter(c -> c.getX() == c1.getX() && c.getY() == c1.getY() && c.getPartRow() == c1.getPartRow() && c.getPartCol() == c1.getPartCol()).
-                forEach(c -> populateBoard(button, c));
-    }
-
-    private void populateBoard(Button button, Coordinates c) {
-        button.setText(String.valueOf(c.getValue()));
-        button.setTextColor(c.getColor());
-        fillUpCellsMap(button, c, c.getColor() == BLUE_1);
-        fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), Integer.parseInt(button.getText().toString()));
-        if (currentCoordinates != null && currentCoordinates.equals(c)) {
-            colorFrame(currentCoordinates, GREEN_1);
+    private void populateList(int i, int j) {
+        View view = getCell(getBoardRow(i), j);
+        if (view instanceof Button)
+        {
+            populateListFromButton((Button) view, new Coordinates(i, j));
+        }
+        else {
+            populateListFromRelativeLayout((RelativeLayout)view, new Coordinates(i, j));
         }
     }
 
-    private void fillUpCellsMap(Button b, Coordinates c, boolean enabled) {
-        c.setEnabled(enabled);
-        cellsMap.put(b.getTag().toString(), c);
+    private void populateListFromButton(Button b, Coordinates c) {
+        if (!b.getText().toString().equals(""))
+        {
+            Cell cell = new Cell();
+            cell.setCoordinates(c);
+            cell.setValue(Integer.parseInt(b.getText().toString()));
+            cell.setColor(BLUE_1);
+            cell.setEnabled(true);
+            cell.setIndex(clickHandler.getListOfCells().size());
+            clickHandler.getListOfCells().add(cell);
+        }
+    }
+
+    private void populateListFromRelativeLayout(RelativeLayout rLayout, Coordinates c) {
+        ArrayList<Sum> sums = new ArrayList<>();
+        for (int i = 0; i < rLayout.getChildCount(); i++)
+        {
+            if (rLayout.getChildAt(i) instanceof TextView)
+            {
+                String sum = ((TextView)rLayout.getChildAt(i)).getText().toString();
+                String direction = rLayout.getChildAt(i).getTag().toString();
+                sums.add(new Sum(Integer.parseInt(sum), direction));
+                Cell cell = new Cell(c, new ArrayList<>(), sums, false);
+                cell.setIndex(clickHandler.getListOfCells().size());
+                clickHandler.getListOfCells().add(cell);
+            }
+        }
     }
 
     private void putValue(int x, int y, Button b) {
@@ -621,7 +538,6 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
             b.setText(String.valueOf(number));
             matrix[x][y] = number;
-            yIndex++;
         } else {
             conflictNumber = findConflictNumber(x, y);
             backTrack();
@@ -640,17 +556,6 @@ public class Kakuro extends AppCompatActivity implements Constants {
         checkHorizontal(x, y);
         fillUpMissing();
         return allNumbers.get(0);
-    }
-
-    private void printMatrix() {
-        System.out.print("\n\n***************start****************\n");
-        for (int m = 0; m < 9; m++) {
-            for (int n = 0; n < 9; n++) {
-                System.out.print(matrix[m][n]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n*******************end*****************\n");
     }
 
     private String findConflict(int x, int y, int conflictNumber) {
@@ -749,19 +654,9 @@ public class Kakuro extends AppCompatActivity implements Constants {
         switchData(conflictNumber, new int[]{cor.getX(), cor.getY()}, -1);
     }
 
-    private void putNumberInButton(int partRow, int partCol, int x, int y, String number) {
-        Button b = getButton(partRow, partCol, x, y);
-        b.setText(number);
-    }
-
     private void putNumberInButton(int x, int y, String number) {
         getButton(x, y).setText(number);
         matrix[x][y] = number.equals("") ? 0 : Integer.parseInt(number);
-    }
-
-    private Button getButton(int partRow, int partCol, int x, int y) {
-        return ((Button) ((FrameLayout) ((TableRow) ((TableLayout) ((TableRow) kakuroBoard.getChildAt(partRow))
-                .getChildAt(partCol)).getChildAt(x)).getChildAt(y)).getChildAt(0));
     }
 
     private Button getButton(int x, int y) {
@@ -771,10 +666,8 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private void switchData(int conflictNumber, int[] currCoordinates, int toSkip) {
         String numberToSwitch2;
         int[] coordinates, newSearchCoor;
-        newCoordinatesToCompare = currCoordinates;
         prevConflict = findConflict(currCoordinates[0], currCoordinates[1], conflictNumber);
         if (prevConflict.equals(NO_CONFLICT)) {
-            newCoordinatesToCompare = new int[]{-1, -1};
             return;
         }
 
@@ -963,42 +856,19 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
     }
 
-    private void fillUpTempMatrix(int partRow, int partColumn, int i, int j, int value) {
-        int x = partColumn * 3 + j;
-        int y = partRow * 3 + i;
-        matrix[y][x] = value;
+    private String getValueFromHintMatrix(int i, int j)
+    {
+        return String.valueOf(hintMatrix[i][j]);
     }
 
-    private void handleClick(int i, int j) {
-        currentCoordinates = new Coordinates(i, j);
-        currentCoordinates.setValue(matrix[i][j]);
-//        if (previousChoice.getValue() > 0) {
-//            colorFrame(previousChoice, GREEN_4);
-//        }
-
-        if (!chosenNumber.equals("")) {
-            Button button = getButton(i, j);
-            button.setText(chosenNumber);
-            button.setTextColor(BLUE_1);
-//            colorFrame(currentCoordinates, GREEN_1);
-            previousChoice = currentCoordinates;
-            previousChoice.setValue(Integer.parseInt(chosenNumber));
-            currentCoordinates.setValue(Integer.parseInt(chosenNumber));
-            coordinatesList.add(currentCoordinates);
-            updateValue(new int[]{i, j}, chosenNumber, true);
-            if (checkForVictory()) {
-                colorGrid();
+    private void fillUpHintMatrix() {
+        for(int i = 0; i < NUMBER_OF_COLS; i++)
+        {
+            for(int j = 0; j < NUMBER_OF_COLS; j++)
+            {
+                hintMatrix[i][j] = matrix[i][j];
             }
         }
-    }
-
-    private void colorFrame(Coordinates coordinates, int color) {
-        Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
-        ((FrameLayout) b.getParent()).setBackgroundColor(color);
-    }
-
-    private void colorGrid() {
-        iterateTableView(FUNCTION_COLOR_CELL_VICTORY, new ArrayList<>());
     }
 
     private void initColorMap() {

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="5dp"
-    android:paddingHorizontal="20dp"
-    android:orientation="horizontal">
+    android:paddingTop="5dp"
+    android:id="@+id/mainRelativeLayout">
 
     <TableLayout
         android:id="@+id/sudokuBoard"
+        android:paddingStart="20dp"
+        android:paddingEnd="0dp"
+        android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -18,19 +19,22 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
         android:layout_gravity="center"
+        android:paddingEnd="10dp"
+        android:paddingStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/sudokuBoard"
+        android:gravity="center"
         android:orientation="vertical">
 
         <RadioGroup
+            android:id="@+id/levelRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/levelRadioGroup"
-            android:gravity="center"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_alignParentTop="true">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/easyRadio"
@@ -43,8 +47,8 @@
                 android:id="@+id/moderateRadio"
                 android:layout_width="95dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:checked="true"
+                android:gravity="center"
                 android:text="@string/moderate_level" />
 
             <RadioButton
@@ -55,28 +59,20 @@
                 android:text="@string/hard_level" />
         </RadioGroup>
 
-        <include layout="@layout/controls"/>
-
-        <LinearLayout
+        <include
+            layout="@layout/controls"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:paddingTop="0dp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="1.8">
+            android:layout_height="122dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="9dp" />
 
-            <Button
-                android:layout_width="140dp"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/buttonTextSize"
-                android:textAllCaps="false"
-                android:textColor="@color/red"
-                android:id="@+id/moreBtn"
-                android:text="@string/more"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_gravity="center"/>
-        </LinearLayout>
-
+        <include layout="@layout/time_and_menu"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
-    </LinearLayout>
-<!--</android.support.design.widget.CoordinatorLayout>-->
+</RelativeLayout>

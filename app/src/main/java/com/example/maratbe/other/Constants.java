@@ -30,9 +30,9 @@ public interface Constants {
     int BLUE_6 = Color.parseColor("#deebfc");
 
     int YELLOW_1 = Color.parseColor("#d3f713");
-    int YELLOW_2 = Color.parseColor("#f4ec58");
-    int YELLOW_3 = Color.parseColor("#e7f986");
-    int YELLOW_4 = Color.parseColor("#eff9bb");
+    int YELLOW_2 = Color.parseColor("#f5fa93");
+    int YELLOW_3 = Color.parseColor("#EBFA9D");
+    int YELLOW_4 = Color.parseColor("#D3E5F399");
     int ORANGE = Color.parseColor("#fc8225");
     int PINK = Color.parseColor("#ff75d1");
     int PURPLE_1 = Color.parseColor("#cf63ed");
@@ -50,6 +50,9 @@ public interface Constants {
     String KAKURO = "Kakuro";
     String SUDOKU = "Sudoku";
 
+    String ORIENTATION_LANDSCAPE = "Landscape";
+    String ORIENTATION_PORTRAIT = "Portrait";
+
     int NUMBER_OF_COLS = 9;
     int NUMBER_OF_ROWS_PART = 3;
 
@@ -66,6 +69,6 @@ public interface Constants {
     int DIFFICULTY_START_MODERATE = 4;
     int DIFFICULTY_START_HARD = 5;
     int DIFFICULTY_RANGE_EASY = 2;
-    int DIFFICULTY_RANGE_MODERATE = 3;
-    int DIFFICULTY_RANGE_HARD = 3;
+    int DIFFICULTY_RANGE_MODERATE = 2;
+    int DIFFICULTY_RANGE_HARD = 2;
 }

@@ -1,79 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_columnWeight="2"
-    android:layout_rowWeight="1"
+    android:layout_marginBottom="50dp"
     tools:context="com.example.maratbe.other.MainActivity">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sudokuCardView"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TableRow android:layout_marginBottom="20dp" android:layout_height="wrap_content" android:gravity="center">
-        <androidx.cardview.widget.CardView
-            app:cardCornerRadius="10dp"
-            android:layout_width="130dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_height="130dp">
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/ticTacToeBtn"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:background="@color/blue"
-                android:text="@string/tic_tac_toe"
-                android:textAllCaps="false"
-                android:textSize="@dimen/buttonTextSizeLarge" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            app:cardCornerRadius="10dp"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
-
-            <ImageButton
+            <ImageView
+                android:clickable="false"
                 android:id="@+id/sudokuBtn"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center"
                 android:background="@drawable/sudoku"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />
-        </androidx.cardview.widget.CardView>
-    </TableRow>
 
-    <TableRow android:layout_height="wrap_content" android:gravity="center">
-        <androidx.cardview.widget.CardView
-            app:cardCornerRadius="10dp"
-            android:layout_width="130dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_height="130dp">
+            <TextView
+                android:layout_gravity="center"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:textStyle="italic|bold"
+                android:text="@string/sudoku"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-            <ImageButton
+    <androidx.cardview.widget.CardView
+        android:id="@+id/kakuroCardView"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="50dp"
+        app:cardCornerRadius="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:clickable="false"
                 android:id="@+id/kakuroBtn"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center"
                 android:background="@drawable/kakuro"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
-        </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_gravity="center"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:textStyle="italic|bold"
+                android:text="@string/kakuro"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    </TableRow>
-</TableLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/tictactoeCardView"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_below="@+id/kakuroCardView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:clickable="false"
+                android:id="@+id/tictactoeBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="91dp"
+                android:layout_gravity="center"
+                android:background="@drawable/tic_tac_toe"
+                android:textAllCaps="false"
+                android:textSize="@dimen/buttonTextSizeLarge" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:textStyle="italic|bold"
+                android:text="@string/tic_tac_toe"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

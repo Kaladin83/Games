@@ -24,6 +24,7 @@
     <string name="number9">9</string>
     <string name="save_game">Save the game</string>
     <string name="load_game">Load a game</string>
+    <string name="back_to_game">Back to the game</string>
     <string name="start_new_game">Start a new game</string>
     <string name="name_to_save">Please choose a name to save with</string>
     <string name="name_to_load">Please choose a game to load</string>
