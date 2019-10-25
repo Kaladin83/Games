@@ -2,6 +2,7 @@ package com.example.maratbe.games;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,7 +36,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private Coordinates cor = new Coordinates();
     private int conflictNumber = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE;
     private int emptyCells = 0;
-    private long pauseOffset;
+    private long pauseOffset, timeToAdd;
 
     private int MAX_COLS = 10, KAKURO_CELL;
     private int[][] matrix = new int[MAX_COLS][MAX_COLS];
@@ -54,16 +55,15 @@ public class Kakuro extends AppCompatActivity implements Constants {
             }
         }
         initColorMap();
+        timeButton = findViewById(R.id.timeBtn);
+        timeButton.setOnClickListener(v ->
+                clickHandler.onTimeButtonClicked(v.isSelected())
+        );
         buildGui(savedInstanceState);
 
         TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
                 clickHandler.onMenuButtonClicked()
-        );
-
-        timeButton = findViewById(R.id.timeBtn);
-        timeButton.setOnClickListener(v ->
-                clickHandler.onTimeButtonClicked(v.isSelected())
         );
     }
 
@@ -87,6 +87,9 @@ public class Kakuro extends AppCompatActivity implements Constants {
         outState.putParcelable("previousCell", clickHandler.getPreviousCell());
         outState.putInt("numOfHints", clickHandler.getNumberOfHints());
         outState.putBoolean("isHintPressed", clickHandler.isHintPressed());
+        outState.putBoolean("isTimePressed", timeButton.isSelected());
+        outState.putLong("timeToAdd", chronometer.getBase() - SystemClock.elapsedRealtime());
+        outState.putLong("pauseOffset", pauseOffset);
     }
 
     private void setupClickHandler() {
@@ -125,7 +128,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
                 pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
             }
         };
-        clickHandler.createControlPanel(findViewById(R.id.choiceButtonsLayout));
+        clickHandler.createControlPanel(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout));
     }
 
     private void initGlobalVariables() {
@@ -244,9 +247,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
 
         cell.setSums(sums);
-
-        RelativeLayout rLayout = (RelativeLayout) getCell(getBoardRow(c.getX()), c.getY());
-        createTriangles(cell, getBoardRow(c.getX()).getLayoutParams(), rLayout);
+        createTriangles(cell, (TrianglesView) getCell(getBoardRow(c.getX()), c.getY()));
     }
 
     private int sumHorizontalNumbers(int x, int y) {
@@ -306,7 +307,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         if (cell.isEnabled()) {
             return populateButtonFromList(matrix[i][j], name, layoutParams);
         } else {
-            return populateRelativeLayoutFromCell(cell, name, layoutParams);
+            return populateTrianglesViewFromCell(cell, name, layoutParams);
         }
     }
 
@@ -316,12 +317,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
         return b;
     }
 
-    private View populateRelativeLayoutFromCell(Cell cell, String name, ViewGroup.LayoutParams layoutParams) {
-        RelativeLayout rLayout = (RelativeLayout) createRelativeLayout(name, layoutParams);
+    private View populateTrianglesViewFromCell(Cell cell, String name, ViewGroup.LayoutParams layoutParams) {
+        TrianglesView trianglesView = (TrianglesView)createTrianglesView(name, layoutParams);
         if (cell.getSums().size() > 0) {
-            createTriangles(cell, getBoardRow(cell.getCoordinates().getX()).getLayoutParams(), rLayout);
+            createTriangles(cell, trianglesView);
         }
-        return rLayout;
+        return trianglesView;
     }
 
     private View createNewCells(int i, int j, ViewGroup.LayoutParams layoutParams) {
@@ -329,50 +330,22 @@ public class Kakuro extends AppCompatActivity implements Constants {
             updateValue(new int[] {i,j}, "", true);
             return createButton("c00" + i + "" + j, layoutParams);
         } else {
-            return createRelativeLayout("c00" + i + "" + j, layoutParams);
+            return createTrianglesView("c00" + i + "" + j, layoutParams);
         }
     }
 
-    private View createRelativeLayout(String name, ViewGroup.LayoutParams layoutParams) {
-        RelativeLayout rLayout = new RelativeLayout(this);
-        rLayout.setLayoutParams(layoutParams);
-        rLayout.setTag(name);
-        return rLayout;
+    private View createTrianglesView(String name, ViewGroup.LayoutParams layoutParams) {
+        TrianglesView trianglesView = new TrianglesView(this);
+        trianglesView.setLayoutParams(layoutParams);
+        trianglesView.setTag(name);
+        return trianglesView;
     }
 
-    private void createTriangles(Cell cell, ViewGroup.LayoutParams layoutParams, RelativeLayout relativeLayout) {
-        Triangles triangles = new Triangles(this);
-        triangles.setSize(relativeLayout.getLayoutParams().height);
-        triangles.setDirections(cell.getSums());
-        triangles.buildCell();
-        triangles.setTag("r"+cell.getCoordinates().getX()+"rl"+cell.getCoordinates().getY());
-        triangles.setLayoutParams(layoutParams);
-        combineIntoLayout(triangles, relativeLayout, cell);
-    }
-
-    private void combineIntoLayout(Triangles triangles, RelativeLayout relativeLayout, Cell cell) {
-        relativeLayout.addView(triangles);
-        cell.getSums().forEach(s -> {
-            if (s.getDirection().equals(UPPER)) {
-                addTextViewToRelativeLayout(s, relativeLayout, new int[]{RelativeLayout.ALIGN_PARENT_END, RelativeLayout.CENTER_VERTICAL});
-            } else {
-                addTextViewToRelativeLayout(s, relativeLayout, new int[]{RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.CENTER_HORIZONTAL});
-            }
-        });
-    }
-
-    private void addTextViewToRelativeLayout(Sum sum, RelativeLayout relativeLayout, int[] rules) {
-        TextView txt = new TextView(this);
-        txt.setText(String.valueOf(sum.getValue()));
-        txt.setTag(sum.getDirection());
-        txt.setTextSize(10);
-        txt.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-        int size = (int) (KAKURO_CELL / 2.5);
-        RelativeLayout.LayoutParams rParams = new RelativeLayout.LayoutParams(size, size);
-        rParams.addRule(rules[0]);
-        rParams.addRule(rules[1]);
-        relativeLayout.addView(txt, rParams);
+    private void createTriangles(Cell cell, TrianglesView view) {
+        view.setSize(view.getLayoutParams().height);
+        view.setDirections(cell.getSums());
+        view.buildCell();
+        view.setTag("r"+cell.getCoordinates().getX()+"rl"+cell.getCoordinates().getY());
     }
 
     private Button createButton(String name, ViewGroup.LayoutParams layoutParams) {
@@ -420,25 +393,35 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void buildGui(Bundle savedInstanceState) {
         kakuroBoard = findViewById(R.id.kakuroBoard);
-        chronometer = findViewById(R.id.chronometer);
         KAKURO_CELL = calculateCellSize(MainActivity.getScreenWidth());
         setupClickHandler();
         if (savedInstanceState != null) {
-            clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
-            clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
-            clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
-            clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
-            clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
-            Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
-
-            createBoard(true);
-            clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
+            getValuesFromBundle(savedInstanceState);
         } else {
             resetBoard();
         }
+        chronometer = findViewById(R.id.chronometer);
+        chronometer.setBase(chronometer.getBase()+timeToAdd);
+        chronometer.start();
+        timeButton.setSelected(true);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void getValuesFromBundle(Bundle savedInstanceState) {
+        clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
+        timeToAdd = (long) savedInstanceState.get("timeToAdd");
+        timeButton.setSelected((boolean) savedInstanceState.get("isTimePressed"));
+        pauseOffset = (long) savedInstanceState.get("pauseOffset");
+        clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
+        clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
+        clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
+        clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
+        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
+
+        createBoard(true);
+        clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
     }
 
     private void initAllNumbers() {

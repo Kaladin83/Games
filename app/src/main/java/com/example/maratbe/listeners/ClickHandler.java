@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public abstract class ClickHandler implements Constants, ClickListener {
@@ -107,28 +105,34 @@ public abstract class ClickHandler implements Constants, ClickListener {
         };
     }
 
-    public void createControlPanel(TableLayout numberLayout) {
+    public void createControlPanel(TableLayout numberLayout, Button revertButton, RelativeLayout hintLayout) {
+        createNumbers(numberLayout);
+        createActions(revertButton, hintLayout);
+    }
+
+    private void createNumbers(TableLayout numberLayout) {
         TableRow row;
         Button button;
         for (int i = 0; i < numberLayout.getChildCount(); i++) {
             if (numberLayout.getChildAt(i) instanceof TableRow) {
                 row = (TableRow) numberLayout.getChildAt(i);
                 for (int j = 0; j < row.getChildCount(); j++) {
-                    if (row.getChildAt(j) instanceof Button) {
-                        button = (Button) row.getChildAt(j);
-                        numbersMap.put(button.getTag().toString(), button);
-                        button.setOnClickListener(this::onButtonControlClicked);
-                    }
-                    else{
-                        RelativeLayout rLayout = (RelativeLayout) row.getChildAt(j);
-                        hintButton = (Button) rLayout.getChildAt(0);
-                        hintTextView = (TextView) rLayout.getChildAt(1);
-                        hintButton.setOnClickListener(this::onLayoutControlClicked);
-                        hintTextView.setOnClickListener(this::onLayoutControlClicked);
-                    }
+                    button = (Button) row.getChildAt(j);
+                    numbersMap.put(button.getTag().toString(), button);
+                    button.setOnClickListener(this::onButtonControlClicked);
                 }
             }
         }
+    }
+
+    private void createActions(Button revertButton, RelativeLayout hintLayout) {
+        numbersMap.put(revertButton.getTag().toString(), revertButton);
+        revertButton.setOnClickListener(this::onButtonControlClicked);
+
+        hintButton = (Button) hintLayout.getChildAt(0);
+        hintTextView = (TextView) hintLayout.getChildAt(1);
+        hintButton.setOnClickListener(this::onLayoutControlClicked);
+        hintTextView.setOnClickListener(this::onLayoutControlClicked);
     }
 
     private void createHint() {
@@ -142,10 +146,10 @@ public abstract class ClickHandler implements Constants, ClickListener {
         }
     }
 
-
     private void updatePreviousControl() {
         if (!previousNumber.equals("")) {
-            Objects.requireNonNull(numbersMap.get(previousNumber)).setBackgroundColor(BLUE_6);
+            Objects.requireNonNull(numbersMap.get(previousNumber)).setSelected(false);
+
         }
     }
 
@@ -163,6 +167,16 @@ public abstract class ClickHandler implements Constants, ClickListener {
         }
     }
 
+    public Cell getCoordinatesFromList(String name) {
+        int partRow = Integer.parseInt(name.substring(1,2));
+        int partCol = Integer.parseInt(name.substring(2,3));
+        int x = Integer.parseInt(name.substring(3,4));
+        int y = Integer.parseInt(name.substring(4,5));
+        Optional<Cell> result = listOfCells.stream().
+                filter(c -> c.getCoordinates().equals(new Coordinates(x, y, partRow, partCol))).findFirst();
+        return result.orElseGet(Cell::new);
+    }
+
     @Override
     public void onCellClick(String name) {
         currentCell = getCoordinatesFromList(name);
@@ -174,7 +188,7 @@ public abstract class ClickHandler implements Constants, ClickListener {
                 isPreviousExists = true;
             }
             updateCellNewValue(isPreviousExists);
-            turns.push(currentCell);
+
             if (hintPressed)
             {
                 updateHints(true);
@@ -182,17 +196,8 @@ public abstract class ClickHandler implements Constants, ClickListener {
 
             currentCell.setColor(BLUE_1);
             listOfCells.get(currentCell.getIndex()).getValue().add(Integer.parseInt(chosenNumber));
+            turns.push(currentCell);
         }
-    }
-
-    public Cell getCoordinatesFromList(String name) {
-        int partRow = Integer.parseInt(name.substring(1,2));
-        int partCol = Integer.parseInt(name.substring(2,3));
-        int x = Integer.parseInt(name.substring(3,4));
-        int y = Integer.parseInt(name.substring(4,5));
-        Optional<Cell> result = listOfCells.stream().
-                filter(c -> c.getCoordinates().equals(new Coordinates(x, y, partRow, partCol))).findFirst();
-        return result.orElseGet(Cell::new);
     }
 
     @Override
@@ -213,10 +218,13 @@ public abstract class ClickHandler implements Constants, ClickListener {
                 }
                 listOfCells.set(index, previous);
                 updateCellRevertValue(previous);
-                view.setSelected(!view.isSelected());
+                view.setSelected(true);
+            }
+            else {
+                view.setSelected(false);
             }
         } else {
-            view.setBackgroundColor(GREEN_5);
+            view.setSelected(true);
             Objects.requireNonNull(numbersMap.get("revert")).setSelected(false);
             chosenNumber = ((Button) view).getText().toString();
         }

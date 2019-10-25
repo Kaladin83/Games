@@ -2,7 +2,8 @@
 <resources>
     <dimen name="cell">33dp</dimen>
     <dimen name="cellButton">30dp</dimen>
-    <dimen name="button">38dp</dimen>
+    <dimen name="controlButtonHeight">33dp</dimen>
+    <dimen name="controlButtonWidth">60dp</dimen>
     <dimen name="resetButton">60dp</dimen>
     <dimen name="part">101dp</dimen>
     <dimen name="tool_bar">50dp</dimen>

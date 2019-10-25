@@ -44,7 +44,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private int conflictNumber = 0, yIndex = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE, numOfHints;
     private int SUDOKU_CELL = 0;
-    private long pauseOffset;
+    private long pauseOffset = 0, timeToAdd = 0;
     private int[][] matrix = new int[9][9];
     private int[][] hintMatrix = new int[9][9];
     int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
@@ -61,15 +61,16 @@ public class Sudoku extends AppCompatActivity implements Constants {
             getSupportActionBar().hide();
         }
         initColorMap();
+        timeButton = findViewById(R.id.timeBtn);
+        timeButton.setOnClickListener(v ->
+                clickHandler.onTimeButtonClicked(v.isSelected())
+        );
         buildGui(savedInstanceState);
         TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
                 clickHandler.onMenuButtonClicked()
         );
-        timeButton = findViewById(R.id.timeBtn);
-        timeButton.setOnClickListener(v ->
-                clickHandler.onTimeButtonClicked(v.isSelected())
-        );
+
     }
 
     @Override
@@ -92,6 +93,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
         outState.putParcelable("previousCell", clickHandler.getPreviousCell());
         outState.putInt("numOfHints", clickHandler.getNumberOfHints());
         outState.putBoolean("isHintPressed", clickHandler.isHintPressed());
+        outState.putBoolean("isTimePressed", timeButton.isSelected());
+        outState.putLong("timeToAdd", chronometer.getBase() - SystemClock.elapsedRealtime());
+        outState.putLong("pauseOffset", pauseOffset);
     }
 
     private void setupClickHandler() {
@@ -141,7 +145,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
             }
         };
-        clickHandler.createControlPanel(findViewById(R.id.choiceButtonsLayout));
+        clickHandler.createControlPanel(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout));
     }
 
     public void resetBoard(boolean clearBoard) {
@@ -251,26 +255,36 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void buildGui(Bundle savedInstanceState) {
         sudokuBoard = findViewById(R.id.sudokuBoard);
-        chronometer = findViewById(R.id.chronometer);
+
         createBoard();
         setupClickHandler();
         setRadios();
         if (savedInstanceState != null) {
-            clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
-            clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
-            clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
-            clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
-            clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
-            Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
-
-            iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE);
-            clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
+            getValuesFromBundle(savedInstanceState);
         } else {
             resetBoard(false);
         }
+        chronometer = findViewById(R.id.chronometer);
+        chronometer.setBase(chronometer.getBase()+timeToAdd);
+        chronometer.start();
+        timeButton.setSelected(true);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void getValuesFromBundle(Bundle savedInstanceState) {
+        clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
+        timeToAdd = (long) savedInstanceState.get("timeToAdd");
+        timeButton.setSelected((boolean) savedInstanceState.get("isTimePressed"));
+        pauseOffset = (long) savedInstanceState.get("pauseOffset");
+        clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
+        clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
+        clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
+        clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
+        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
+        iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE);
+        clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
     }
 
     private void setRadios() {
@@ -794,7 +808,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
         int y = partRow * 3 + i;
         matrix[y][x] = value;
     }
-
 
     private String getValueFromHintMatrix(int partRow, int partColumn, int i, int j)
     {

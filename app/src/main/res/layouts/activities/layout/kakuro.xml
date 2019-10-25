@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainRelativeLayout"
-    android:paddingTop="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +19,7 @@
     <include layout="@layout/controls"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/kakuroBoard"
         android:layout_marginTop="20dp" />
 
@@ -26,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginStart="30dp"
         android:layout_alignParentBottom="true"/>
 </RelativeLayout>

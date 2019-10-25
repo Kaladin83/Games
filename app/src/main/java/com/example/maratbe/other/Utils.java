@@ -1,6 +1,5 @@
 package com.example.maratbe.other;
 
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
@@ -15,9 +14,6 @@ import com.example.maratbe.domain.Coordinates;
 import com.example.maratbe.listeners.ClickHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -98,20 +94,20 @@ public class Utils {
         {
             chosenNumber = hintValue;
             clickHandler.setChosenNumber(chosenNumber);
-            clickHandler.getCurrentCell().setValue(Integer.parseInt(chosenNumber));
+            //clickHandler.getCurrentCell().setValue(Integer.parseInt(chosenNumber));
         }
         return chosenNumber;
     }
 
-    public static long handleChronometer(Chronometer chronometer, Button timeButton, long pauseOffset, boolean isPaused) {
-        if (isPaused)
+    public static long handleChronometer(Chronometer chronometer, Button timeButton, long pauseOffset, boolean isPauseButtonShowing) {
+        if (isPauseButtonShowing)
         {
             pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
             chronometer.stop();
         }
         else
         {
-            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset );
             chronometer.start();
         }
         timeButton.setSelected(!timeButton.isSelected());
