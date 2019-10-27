@@ -7,6 +7,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import com.example.maratbe.games.R;
 import com.example.maratbe.other.Constants;
@@ -14,19 +16,20 @@ import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 public abstract class MenuHandler implements Constants, OnClickListener {
-    private int height, width;
     private RelativeLayout rLayout;
     private LinearLayout menuLayout;
+    private TableLayout numberLayout;
     private MenuListener menuListener;
 
-    protected MenuHandler(RelativeLayout rLayout, Object gameInstance) {
+    MenuHandler(RelativeLayout rLayout, TableLayout numberLayout, Object gameInstance) {
         this.rLayout = rLayout;
+        this.numberLayout = numberLayout;
 
         new MenuListenerImpl(this, gameInstance);
         buildMenu();
     }
 
-    public void setMenuListener(MenuListener menuListener) {
+    void setMenuListener(MenuListener menuListener) {
         this.menuListener = menuListener;
     }
 
@@ -60,7 +63,22 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         }
     }
 
-    public void showMenu() {
+    private void setControlButtonsSize() {
+        for (int i = 0; i < numberLayout.getChildCount(); i++)
+        {
+            TableRow row = (TableRow) numberLayout.getChildAt(i);
+            for (int j = 0; j < row.getChildCount(); j++)
+            {
+                Button b = ((Button) row.getChildAt(j));
+                System.out.println("MeasuredHeight = "+ b.getMeasuredHeight());
+                System.out.println("height = "+ b.getHeight());
+                b.setHeight(33 * MainActivity.getLogicalDensity());
+                System.out.println("correct height = "+ 33 * MainActivity.getLogicalDensity());
+            }
+        }
+    }
+
+    void showMenu() {
         Utils.slideToTop(menuLayout);
         Button startGameButton = rLayout.findViewById(R.id.startButton);
         Button saveButton = rLayout.findViewById(R.id.saveButton);
@@ -82,6 +100,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
             default: menuListener.backToGame(); break;
         }
         Utils.slideToBottom(menuLayout);
+        setControlButtonsSize();
     }
 
     public abstract void saveGame(MenuListener menuListener);

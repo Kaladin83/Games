@@ -100,7 +100,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private void setupClickHandler() {
         RelativeLayout relativeLayout = findViewById(R.id.mainRelativeLayout);
-        clickHandler = new ClickHandler(relativeLayout, this) {
+        clickHandler = new ClickHandler(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout)) {
             @Override
             protected void colorCellsForHints() {
                 iterateTableView(FUNCTION_COLOR_CELLS_HINT);
@@ -110,7 +110,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
             protected void updateCellRevertValue(Cell previous) {
                 Coordinates coordinates = previous.getCoordinates();
                 Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
-                b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0? "":
+                b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0 ? "" :
                         String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
                 b.setTextColor(BLUE_1);
                 ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
@@ -119,8 +119,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
             @Override
             protected void updateCellNewValue(boolean isPreviousExists) {
                 Coordinates coordinates = clickHandler.getCurrentCell().getCoordinates();
-                if (isPreviousExists)
-                {
+                if (isPreviousExists) {
                     colorFrame(clickHandler.getPreviousCell().getCoordinates(), GREEN_4);
                 }
 
@@ -145,10 +144,21 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
             }
         };
-        clickHandler.createControlPanel(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout));
+
+        clickHandler.createControlPanel();
+        clickHandler.setupMenuLayout(relativeLayout, this);
     }
 
     public void resetBoard(boolean clearBoard) {
+        if (clearBoard)
+        {
+            if (clickHandler.getCurrentCell() != null)
+            {
+                colorFrame(clickHandler.getCurrentCell().getCoordinates(), GREEN_4);
+            }
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            clickHandler.resetHandler();
+        }
         setDifficulty(getStartDifficulty(), getRangeDifficulty(), false);
         populateBoard(clearBoard);
         fillUpHintMatrix();
@@ -257,9 +267,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private void buildGui(Bundle savedInstanceState) {
         sudokuBoard = findViewById(R.id.sudokuBoard);
-
-        createBoard();
         setupClickHandler();
+        createBoard();
         setRadios();
         if (savedInstanceState != null) {
             getValuesFromBundle(savedInstanceState);

@@ -94,7 +94,6 @@ public class Utils {
         {
             chosenNumber = hintValue;
             clickHandler.setChosenNumber(chosenNumber);
-            //clickHandler.getCurrentCell().setValue(Integer.parseInt(chosenNumber));
         }
         return chosenNumber;
     }

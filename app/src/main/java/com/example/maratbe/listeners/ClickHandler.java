@@ -10,18 +10,20 @@ import android.widget.TextView;
 import com.example.maratbe.domain.Cell;
 import com.example.maratbe.domain.Coordinates;
 import com.example.maratbe.other.Constants;
+import com.example.maratbe.other.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
 public abstract class ClickHandler implements Constants, ClickListener {
-    private Button hintButton;
+    private Button hintButton, revertButton;
+    private RelativeLayout hintLayout;
     private TextView hintTextView;
+    private TableLayout numberLayout;
     private String chosenNumber ="", previousNumber = "";
     private Cell currentCell, previousCell;
     private Stack<Cell> turns = new Stack<>();
@@ -30,8 +32,10 @@ public abstract class ClickHandler implements Constants, ClickListener {
     private boolean hintPressed = false;
     private MenuHandler menuHandler;
 
-    protected ClickHandler(RelativeLayout relativeLayout, Object gameInstance) {
-        setupMenuLayout(relativeLayout, gameInstance);
+    protected ClickHandler(TableLayout numberLayout, Button revertButton, RelativeLayout hintLayout) {
+        this.numberLayout = numberLayout;
+        this.revertButton = revertButton;
+        this.hintLayout = hintLayout;
     }
 
     public String getChosenNumber()
@@ -96,8 +100,22 @@ public abstract class ClickHandler implements Constants, ClickListener {
         turns = listOfTurns.stream().collect(Collectors.toCollection(Stack::new));
     }
 
-    private void setupMenuLayout(RelativeLayout relativeLayout, Object gameInstance) {
-        menuHandler = new MenuHandler(relativeLayout, gameInstance) {
+    public void resetHandler()
+    {
+        updatePreviousControl();
+        setHintPressed(false);
+        numbersMap.get("revert").setSelected(false);
+        chosenNumber = "";
+        previousNumber = "";
+        currentCell = null;
+        previousCell = null;
+        turns = new Stack<>();
+        listOfCells = new ArrayList<>();
+    }
+
+    public void setupMenuLayout(RelativeLayout relativeLayout, Object gameInstance)
+    {
+        menuHandler = new MenuHandler(relativeLayout, numberLayout, gameInstance) {
             @Override
             public void saveGame(MenuListener menuListener) {
                 menuListener.saveGame(Collections.singletonList(listOfCells));
@@ -105,7 +123,8 @@ public abstract class ClickHandler implements Constants, ClickListener {
         };
     }
 
-    public void createControlPanel(TableLayout numberLayout, Button revertButton, RelativeLayout hintLayout) {
+    public void createControlPanel() {
+
         createNumbers(numberLayout);
         createActions(revertButton, hintLayout);
     }
@@ -148,8 +167,7 @@ public abstract class ClickHandler implements Constants, ClickListener {
 
     private void updatePreviousControl() {
         if (!previousNumber.equals("")) {
-            Objects.requireNonNull(numbersMap.get(previousNumber)).setSelected(false);
-
+            numbersMap.get(previousNumber).setSelected(false);
         }
     }
 
@@ -158,12 +176,9 @@ public abstract class ClickHandler implements Constants, ClickListener {
         if (pressed)
         {
             colorCellsForHints();
-        }
-        hintButton.setSelected(false);
-        if (pressed)
-        {
             int hints = Integer.parseInt(hintTextView.getText().toString());
             hintTextView.setText(String.valueOf(hints -1));
+            hintButton.setSelected(false);
         }
     }
 
@@ -209,23 +224,24 @@ public abstract class ClickHandler implements Constants, ClickListener {
             if (!turns.isEmpty()) {
                 int index = turns.pop().getIndex();
                 Cell previous = listOfCells.get(index);
-                if (previous.getValue().size() > 1)
-                {
+                if (previous.getValue().size() > 1) {
                     previous.getValue().remove(previous.getValue().size() - 1);
-                }
-                else {
+                } else {
                     previous.setValue(0);
                 }
                 listOfCells.set(index, previous);
                 updateCellRevertValue(previous);
                 view.setSelected(true);
             }
-            else {
+            if (turns.isEmpty()) {
                 view.setSelected(false);
             }
         } else {
             view.setSelected(true);
-            Objects.requireNonNull(numbersMap.get("revert")).setSelected(false);
+            System.out.println("initial MeasuredHeight = "+ view.getMeasuredHeight());
+            System.out.println("initial height = "+ view.getHeight());
+            System.out.println("logicalDensity = "+ MainActivity.getLogicalDensity());
+            numbersMap.get("revert").setSelected(false);
             chosenNumber = ((Button) view).getText().toString();
         }
         previousNumber = ((Button) view).getText().toString();

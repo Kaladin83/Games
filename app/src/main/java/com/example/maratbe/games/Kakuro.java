@@ -94,7 +94,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void setupClickHandler() {
         RelativeLayout relativeLayout = findViewById(R.id.mainRelativeLayout);
-        clickHandler = new ClickHandler(relativeLayout, this) {
+        clickHandler = new ClickHandler(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout)) {
             @Override
             protected void colorCellsForHints() {
                 iterateTableView(FUNCTION_COLOR_CELLS_HINT);
@@ -128,7 +128,8 @@ public class Kakuro extends AppCompatActivity implements Constants {
                 pauseOffset = Utils.handleChronometer(chronometer, timeButton, pauseOffset, isPaused);
             }
         };
-        clickHandler.createControlPanel(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout));
+        clickHandler.setupMenuLayout(relativeLayout, this);
+        clickHandler.createControlPanel();
     }
 
     private void initGlobalVariables() {
