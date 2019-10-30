@@ -57,9 +57,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sudoku);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getSupportActionBar().hide();
-        }
         initColorMap();
         timeButton = findViewById(R.id.timeBtn);
         timeButton.setOnClickListener(v ->
@@ -152,10 +149,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
     public void resetBoard(boolean clearBoard) {
         if (clearBoard)
         {
-            if (clickHandler.getCurrentCell() != null)
-            {
-                colorFrame(clickHandler.getCurrentCell().getCoordinates(), GREEN_4);
-            }
             chronometer.setBase(SystemClock.elapsedRealtime());
             clickHandler.resetHandler();
         }
@@ -432,6 +425,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
                     for (; yIndex < NUMBER_OF_ROWS_PART; ) {
                         Button b = (Button) ((FrameLayout) rowInGroup.getChildAt(yIndex)).getChildAt(0);
                         b.setTextColor(Color.BLACK);
+                        colorFrame(new Coordinates(i, j, k, yIndex), GREEN_4);
                         if (b.getText().toString().equals("") || b.getText().toString().equals("0")) {
                             putValue(i, j, k, yIndex, b);
                         } else {

@@ -49,11 +49,6 @@ public class Kakuro extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kakuro);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
-        }
         initColorMap();
         timeButton = findViewById(R.id.timeBtn);
         timeButton.setOnClickListener(v ->

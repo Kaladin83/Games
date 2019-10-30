@@ -5,107 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="50dp"
-    tools:context="com.example.maratbe.other.MainActivity">
-    <androidx.cardview.widget.CardView
-        android:id="@+id/sudokuCardView"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="10dp"
+    android:background="@drawable/main_page">
+
+    <TextView
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:clickable="false"
-                android:id="@+id/sudokuBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:background="@drawable/sudoku"
-                android:textAllCaps="false"
-                android:textSize="@dimen/buttonTextSizeLarge" />
-
-            <TextView
-                android:layout_gravity="center"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/buttonTextSize"
-                android:textStyle="italic|bold"
-                android:text="@string/sudoku"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/kakuroCardView"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginTop="50dp"
-        app:cardCornerRadius="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:clickable="false"
-                android:id="@+id/kakuroBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:background="@drawable/kakuro"
-                android:textAllCaps="false"
-                android:textSize="@dimen/buttonTextSizeLarge" />
-
-            <TextView
-                android:layout_gravity="center"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/buttonTextSize"
-                android:textStyle="italic|bold"
-                android:text="@string/kakuro"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        android:text="Games"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/tictactoeCardView"
         android:clickable="true"
         android:focusable="true"
-        android:layout_below="@+id/kakuroCardView"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="40dp"
         app:cardCornerRadius="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -140,6 +58,97 @@
                 android:textSize="@dimen/buttonTextSize"
                 android:textStyle="italic|bold"
                 android:text="@string/tic_tac_toe"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sudokuCardView"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_above="@+id/tictactoeCardView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:clickable="false"
+                android:id="@+id/sudokuBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:background="@drawable/sudoku_logo"
+                android:textAllCaps="false"
+                android:textSize="@dimen/buttonTextSizeLarge" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:textStyle="italic|bold"
+                android:text="@string/sudoku"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/kakuroCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tictactoeCardView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="2dp"
+
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="7dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/kakuroBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:background="@drawable/kakuro_logo"
+                android:clickable="false"
+                android:textAllCaps="false"
+                android:textSize="@dimen/buttonTextSizeLarge" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/kakuro"
+                android:textSize="@dimen/buttonTextSize"
+                android:textStyle="italic|bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

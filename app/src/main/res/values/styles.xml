@@ -1,11 +1,39 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="DefaultTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/red1</item>
+        <item name="colorAccent">@color/red2</item>
+        <item name="background_selected">@color/red2</item>
+        <item name="background_not_selected">@color/red3</item>
+        <item name="buttonStyle">@style/DefaultNumberButton</item>
+
+
     </style>
+
+    <style name="GreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightBlue</item>
+        <item name="colorPrimaryDark">@color/darkBlue</item>
+        <item name="colorAccent">@color/blue</item>
+<!--        <item name="buttonStyle">@style/GreenNumberButton</item>-->
+    </style>
+
+    <style name="MyTextViewStyle" parent="DefaultTheme">
+        <item name="android:background">@color/translucent</item>
+    </style>
+
+    <style name="MyBackground" parent="DefaultTheme">
+        <item name="android:background">@color/lightRedTranslucent</item>
+    </style>
+
+<!--    <style name="GreenNumberButton" parent="GreenTheme">-->
+<!--        <item name="selected">@color/lightBlue2</item>-->
+<!--        <item name="not_selected">@color/lightBlue3</item>-->
+<!--    </style>-->
+
+    <style name="DefaultNumberButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+
 
 </resources>

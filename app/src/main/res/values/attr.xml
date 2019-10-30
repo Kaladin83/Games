@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="button_selected">
+        <attr name="background_selected" format="reference" />
+        <attr name="background_not_selected" format="reference" />
+        <attr name="border_selected" format="reference" />
+        <attr name="border_not_selected" format="reference" />
+    </declare-styleable>
+
+</resources>
