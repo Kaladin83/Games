@@ -3,8 +3,15 @@
     <declare-styleable name="button_selected">
         <attr name="background_selected" format="reference" />
         <attr name="background_not_selected" format="reference" />
-        <attr name="border_selected" format="reference" />
-        <attr name="border_not_selected" format="reference" />
+        <attr name="kakuro_background_not_selected" format="reference" />
+        <attr name="kakuro_background_selected" format="reference" />
+        <attr name="sudoku_cell" format="reference" />
+        <attr name="sudoku_cell_selected" format="reference" />
+        <attr name="sudoku_cell_not_selected" format="reference" />
+        <attr name="sudoku_cell_text" format="reference" />
+        <attr name="sudoku_button" format="reference" />
+        <attr name="state_level_1" format="boolean" />
+        <attr name="state_level_2" format="boolean" />
     </declare-styleable>
 
 </resources>

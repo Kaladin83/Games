@@ -2,16 +2,16 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/controlsLayout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
         <TableLayout
             android:id="@+id/numbersLayout"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@+id/hintLayout"
             android:layout_gravity="center">
 
             <TableRow
@@ -70,7 +70,6 @@
                     android:tag="@string/number5"
                     android:textSize="16sp" />
                 <Button
-                    style="@style/DefaultNumberButton"
                     android:id="@+id/n6"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
@@ -130,7 +129,6 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_width="46dp"
-        android:layout_toStartOf="@+id/numbersLayout"
         android:layout_height="46dp">
 
         <Button

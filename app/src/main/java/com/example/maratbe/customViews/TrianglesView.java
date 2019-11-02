@@ -1,15 +1,17 @@
-package com.example.maratbe.domain;
+package com.example.maratbe.customViews;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.maratbe.domain.Sum;
 import com.example.maratbe.other.Constants;
 
 import java.util.ArrayList;
@@ -19,12 +21,15 @@ public class TrianglesView extends View implements Constants {
     private final Paint bottomTrianglePaint = new Paint();
     private final Paint topTextPaint = new Paint();
     private final Paint bottomTextPaint = new Paint();
+    private final Paint verticalLinePaint = new Paint();
+    private final Paint horizontalLinePaint = new Paint();
 
     private final Path topPath = new Path();
     private final Path bottomPath = new Path();
 
     private Context context;
     private int size, textHeight = 0, textWidth = 0;
+    private boolean isToDrawVerticalLine = false;
     private ArrayList<Sum> sums;
     private String bottomText = "", topText = "";
 
@@ -51,6 +56,10 @@ public class TrianglesView extends View implements Constants {
         this.sums = sums;
     }
 
+    public void isToDrawVerticalLine(boolean isToDrawVerticalLine) {
+        this.isToDrawVerticalLine = isToDrawVerticalLine;
+    }
+
     public void buildCell()
     {
         sums.forEach(s-> {
@@ -59,6 +68,7 @@ public class TrianglesView extends View implements Constants {
                 drawUpperText(s.getValue());
             } else {
                 buildLowerTriangle();
+                drawHorizontalLine();
                 drawLowerText(s.getValue());
             }
         });
@@ -82,8 +92,8 @@ public class TrianglesView extends View implements Constants {
 
     private void setTextBounds(String text,Paint paint) {
         Rect bounds = new Rect();
-        paint.setTypeface(Typeface.DEFAULT);// your preference here
-        paint.setTextSize(30);// have this the same as your text size
+        paint.setTypeface(Typeface.DEFAULT);
+        paint.setTextSize(30);
         paint.getTextBounds(text, 0, text.length(), bounds);
 
         textHeight = bounds.height();
@@ -98,6 +108,20 @@ public class TrianglesView extends View implements Constants {
         bottomPath.lineTo(0, 0);
         bottomPath.lineTo(size, size);
         bottomPath.lineTo(0, size);
+    }
+
+    private void drawVerticalLine() {
+        verticalLinePaint.setColor(Color.BLACK);
+        verticalLinePaint.setAntiAlias(false);
+        verticalLinePaint.setStyle(Paint.Style.STROKE );
+        verticalLinePaint.setStrokeWidth(4);
+    }
+
+    private void drawHorizontalLine() {
+        horizontalLinePaint.setColor(Color.BLACK);
+        horizontalLinePaint.setAntiAlias(false);
+        horizontalLinePaint.setStyle(Paint.Style.STROKE );
+        horizontalLinePaint.setStrokeWidth(4);
     }
 
     private void buildUpperTriangle() {
@@ -118,5 +142,13 @@ public class TrianglesView extends View implements Constants {
 
         canvas.drawText(topText, size - textWidth - 7, size/2 + textHeight/2, topTextPaint);
         canvas.drawText(bottomText, (size/2 - textWidth/2) - 3, size - 7, bottomTextPaint);
+
+        if (isToDrawVerticalLine)
+        {
+            drawVerticalLine();
+            canvas.drawLine(0, 0, 0, size, verticalLinePaint);
+        }
+
+        canvas.drawLine(0, size, size, size, horizontalLinePaint);
     }
 }

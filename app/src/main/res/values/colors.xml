@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="red">#fc165f</color>
     <color name="colorAccent">#098073</color>
-    <color name="green1">#eafcd1</color>
     <color name="black">#1B1B1B</color>
     <color name="lightBlack">#666262</color>
     <color name="lightBlue">#E2F3FA</color>
@@ -12,15 +11,22 @@
     <color name="lightBlue3">#EFF1FA</color>
     <color name="blue">#328DBD</color>
     <color name="white">#ffffff</color>
-    <color name="Yellow1">#D3E5F399</color>
     <color name="red1">#FF262C</color>
-    <color name="red2">#FF5255</color>
+    <color name="red2">#FF6669</color>
     <color name="red3">#F8DBDB</color>
+    <color name="red4">#FCF2F2</color>
     <color name="lightRedTranslucent">#CBFCF2F2</color>
-    <color name="orange">#FF6636</color>
+<!--    <color name="yellow1">#FD5C1B</color>-->
+    <color name="yellow2">#FCFCC7</color>
+    <color name="yellow3">#D3E5F399</color>
+    <color name="orange1">#FD5C1B</color>
+    <color name="orange2">#FF9260</color>
     <color name="gray">#CCC7C5</color>
     <color name="lightGreenTranslucent">#BFD4FFBB</color>
+    <color name="green1">#6BDD50</color>
+    <color name="green2">#eafcd1</color>
     <color name="darkBlue">#3401CF</color>
     <color name="translucent">#003401CF</color>
-
+    <color name="cell_text_color">?attr/sudoku_cell_text</color>
+<!--    <item name="cell_text_color" type="color" color="?attr/sudoku_cell_text"/>-->
 </resources>

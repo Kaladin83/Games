@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,15 +110,18 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
                 b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0 ? "" :
                         String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
-                b.setTextColor(BLUE_1);
-                ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
+                //b.setTextColor(BLUE_1);
+              //  b.setSelected(true);
+                b.setActivated(true);
+                colorFrame(coordinates, false);
+               // ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
             }
 
             @Override
             protected void updateCellNewValue(boolean isPreviousExists) {
                 Coordinates coordinates = clickHandler.getCurrentCell().getCoordinates();
                 if (isPreviousExists) {
-                    colorFrame(clickHandler.getPreviousCell().getCoordinates(), GREEN_4);
+                    colorFrame(clickHandler.getPreviousCell().getCoordinates(), false);
                 }
 
                 String chosenNumber = Utils.updateValueWhenHintPressed(clickHandler,
@@ -125,9 +129,10 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
                 Button button = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
                 button.setText(chosenNumber);
-                button.setTextColor(BLUE_1);
+                //button.setTextColor(BLUE_1);
+                button.setActivated(true);
                 button.setBackgroundColor(Color.WHITE);
-                colorFrame(coordinates, GREEN_1);
+                colorFrame(coordinates, true);
 
                 fillUpTempMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY(),
                         Integer.parseInt(button.getText().toString()));
@@ -385,9 +390,11 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private View createCell(int i, int j, int k, int l) {
         SUDOKU_CELL = (MainActivity.getScreenWidth() / (NUMBER_OF_COLS + 1))-6;
         ViewGroup.LayoutParams params = new TableRow.LayoutParams(SUDOKU_CELL, SUDOKU_CELL);
-        FrameLayout frame = new FrameLayout(this);
+        FrameLayout frame = new FrameLayout(this, null , 0, R.style.SudokuFrameStyle);
+        frame.setTag("b"+i+""+j+""+k+""+l);
         frame.setLayoutParams(params);
-        frame.setBackgroundColor(GREEN_4);
+        frame.setFocusable(true);
+        frame.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
         frame.addView(createButton(i, j, k, l));
         return frame;
     }
@@ -395,11 +402,11 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private View createButton(int i, int j, int k, int l) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(SUDOKU_CELL-7, SUDOKU_CELL - 7);
         params.gravity = Gravity.CENTER;
-        Button button = new Button(sudokuBoard.getContext());
+        Button button = new Button(this, null , 0, R.style.SudokuButtonStyle);
         button.setLayoutParams(params);
-        button.setTag("b"+i+""+j+""+k+""+l);
         button.setBackgroundColor(WHITE);
-        button.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
+        button.setClickable(false);
+        button.setActivated(true);
         button.setPadding(0,0,0,0);
         button.setGravity(Gravity.CENTER);
         return button;
@@ -409,7 +416,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         if (clearBoard) {
             if (clickHandler.getPreviousCell() != null && clickHandler.getPreviousCell().getValue() != null &&
                     clickHandler.getPreviousCell().getValue().get(clickHandler.getPreviousCell().getValue().size() - 1) > 0) {
-                colorFrame(clickHandler.getPreviousCell().getCoordinates(), GREEN_4);
+                colorFrame(clickHandler.getPreviousCell().getCoordinates(), false);
             }
             iterateTableView(FUNCTION_EMPTY_BOARD);
         }
@@ -424,8 +431,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
                     TableRow rowInGroup = (TableRow) group.getChildAt(k);
                     for (; yIndex < NUMBER_OF_ROWS_PART; ) {
                         Button b = (Button) ((FrameLayout) rowInGroup.getChildAt(yIndex)).getChildAt(0);
-                        b.setTextColor(Color.BLACK);
-                        colorFrame(new Coordinates(i, j, k, yIndex), GREEN_4);
+                       // b.setTextColor(Color.BLACK);
+                        b.setActivated(false);
+                        colorFrame(new Coordinates(i, j, k, yIndex), false);
                         if (b.getText().toString().equals("") || b.getText().toString().equals("0")) {
                             putValue(i, j, k, yIndex, b);
                         } else {
@@ -490,7 +498,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         Cell cell = new Cell();
         cell.setCoordinates(c);
         cell.setValue(value.equals("")? 0: Integer.parseInt(button.getText().toString()));
-        cell.setColor(value.equals("")? BLUE_1: Color.BLACK);
+        cell.setColor(value.equals("")? R.attr.sudoku_cell_text: Color.BLACK);
         cell.setIndex(clickHandler.getListOfCells().size());
         cell.setEnabled(value.equals(""));
         clickHandler.getListOfCells().add(cell);
@@ -507,13 +515,13 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private void populateBoard(Button button, Cell c) {
         button.setText(c.getValue().get(c.getValue().size() - 1) == 0? "": String.valueOf(c.getValue().get(c.getValue().size() - 1)));
-        button.setTextColor(c.getColor());
+        button.setActivated(c.getColor() != Color.BLACK);
         Coordinates c1 = c.getCoordinates();
         fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), c.getValue().get(c.getValue().size() - 1));
         if (clickHandler.getCurrentCell() != null && clickHandler.getCurrentCell().isEnabled() &&
                 clickHandler.getCurrentCell().getCoordinates() != null &&
                 clickHandler.getCurrentCell().getCoordinates().equals(c.getCoordinates())) {
-            colorFrame(clickHandler.getCurrentCell().getCoordinates(), GREEN_1);
+            colorFrame(clickHandler.getCurrentCell().getCoordinates(), true);
         }
     }
 
@@ -829,9 +837,10 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void colorFrame(Coordinates coordinates, int color) {
+    private void colorFrame(Coordinates coordinates, boolean selected) {
         Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
-        ((FrameLayout) b.getParent()).setBackgroundColor(color);
+       // ((FrameLayout) b.getParent()).setBackgroundColor(color);
+        ((FrameLayout) b.getParent()).setSelected(selected);
     }
 
     private void colorGrid() {

@@ -19,35 +19,29 @@
                 android:gravity="center">
                 <Button
                     android:id="@+id/n1"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_corners"
                     android:text="@string/number1"
                     android:tag="@string/number1"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/n2"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_horizontal"
                     android:tag="@string/number2"
                     android:text="@string/number2"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/n3"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_corners"
                     android:text="@string/number3"
                     android:tag="@string/number3"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
             </TableRow>
 
@@ -58,34 +52,28 @@
 
                 <Button
                     android:id="@+id/n4"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_vertical"
                     android:tag="@string/number4"
                     android:text="@string/number4"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/n5"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_middle"
                     android:text="@string/number5"
                     android:tag="@string/number5"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
                 <Button
                     android:id="@+id/n6"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_vertical"
                     android:tag="@string/number6"
                     android:text="@string/number6"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
             </TableRow>
@@ -97,35 +85,29 @@
 
                 <Button
                     android:id="@+id/n7"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_corners"
                     android:tag="@string/number7"
                     android:text="@string/number7"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/n8"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_horizontal"
                     android:tag="@string/number8"
                     android:text="@string/number8"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/n9"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
                     android:background="@drawable/controls_corners"
                     android:tag="@string/number9"
                     android:text="@string/number9"
-                    android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
             </TableRow>
     </TableLayout>
