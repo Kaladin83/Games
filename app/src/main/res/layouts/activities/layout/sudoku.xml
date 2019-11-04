@@ -5,9 +5,9 @@
     android:id="@+id/mainRelativeLayout"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    cust:
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/sudoku_cell_text">
     <RadioGroup
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

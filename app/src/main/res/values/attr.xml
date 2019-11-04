@@ -13,7 +13,7 @@
         <attr name="sudoku_hint_color" format="reference" />
     </declare-styleable>
 
-    <declare-styleable name="SudokuCell">
-        <attr name="sudoku_cell" format="reference" />
-    </declare-styleable>
+<!--    <declare-styleable name="SudokuCell">-->
+<!--        <attr name="sudoku_cell" format="reference" />-->
+<!--    </declare-styleable>-->
 </resources>
