@@ -401,14 +401,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         SudokuButton button = new SudokuButton(this, null, R.attr.sudoku_cell, 0);
         button.setLayoutParams(params);
         button.setTag("b"+i+""+j+""+k+""+l);
-        //button.setTextColor();
-        //button.setStateColor(false);
-        button.setSelected(false);
-        button.setActivated(false);
-     //   button.setTextColor(ContextCompat.getColorStateList(this, R.color.cell_text));
         button.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
-        // SudokuButton.setActivated(true);
-       // button.setPressed(false);
         button.setPadding(0,0,0,0);
         button.setGravity(Gravity.CENTER);
         return button;
