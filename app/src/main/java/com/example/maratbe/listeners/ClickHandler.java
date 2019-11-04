@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import io.alterac.blurkit.BlurLayout;
+
 public abstract class ClickHandler implements Constants, ClickListener {
     private Button hintButton, revertButton;
     private RelativeLayout hintLayout;
@@ -36,6 +38,11 @@ public abstract class ClickHandler implements Constants, ClickListener {
         this.numberLayout = numberLayout;
         this.revertButton = revertButton;
         this.hintLayout = hintLayout;
+    }
+
+    public BlurLayout getBlurLayout()
+    {
+        return menuHandler.getBlurLayout();
     }
 
     public String getChosenNumber()
@@ -104,7 +111,7 @@ public abstract class ClickHandler implements Constants, ClickListener {
     {
         updatePreviousControl();
         setHintPressed(false);
-        numbersMap.get("md_revert_selector").setSelected(false);
+        numbersMap.get("revert").setSelected(false);
         chosenNumber = "";
         previousNumber = "";
         currentCell = null;

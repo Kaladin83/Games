@@ -1,7 +1,6 @@
 package com.example.maratbe.games;
 
 import android.content.res.Configuration;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Gravity;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.maratbe.customViews.KakuroButton;
 import com.example.maratbe.customViews.TrianglesView;
 import com.example.maratbe.domain.*;
 import com.example.maratbe.listeners.ClickHandler;
@@ -102,10 +100,9 @@ public class Kakuro extends AppCompatActivity implements Constants {
             @Override
             protected void updateCellRevertValue(Cell previous) {
                 Coordinates coordinates = previous.getCoordinates();
-                KakuroButton b = getButton(coordinates.getX(), coordinates.getY());
+                Button b = getButton(coordinates.getX(), coordinates.getY());
                 b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0? "":
                         String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
-                //b.setTextColor(BLUE_1);
             }
 
             @Override
@@ -114,7 +111,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
                 String chosenNumber = Utils.updateValueWhenHintPressed(clickHandler,
                         getValueFromHintMatrix(coordinates.getX(), coordinates.getY()));
 
-                KakuroButton button = getButton(coordinates.getX(), coordinates.getY());
+                Button button = getButton(coordinates.getX(), coordinates.getY());
                 button.setText(chosenNumber);
                 button.setSelected(false);
                 matrix[coordinates.getX()][coordinates.getY()] =
@@ -304,23 +301,22 @@ public class Kakuro extends AppCompatActivity implements Constants {
         Cell cell = clickHandler.getCoordinatesFromList(name);
         matrix[i][j] = cell.getValue().get(cell.getValue().size() - 1);
         if (cell.isEnabled()) {
-            return populateButtonFromList(matrix[i][j], name, layoutParams);
+            return populateButtonFromList(j, matrix[i][j], name, layoutParams);
         } else {
             return populateTrianglesViewFromCell(cell, name, layoutParams);
         }
     }
 
-    private KakuroButton populateButtonFromList(int value, String name, TableRow.LayoutParams layoutParams) {
-        KakuroButton b = createButton(name, layoutParams);
+    private Button populateButtonFromList(int j, int value, String name, TableRow.LayoutParams layoutParams) {
+        Button b = createButton(name, layoutParams);
         b.setText(value == 0? "": String.valueOf(value));
+        putBorder(j, b, false);
         return b;
     }
 
     private View populateTrianglesViewFromCell(Cell cell, String name, TableRow.LayoutParams layoutParams) {
         TrianglesView trianglesView = (TrianglesView)createTrianglesView(name, layoutParams);
-        if (cell.getSums().size() > 0) {
-            createTriangles(cell, trianglesView);
-        }
+        createTriangles(cell, trianglesView);
         return trianglesView;
     }
 
@@ -344,19 +340,22 @@ public class Kakuro extends AppCompatActivity implements Constants {
         view.setLayoutParams(new TableRow.LayoutParams(KAKURO_CELL, KAKURO_CELL));
         view.setSize(KAKURO_CELL);
         view.setDirections(cell.getSums());
-        View v = getCell(getBoardRow(cell.getCoordinates().getX()), cell.getCoordinates().getY() -1);
-        view.isToDrawVerticalLine(v instanceof KakuroButton);
+        if (cell.getCoordinates().getY() > 1)
+        {
+            View v = getCell(getBoardRow(cell.getCoordinates().getX()), cell.getCoordinates().getY() - 1);
+            view.isToDrawVerticalLine(v instanceof Button);
+        }
+
         view.buildCell();
         view.setTag("r"+cell.getCoordinates().getX()+"rl"+cell.getCoordinates().getY());
     }
 
-    private KakuroButton createButton(String name, TableRow.LayoutParams layoutParams) {
-        KakuroButton button = new KakuroButton(this, null, 0,R.style.KakuroButtonStyle);
+    private Button createButton(String name, TableRow.LayoutParams layoutParams) {
+        Button button = new Button(this, null, R.attr.kakuro_cell,0);
         button.setTag(name);
         button.setGravity(Gravity.CENTER);
         button.setPadding(0, 0, 0, 0);
         button.setLayoutParams(layoutParams);
-        button.setActivated(true);
         button.setOnClickListener(v -> clickHandler.onCellClick(name));
         return button;
     }
@@ -371,11 +370,11 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void populateButton(int i, int j) {
         View v = getCell(getBoardRow(i), j);
-        if (v instanceof KakuroButton) {
-            KakuroButton b = (KakuroButton) v;
+        if (v instanceof Button) {
+            Button b = (Button) v;
             if (b.getText().toString().equals("")) {
                 putValue(i, j, b);
-                putBorder(j, b);
+                putBorder(j, b, false);
             }
         }
     }
@@ -405,6 +404,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         } else {
             resetBoard();
         }
+
         chronometer = findViewById(R.id.chronometer);
         chronometer.setBase(chronometer.getBase()+timeToAdd);
         chronometer.start();
@@ -461,14 +461,12 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void setBackgroundColor(int i, int j) {
         View  view = getCell(getBoardRow(i), j);
-        if (view instanceof KakuroButton)
+        if (view instanceof Button)
         {
-            KakuroButton b = (KakuroButton) view;
+            Button b = (Button) view;
             if (b.getText().toString().equals(""))
             {
-//                b.setBackground(Utils.createBorder(1,
-////                        clickHandler.isHintPressed()? YELLOW_4: GREEN_6, 1, BLUE_1));
-                b.setSelected(clickHandler.isHintPressed());
+                putBorder(j, b, clickHandler.isHintPressed());
             }
         }
     }
@@ -477,14 +475,14 @@ public class Kakuro extends AppCompatActivity implements Constants {
         View  view = getCell(getBoardRow(i), j);
         if (view instanceof Button)
         {
-            populateListFromButton((KakuroButton) view, new Coordinates(i, j));
+            populateListFromButton((Button) view, new Coordinates(i, j));
         }
 //        else {
 //            populateListFromRelativeLayout((RelativeLayout)view, new Coordinates(i, j));
 //        }
     }
 
-    private void populateListFromButton(KakuroButton b, Coordinates c) {
+    private void populateListFromButton(Button b, Coordinates c) {
         if (!b.getText().toString().equals(""))
         {
             Cell cell = new Cell();
@@ -513,25 +511,18 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
     }
 
-    private void putBorder(int j, KakuroButton b) {
+    private void putBorder(int j, Button b, boolean selected) {
         if (j == MAX_COLS -1) {
-            b.setBackground(addToSelector(R.drawable.md_kakuro_button_selected_2, R.drawable.md_kakuro_button_not_selected_2));
+            b.setSelected(selected);
+            b.setActivated(true);
         }
         else {
-            b.setBackground(addToSelector(R.drawable.md_kakuro_button_selected_1, R.drawable.md_kakuro_button_not_selected_1));
+            b.setSelected(selected);
+            b.setActivated(false);
         }
     }
 
-    public StateListDrawable addToSelector(int selected, int notSelected) {
-        StateListDrawable res = new StateListDrawable();
-        res.addState(new int[]{android.R.attr.state_pressed}, getDrawable(selected));
-        res.addState(new int[]{android.R.attr.state_selected}, getDrawable(selected));
-        res.addState(new int[]{-android.R.attr.state_pressed}, getDrawable(notSelected));
-        res.addState(new int[]{-android.R.attr.state_selected}, getDrawable(notSelected));
-        return res;
-    }
-
-    private void putValue(int x, int y, KakuroButton b) {
+    private void putValue(int x, int y, Button b) {
         missing.clear();
         cor.setX(x);
         cor.setY(y);
@@ -664,8 +655,8 @@ public class Kakuro extends AppCompatActivity implements Constants {
         matrix[x][y] = number.equals("") ? 0 : Integer.parseInt(number);
     }
 
-    private KakuroButton getButton(int x, int y) {
-        return (KakuroButton) getCell(getBoardRow(x), y);
+    private Button getButton(int x, int y) {
+        return (Button) getCell(getBoardRow(x), y);
     }
 
     private void switchData(int conflictNumber, int[] currCoordinates, int toSkip) {

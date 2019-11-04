@@ -15,11 +15,15 @@ import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
+import io.alterac.blurkit.BlurLayout;
+
+
 public abstract class MenuHandler implements Constants, OnClickListener {
     private RelativeLayout rLayout;
-    private LinearLayout menuLayout;
+    private BlurLayout menuLayout;
     private TableLayout numberLayout;
     private MenuListener menuListener;
+
 
     MenuHandler(RelativeLayout rLayout, TableLayout numberLayout, Object gameInstance) {
         this.rLayout = rLayout;
@@ -35,14 +39,25 @@ public abstract class MenuHandler implements Constants, OnClickListener {
 
     private void buildMenu() {
         LayoutInflater inflater = (LayoutInflater) rLayout.getContext().getSystemService(rLayout.getContext().LAYOUT_INFLATER_SERVICE);
-        menuLayout = (LinearLayout) inflater.inflate(R.layout.menu, rLayout.findViewById(R.id.mainMenuLayout));
-        menuLayout.setBackground(Utils.createGradientBackground(GREEN_4, WHITE));
+        menuLayout = (BlurLayout) inflater.inflate(R.layout.menu, rLayout.findViewById(R.id.mainMenuLayout));
+        //menuLayout.setBackground(Utils.createGradientBackground(GREEN_4, WHITE));
+//        for (int i = 0; i< menuLayout.getChildCount(); i++)
+//        {
+//            menuLayout.bringChildToFront(menuLayout.getChildAt(i));
+//            menuLayout.child
+//        }
+
 
         if (rLayout.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             addToLayout(ORIENTATION_LANDSCAPE);
         } else {
             addToLayout(ORIENTATION_PORTRAIT);
         }
+    }
+
+    public BlurLayout getBlurLayout()
+    {
+        return menuLayout;
     }
 
     private void addToLayout(String orientation) {

@@ -3,15 +3,21 @@
     <declare-styleable name="attr">
         <attr name="controls_background_selected" format="reference" />
         <attr name="controls_background_not_selected" format="reference" />
-        <attr name="kakuro_background_not_selected" format="reference" />
-        <attr name="kakuro_background_selected" format="reference" />
+        <attr name="kakuro_cell_background" format="reference" />
+        <attr name="background_hint_color" format="reference" />
         <attr name="sudoku_cell" format="reference" />
+        <attr name="kakuro_cell" format="reference" />
         <attr name="sudoku_cell_selected" format="reference" />
         <attr name="sudoku_cell_not_selected" format="reference" />
         <attr name="sudoku_cell_text" format="reference" />
         <attr name="sudoku_button" format="reference" />
-        <attr name="sudoku_hint_color" format="reference" />
         <attr name="state_color" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BlurLayout">
+        <attr name="downscaleFactor" format="float" />
+        <attr name="blurRadius" format="integer" />
+        <attr name="fps" format="integer" />
     </declare-styleable>
 
 <!--    <declare-styleable name="SudokuCell">-->

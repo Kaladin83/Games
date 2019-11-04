@@ -15,6 +15,8 @@ import com.example.maratbe.listeners.ClickHandler;
 
 import java.util.ArrayList;
 
+import io.alterac.blurkit.BlurLayout;
+
 public class Utils {
 
     public static Drawable createBorder(int radius, int color, int strokeWidth, int strokeColor) {
@@ -59,10 +61,17 @@ public class Utils {
 
     private static void setVisibility(View view, int visible) {
 
-        LinearLayout lLayout = (LinearLayout) view;
+        BlurLayout lLayout = (BlurLayout) view;
         for (int i = 0; i< lLayout.getChildCount(); i++)
         {
-            lLayout.getChildAt(i).setVisibility(visible);
+            for (int j = 0; j< lLayout.getChildCount(); j++)
+            {
+                if (lLayout.getChildAt(i) instanceof  LinearLayout)
+                {
+                    ((LinearLayout)lLayout.getChildAt(i)).getChildAt(j).setVisibility(visible);
+                }
+                lLayout.getChildAt(i).setVisibility(visible);
+            }
         }
         view.setVisibility(visible);
     }

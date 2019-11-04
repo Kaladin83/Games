@@ -1,48 +1,61 @@
 <resources>
 
-    <style name="DefaultTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SummerHeat" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/red1</item>
         <item name="colorAccent">@color/red2</item>
 
         <item name="controls_background_selected">@color/red2</item>
         <item name="controls_background_not_selected">@color/red3</item>
-        <item name="kakuro_background_selected">@color/yellow2</item>
-        <item name="kakuro_background_not_selected">@color/red4</item>
+        <item name="kakuro_cell_background">@color/lightRedTransparent</item>
         <item name="sudoku_cell_selected">@color/red1</item>
-        <item name="sudoku_cell_not_selected">@color/lightRedTranslucent</item>
+        <item name="sudoku_cell_not_selected">@color/lightRedTransparent</item>
         <item name="sudoku_cell_text">@color/orange1</item>
-        <item name="sudoku_hint_color">@color/yellow2</item>
+        <item name="background_hint_color">@color/yellow2</item>
 
-        <item name="android:windowBackground">@color/lightRedTranslucent</item>
+        <item name="android:windowBackground">@color/lightRedTransparent</item>
 
-        <item name="buttonStyle">@style/DefaultNumberButton</item>
+        <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
-<!--        <item name="sudoku_button">@style/SudokuTextStyle</item>-->
+        <item name="kakuro_cell">@style/KakuroButtonStyle</item>
+    </style>
 
+    <style name="SpringBlossom" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/green1</item>
+        <item name="colorAccent">@color/green2</item>
+
+        <item name="controls_background_selected">@color/green2</item>
+        <item name="controls_background_not_selected">@color/yellow3</item>
+        <item name="kakuro_cell_background">@color/greenTransparent</item>
+        <item name="sudoku_cell_selected">@color/green1</item>
+        <item name="sudoku_cell_not_selected">@color/greenTransparent</item>
+        <item name="sudoku_cell_text">@color/blue2</item>
+        <item name="background_hint_color">@color/blueTransparent</item>
+
+        <item name="android:windowBackground">@color/greenTransparent</item>
+
+        <item name="buttonStyle">@style/ControlButton</item>
+        <item name="sudoku_cell">@style/SudokuFrameStyle</item>
+        <item name="kakuro_cell">@style/KakuroButtonStyle</item>
     </style>
 
     <style name="MyTextViewStyle">
-        <item name="background">@color/translucent</item>
+        <item name="background">@color/transparent</item>
     </style>
 
-    <style name="DefaultNumberButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+    <style name="ControlButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/button_text_color</item>
     </style>
 
     <style name="SudokuFrameStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:background">@drawable/md_sudoku_cell_selector</item>
         <item name="android:textColor">@color/cell_text</item>
-<!--        <item name="android:textColor">@color/black</item>-->
-<!--        <item name="android:textColorPrimary">@color/orange1</item>-->
     </style>
 
-<!--    <style name="SudokuTextStyle">-->
-<!--        <item name="android:textColor">@color/cell_text</item>-->
-<!--    </style>-->
-
-    <style name="KakuroButtonStyle">
-        <item name="android:textColor">@color/cell_text</item>
+    <style name="KakuroButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:background">@drawable/md_kakuro_cell_selector</item>
+        <item name="android:textColor">@color/blue1</item>
     </style>
 
 </resources>

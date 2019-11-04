@@ -10,6 +10,7 @@
         <shape android:shape="rectangle">
             <solid android:color="#fff"/>
             <stroke android:color="?attr/sudoku_cell_selected" android:width="2dp"/>
+            <corners android:radius="2dp"/>
         </shape>
     </item>
 </layer-list>

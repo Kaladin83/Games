@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="false" android:state_activated="false"
+        android:drawable="@drawable/md_kakuro_button_not_selected_1"/>
+    <item android:state_selected="false" android:state_activated="true"
+        android:drawable="@drawable/md_kakuro_button_not_selected_2"/>
+    <item android:state_selected="true" android:state_activated="false"
+        android:drawable="@drawable/md_kakuro_button_selected_1"/>
+    <item android:state_selected="true" android:state_activated="true"
+        android:drawable="@drawable/md_kakuro_button_selected_2"/>
+</selector>
