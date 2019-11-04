@@ -40,7 +40,7 @@ public class Utils {
         if (view.getVisibility() == View.VISIBLE)
         {
             TranslateAnimation animate = new TranslateAnimation(0,0,0,view.getHeight());
-            animate.setDuration(300);
+            animate.setDuration(400);
             animate.setFillAfter(true);
             view.startAnimation(animate);
             setVisibility(view, View.GONE);
@@ -51,7 +51,7 @@ public class Utils {
         if (view.getVisibility() != View.VISIBLE)
         {
             TranslateAnimation animate = new TranslateAnimation(0,0,view.getHeight(),0);
-            animate.setDuration(300);
+            animate.setDuration(400);
             animate.setFillAfter(true);
             view.startAnimation(animate);
             setVisibility(view, View.VISIBLE);
