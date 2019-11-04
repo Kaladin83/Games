@@ -2,12 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#FF807E7E" />
+            <solid android:color="?attr/sudoku_cell_selected"/>
         </shape>
     </item>
-    <item android:bottom="2px" android:right="2px" android:left="2px" android:top="2px">
+
+    <item android:bottom="8px" android:left="8px" android:top="8px" android:right="8px">
         <shape android:shape="rectangle">
-            <solid android:color="#ffff" />
+            <solid android:color="#fff"/>
         </shape>
     </item>
 </layer-list>

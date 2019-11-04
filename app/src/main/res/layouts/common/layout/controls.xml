@@ -20,7 +20,7 @@
                 android:gravity="center">
 
                 <Button
-                    android:background="@drawable/controls_corners"
+                    android:background="@drawable/md_controls_corners"
                     android:id="@+id/n1"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
@@ -32,7 +32,7 @@
                     android:id="@+id/n2"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_horizontal"
+                    android:background="@drawable/md_controls_horizontal"
                     android:tag="@string/number2"
                     android:text="@string/number2"
                     android:textSize="16sp" />
@@ -41,7 +41,7 @@
                     android:id="@+id/n3"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_corners"
+                    android:background="@drawable/md_controls_corners"
                     android:text="@string/number3"
                     android:tag="@string/number3"
                     android:textSize="16sp" />
@@ -56,7 +56,7 @@
                     android:id="@+id/n4"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_vertical"
+                    android:background="@drawable/md_controls_vertical"
                     android:tag="@string/number4"
                     android:text="@string/number4"
                     android:textSize="16sp" />
@@ -65,7 +65,7 @@
                     android:id="@+id/n5"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_middle"
+                    android:background="@drawable/md_controls_middle"
                     android:text="@string/number5"
                     android:tag="@string/number5"
                     android:textSize="16sp" />
@@ -73,7 +73,7 @@
                     android:id="@+id/n6"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_vertical"
+                    android:background="@drawable/md_controls_vertical"
                     android:tag="@string/number6"
                     android:text="@string/number6"
                     android:textSize="16sp" />
@@ -89,7 +89,7 @@
                     android:id="@+id/n7"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_corners"
+                    android:background="@drawable/md_controls_corners"
                     android:tag="@string/number7"
                     android:text="@string/number7"
                     android:textSize="16sp" />
@@ -98,7 +98,7 @@
                     android:id="@+id/n8"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_horizontal"
+                    android:background="@drawable/md_controls_horizontal"
                     android:tag="@string/number8"
                     android:text="@string/number8"
                     android:textSize="16sp" />
@@ -107,7 +107,7 @@
                     android:id="@+id/n9"
                     android:layout_width="@dimen/controlButtonWidth"
                     android:layout_height="@dimen/controlButtonHeight"
-                    android:background="@drawable/controls_corners"
+                    android:background="@drawable/md_controls_corners"
                     android:tag="@string/number9"
                     android:text="@string/number9"
                     android:textSize="16sp" />
@@ -121,7 +121,7 @@
         android:layout_toEndOf="@+id/numbersLayout"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:background="@drawable/revert"/>
+        android:background="@drawable/md_revert_selector"/>
 
     <RelativeLayout
         android:id="@+id/hintLayout"
@@ -138,7 +138,7 @@
             android:layout_centerInParent="true"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:background="@drawable/hint" />
+            android:background="@drawable/md_hint" />
         <TextView
             android:id="@+id/hintTextView"
             android:layout_alignParentBottom="true"

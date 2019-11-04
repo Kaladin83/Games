@@ -4,15 +4,10 @@ import android.content.res.Configuration;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -520,10 +515,10 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private void putBorder(int j, KakuroButton b) {
         if (j == MAX_COLS -1) {
-            b.setBackground(addToSelector(R.drawable.kakuro_button_selected_2, R.drawable.kakuro_button_not_selected_2));
+            b.setBackground(addToSelector(R.drawable.md_kakuro_button_selected_2, R.drawable.md_kakuro_button_not_selected_2));
         }
         else {
-            b.setBackground(addToSelector(R.drawable.kakuro_button_selected_1, R.drawable.kakuro_button_not_selected_1));
+            b.setBackground(addToSelector(R.drawable.md_kakuro_button_selected_1, R.drawable.md_kakuro_button_not_selected_1));
         }
     }
 

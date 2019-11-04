@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="red">#fc165f</color>
     <color name="colorAccent">#098073</color>
-    <color name="black">#1B1B1B</color>
+    <color name="black">#000000</color>
     <color name="lightBlack">#666262</color>
     <color name="lightBlue">#E2F3FA</color>
     <color name="lightBlue2">#deebfc</color>
@@ -15,7 +15,7 @@
     <color name="red2">#FF6669</color>
     <color name="red3">#F8DBDB</color>
     <color name="red4">#FCF2F2</color>
-    <color name="lightRedTranslucent">#CBFCF2F2</color>
+    <color name="lightRedTranslucent">#F8E7E7</color>
 <!--    <color name="yellow1">#FD5C1B</color>-->
     <color name="yellow2">#FCFCC7</color>
     <color name="yellow3">#D3E5F399</color>

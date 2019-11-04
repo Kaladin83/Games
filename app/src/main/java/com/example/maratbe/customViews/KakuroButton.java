@@ -12,8 +12,6 @@ import com.example.maratbe.games.R;
 public class KakuroButton extends TextView {
     private boolean stateLevel1;
     private boolean stateLevel2;
-    private static final int[] STATE_LEVEL_1 = {R.attr.state_level_1};
-    private static final int[] STATE_LEVEL_2 = {R.attr.state_level_2};
 
     public KakuroButton(Context context) {
         super(context, null, 0,R.style.KakuroButtonStyle);
@@ -52,20 +50,5 @@ public class KakuroButton extends TextView {
     public void setStateLevel2(boolean stateLevel2) {
         this.stateLevel2 = stateLevel2;
         refreshDrawableState();
-    }
-
-    @Override
-    protected int[] onCreateDrawableState(int extraSpace) {
-        final int[] drawableState = super.onCreateDrawableState(extraSpace + 2);
-        if (stateLevel1)
-        {
-            mergeDrawableStates(drawableState, STATE_LEVEL_1);
-        }
-
-        if (stateLevel2)
-        {
-            mergeDrawableStates(drawableState, STATE_LEVEL_2);
-        }
-        return drawableState;
     }
 }

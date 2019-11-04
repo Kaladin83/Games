@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="button_selected">
-        <attr name="background_selected" format="reference" />
-        <attr name="background_not_selected" format="reference" />
+    <declare-styleable name="attr">
+        <attr name="controls_background_selected" format="reference" />
+        <attr name="controls_background_not_selected" format="reference" />
         <attr name="kakuro_background_not_selected" format="reference" />
         <attr name="kakuro_background_selected" format="reference" />
         <attr name="sudoku_cell" format="reference" />
@@ -10,8 +10,10 @@
         <attr name="sudoku_cell_not_selected" format="reference" />
         <attr name="sudoku_cell_text" format="reference" />
         <attr name="sudoku_button" format="reference" />
-        <attr name="state_level_1" format="boolean" />
-        <attr name="state_level_2" format="boolean" />
+        <attr name="sudoku_hint_color" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="SudokuCell">
+        <attr name="sudoku_cell" format="reference" />
+    </declare-styleable>
 </resources>

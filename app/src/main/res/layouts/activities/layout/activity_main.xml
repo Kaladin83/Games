@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="91dp"
                 android:layout_gravity="center"
-                android:background="@drawable/tic_tac_toe"
+                android:background="@drawable/img_tic_tac_toe_logo"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
@@ -90,7 +90,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:background="@drawable/sudoku_logo"
+                android:background="@drawable/img_sudoku_logo"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
@@ -135,7 +135,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:background="@drawable/kakuro_logo"
+                android:background="@drawable/img_kakuro_logo"
                 android:clickable="false"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />

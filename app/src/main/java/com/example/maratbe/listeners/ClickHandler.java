@@ -104,7 +104,7 @@ public abstract class ClickHandler implements Constants, ClickListener {
     {
         updatePreviousControl();
         setHintPressed(false);
-        numbersMap.get("revert").setSelected(false);
+        numbersMap.get("md_revert_selector").setSelected(false);
         chosenNumber = "";
         previousNumber = "";
         currentCell = null;
