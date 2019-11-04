@@ -1,14 +1,18 @@
 package com.example.maratbe.games;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.RadioButton;
+import android.widget.Chronometer;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.example.maratbe.customViews.SudokuButton;
 import com.example.maratbe.domain.Cell;
 import com.example.maratbe.domain.Coordinates;
 import com.example.maratbe.listeners.ClickHandler;
@@ -45,6 +51,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private long pauseOffset = 0, timeToAdd = 0;
     private int[][] matrix = new int[9][9];
     private int[][] hintMatrix = new int[9][9];
+    private Context context;
     int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
 
     private ClickHandler clickHandler;
@@ -55,6 +62,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sudoku);
+        context = this;
         initColorMap();
         timeButton = findViewById(R.id.timeBtn);
         timeButton.setOnClickListener(v ->
@@ -104,12 +112,13 @@ public class Sudoku extends AppCompatActivity implements Constants {
             @Override
             protected void updateCellRevertValue(Cell previous) {
                 Coordinates coordinates = previous.getCoordinates();
-                Button  b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
+                SudokuButton  b = getSudokuButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
                 b.setText(previous.getValue().get(previous.getValue().size() - 1) == 0 ? "" :
                         String.valueOf(previous.getValue().get(previous.getValue().size() - 1)));
                 //b.setTextColor(BLUE_1);
               //  b.setSelected(true);
-            //    b.setActivated(true);
+               // b.setPressed(true);
+                b.setStateColor(true);
                 colorFrame(coordinates, false, true);
                // ((FrameLayout) b.getParent()).setBackgroundColor(GRAY_2);
             }
@@ -124,11 +133,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 String chosenNumber = Utils.updateValueWhenHintPressed(clickHandler,
                         getValueFromHintMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY()));
 
-                Button button = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
+                SudokuButton button = getSudokuButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
                 button.setText(chosenNumber);
                 //button.setTextColor(BLUE_1);
-              //  Button.setActivated(true);
-             //   Button.setBackgroundColor(Color.WHITE);
+            //   button.setPressed(true);
+                button.setStateColor(true);
+             //   SudokuButton.setBackgroundColor(Color.WHITE);
                 colorFrame(coordinates, true, true);
 
                 fillUpTempMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY(),
@@ -203,7 +213,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 int m = findCoordinatesToClose(closedArray);
                 closed.add(opened.get(m));
             }
-            closeButtons(i);
+            closeSudokuButtons(i);
         }
     }
 
@@ -217,12 +227,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
         return m;
     }
 
-    private void closeButtons(int i) {
+    private void closeSudokuButtons(int i) {
         for (String close : closed) {
             String[] c = close.split(",");
             getCoordinates(i, Integer.parseInt(c[0]), Integer.parseInt(c[1]));
-            putNumberInButton(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY(), "");
-            Button b = getButton(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY());
+            putNumberInSudokuButton(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY(), "");
+            SudokuButton b = getSudokuButton(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY());
             b.setText("");
             fillUpTempMatrix(cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY(), 0);
         }
@@ -384,37 +394,25 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private Button createCell(int i, int j, int k, int l) {
+    private SudokuButton createCell(int i, int j, int k, int l) {
         SUDOKU_CELL = (MainActivity.getScreenWidth() / (NUMBER_OF_COLS + 1))-6;
         TableRow.LayoutParams params = new TableRow.LayoutParams(SUDOKU_CELL, SUDOKU_CELL);
         params.gravity = Gravity.CENTER;
-        Button Button = new Button(this, null, 0, 0);
-       // Button Button = new Button(this);
-        Button.setLayoutParams(params);
-        Button.setBackground(getDrawable(R.drawable.md_sudoku_cell_selector));
-        //Button.setba(getColor(R.color.cell_text_color));
-       // Button.setBackgroundColor(WHITE);
-        Button.setTag("b"+i+""+j+""+k+""+l);
-        Button.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
-        // Button.setActivated(true);
-        //R.style.SudokuFrameStyle
-        Button.setPadding(0,0,0,0);
-        Button.setGravity(Gravity.CENTER);
-
-        return Button;
+        SudokuButton button = new SudokuButton(this, null, R.attr.sudoku_cell, 0);
+        button.setLayoutParams(params);
+        button.setTag("b"+i+""+j+""+k+""+l);
+        //button.setTextColor();
+        //button.setStateColor(false);
+        button.setSelected(false);
+        button.setActivated(false);
+     //   button.setTextColor(ContextCompat.getColorStateList(this, R.color.cell_text));
+        button.setOnClickListener(v -> clickHandler.onCellClick(v.getTag().toString()));
+        // SudokuButton.setActivated(true);
+       // button.setPressed(false);
+        button.setPadding(0,0,0,0);
+        button.setGravity(Gravity.CENTER);
+        return button;
     }
-
-//    private View createButton(int i, int j, int k, int l) {
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(SUDOKU_CELL-7, SUDOKU_CELL - 7);
-//        params.gravity = Gravity.CENTER;
-//        Button Button = new Button(this, null , 0, R.style.ButtonStyle);
-//        Button.setLayoutParams(params);
-//        Button.setBackgroundColor(WHITE);
-//       // Button.setActivated(true);
-//        Button.setPadding(0,0,0,0);
-//        Button.setGravity(Gravity.CENTER);
-//        return Button;
-//    }
 
     private void populateBoard(boolean clearBoard) {
         if (clearBoard) {
@@ -434,10 +432,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
                     yIndex = 0;
                     TableRow rowInGroup = (TableRow) group.getChildAt(k);
                     for (; yIndex < NUMBER_OF_ROWS_PART; ) {
-                        Button b = (Button)rowInGroup.getChildAt(yIndex);
-                       // b.setTextColor(Color.BLACK);
-                       // b.setActivated(false);
-                        colorFrame(new Coordinates(i, j, k, yIndex), false, true);
+                        SudokuButton b = (SudokuButton)rowInGroup.getChildAt(yIndex);
+                        colorFrame(new Coordinates(i, j, k, yIndex), false, false);
                         if (b.getText().toString().equals("") || b.getText().toString().equals("0")) {
                             putValue(i, j, k, yIndex, b);
                         } else {
@@ -458,16 +454,16 @@ public class Sudoku extends AppCompatActivity implements Constants {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 3; k++) {
                     for (int l = 0; l < 3; l++) {
-                        Button Button = getButton(i, j, k, l);
+                        SudokuButton SudokuButton = getSudokuButton(i, j, k, l);
                         Coordinates coordinates = new Coordinates(k, l, i, j);
-                        handleFunction(function, Button, coordinates);
+                        handleFunction(function, SudokuButton, coordinates);
                     }
                 }
             }
         }
     }
 
-    private void handleFunction(int function, Button b, Coordinates c) {
+    private void handleFunction(int function, SudokuButton b, Coordinates c) {
         switch (function) {
             case FUNCTION_COLOR_CELLS_HINT:
                 setHintPressedBackground(b, c);
@@ -490,14 +486,14 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void setHintPressedBackground(Button b, Coordinates c) {
+    private void setHintPressedBackground(SudokuButton b, Coordinates c) {
         if (b.getText().toString().equals(""))
         {
-            colorFrame(c, !clickHandler.isHintPressed(), false);
+            colorFrame(c, clickHandler.isHintPressed(), !clickHandler.isHintPressed());
         }
     }
 
-    private void populateList(Button button, Coordinates c) {
+    private void populateList(SudokuButton button, Coordinates c) {
         String value = button.getText().toString();
         Cell cell = new Cell();
         cell.setCoordinates(c);
@@ -508,18 +504,18 @@ public class Sudoku extends AppCompatActivity implements Constants {
         clickHandler.getListOfCells().add(cell);
     }
 
-    private void populateBoardFromList(Button button, Coordinates c) {
+    private void populateBoardFromList(SudokuButton button, Coordinates c) {
         button.setOnClickListener(v ->
                 clickHandler.onCellClick((String) v.getTag()));
         fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), 0);
-      //  Button.setBackgroundColor(WHITE);
+      //  SudokuButton.setBackgroundColor(WHITE);
         clickHandler.getListOfCells().stream().filter(c1 -> c1.getCoordinates().equals(c)).
                 forEach(c1 -> populateBoard(button, c1));
     }
 
-    private void populateBoard(Button button , Cell c) {
+    private void populateBoard(SudokuButton button , Cell c) {
         button.setText(c.getValue().get(c.getValue().size() - 1) == 0? "": String.valueOf(c.getValue().get(c.getValue().size() - 1)));
-       // Button.setActivated(c.getColor() != Color.BLACK);
+       // SudokuButton.setActivated(c.getColor() != Color.BLACK);
         Coordinates c1 = c.getCoordinates();
         fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), c.getValue().get(c.getValue().size() - 1));
         if (clickHandler.getCurrentCell() != null && clickHandler.getCurrentCell().isEnabled() &&
@@ -537,7 +533,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void putValue(int partRow, int partColumn, int x, int y, Button b) {
+    private void putValue(int partRow, int partColumn, int x, int y, SudokuButton b) {
         missing.clear();
         cor.setPartRow(partRow);
         cor.setPartCol(partColumn);
@@ -607,7 +603,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private boolean checkHorizontalConflict(int row, int col, int x, int conflictNumber) {
         TableRow currentRow = (TableRow) ((TableLayout) ((TableRow) sudokuBoard.getChildAt(row)).getChildAt(col)).getChildAt(x);
         for (int i = 0; i < 3; i++) {
-            Button b = (Button) currentRow.getChildAt(i);
+            SudokuButton b = (SudokuButton) currentRow.getChildAt(i);
             if (b != null && !b.getText().toString().equals("")) {
                 if (Integer.parseInt(b.getText().toString()) == conflictNumber && !(newCoordinatesToCompare[0] == row && newCoordinatesToCompare[1] == col && newCoordinatesToCompare[2] == x)) {
                     return true;
@@ -629,7 +625,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     private boolean checkVerticalConflict(int row, int col, int y, int conflictNumber) {
         TableLayout table = (TableLayout) ((TableRow) sudokuBoard.getChildAt(row)).getChildAt(col);
         for (int i = 0; i < 3; i++) {
-            Button b = (Button) ((TableRow) table.getChildAt(i)).getChildAt(y);
+            SudokuButton b = (SudokuButton) ((TableRow) table.getChildAt(i)).getChildAt(y);
             if (b != null && !b.getText().toString().equals("")) {
                 if (Integer.parseInt(b.getText().toString()) == conflictNumber && !(newCoordinatesToCompare[0] == row && newCoordinatesToCompare[1] == col && newCoordinatesToCompare[3] == y)) {
                     return true;
@@ -644,18 +640,18 @@ public class Sudoku extends AppCompatActivity implements Constants {
         switchData(conflictNumber, new int[]{cor.getPartRow(), cor.getPartCol(), cor.getX(), cor.getY()}, -1);
     }
 
-    private void putNumberInButton(int partRow, int partCol, int x, int y, String number) {
-        Button b = getButton(partRow, partCol, x, y);
+    private void putNumberInSudokuButton(int partRow, int partCol, int x, int y, String number) {
+        SudokuButton b = getSudokuButton(partRow, partCol, x, y);
         b.setText(number);
     }
 
-    private String getNumberFromButton(int partRow, int partCol, int x, int y) {
-        Button b = getButton(partRow, partCol, x, y);
+    private String getNumberFromSudokuButton(int partRow, int partCol, int x, int y) {
+        SudokuButton b = getSudokuButton(partRow, partCol, x, y);
         return b.getText().toString();
     }
 
-    private Button getButton(int partRow, int partCol, int x, int y) {
-        return ((Button) ((TableRow) ((TableLayout) ((TableRow) sudokuBoard.getChildAt(partRow))
+    private SudokuButton getSudokuButton(int partRow, int partCol, int x, int y) {
+        return ((SudokuButton) ((TableRow) ((TableLayout) ((TableRow) sudokuBoard.getChildAt(partRow))
                 .getChildAt(partCol)).getChildAt(x)).getChildAt(y));
     }
 
@@ -671,26 +667,26 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
         if (prevConflict.equals(VERTICAL)) {
             coordinates = findNumberInLineVertically(conflictNumber, currCoordinates[1], currCoordinates[3], toSkip);
-            numberToSwitch2 = getNumberFromButton(coordinates[0], coordinates[1], coordinates[2], coordinates[4]);
+            numberToSwitch2 = getNumberFromSudokuButton(coordinates[0], coordinates[1], coordinates[2], coordinates[4]);
             newSearchCoor = new int[]{coordinates[0], coordinates[1], coordinates[2], coordinates[4]};
             toSkip = coordinates[0];
         } else {
             coordinates = findNumberInLineHorizontally(conflictNumber, currCoordinates[0], currCoordinates[2], toSkip);
-            numberToSwitch2 = getNumberFromButton(coordinates[0], coordinates[1], coordinates[4], coordinates[3]);
+            numberToSwitch2 = getNumberFromSudokuButton(coordinates[0], coordinates[1], coordinates[4], coordinates[3]);
             newSearchCoor = new int[]{coordinates[0], coordinates[1], coordinates[4], coordinates[3]};
             toSkip = coordinates[1];
         }
-        String numberToSwitch = getNumberFromButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+        String numberToSwitch = getNumberFromSudokuButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
         if (numberToSwitch.equals("")) {
             putValue(coordinates[0], coordinates[1], coordinates[2], coordinates[3],
-                    getButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]));
-            numberToSwitch = getNumberFromButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+                    getSudokuButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]));
+            numberToSwitch = getNumberFromSudokuButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
         }
-        putNumberInButton(currCoordinates[0], currCoordinates[1], currCoordinates[2], currCoordinates[3], numberToSwitch2);
+        putNumberInSudokuButton(currCoordinates[0], currCoordinates[1], currCoordinates[2], currCoordinates[3], numberToSwitch2);
         fillUpTempMatrix(currCoordinates[0], currCoordinates[1], currCoordinates[2], currCoordinates[3], Integer.parseInt(numberToSwitch2));
-        putNumberInButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3], numberToSwitch2);
+        putNumberInSudokuButton(coordinates[0], coordinates[1], coordinates[2], coordinates[3], numberToSwitch2);
         fillUpTempMatrix(coordinates[0], coordinates[1], coordinates[2], coordinates[3], Integer.parseInt(numberToSwitch2));
-        putNumberInButton(newSearchCoor[0], newSearchCoor[1], newSearchCoor[2], newSearchCoor[3], numberToSwitch);
+        putNumberInSudokuButton(newSearchCoor[0], newSearchCoor[1], newSearchCoor[2], newSearchCoor[3], numberToSwitch);
         fillUpTempMatrix(newSearchCoor[0], newSearchCoor[1], newSearchCoor[2], newSearchCoor[3], Integer.parseInt(numberToSwitch));
 
         switchData(Integer.parseInt(numberToSwitch), new int[]{newSearchCoor[0], newSearchCoor[1], newSearchCoor[2], newSearchCoor[3]}, toSkip);
@@ -701,8 +697,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
         for (int i = 0; i < 3; i++) {
             if (i != toSkip) {
                 for (int j = 0; j < 3; j++) {
-                    String numberFromButton = getNumberFromButton(i, partCol, j, y);
-                    int num = !numberFromButton.equals("") ? Integer.parseInt(numberFromButton) : 0;
+                    String numberFromSudokuButton = getNumberFromSudokuButton(i, partCol, j, y);
+                    int num = !numberFromSudokuButton.equals("") ? Integer.parseInt(numberFromSudokuButton) : 0;
                     if (num == conflictNumber) {
                         switch (y) {
                             case 0:
@@ -724,8 +720,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
         for (int i = 0; i < 3; i++) {
             if (i != toSkip) {
                 for (int j = 0; j < 3; j++) {
-                    String numberFromButton = getNumberFromButton(partRow, i, x, j);
-                    int num = !numberFromButton.equals("") ? Integer.parseInt(numberFromButton) : 0;
+                    String numberFromSudokuButton = getNumberFromSudokuButton(partRow, i, x, j);
+                    int num = !numberFromSudokuButton.equals("") ? Integer.parseInt(numberFromSudokuButton) : 0;
                     if (num == conflictNumber) {
                         switch (x) {
                             case 0:
@@ -812,7 +808,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     }
 
     private void getMissingFromRow(TableRow row, int i) {
-        String num = ((Button) row.getChildAt(i)).getText().toString();
+        String num = ((SudokuButton) row.getChildAt(i)).getText().toString();
         if (!num.equals("")) {
             missing.add(Integer.parseInt(num));
         }
@@ -841,11 +837,11 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void colorFrame(Coordinates coordinates, boolean activated, boolean selected) {
-        Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
+    private void colorFrame(Coordinates coordinates, boolean selected, boolean activated) {
+        SudokuButton b = getSudokuButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
        // ((FrameLayout) b.getParent()).setBackgroundColor(color);
-        b.setFocusable(activated);
-        b.setActivated(selected);
+        b.setSelected(selected);
+        b.setActivated(activated);
     }
 
     private void colorGrid() {

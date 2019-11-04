@@ -11,6 +11,7 @@
         <attr name="sudoku_cell_text" format="reference" />
         <attr name="sudoku_button" format="reference" />
         <attr name="sudoku_hint_color" format="reference" />
+        <attr name="state_color" format="boolean" />
     </declare-styleable>
 
 <!--    <declare-styleable name="SudokuCell">-->

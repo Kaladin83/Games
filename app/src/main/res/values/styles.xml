@@ -10,9 +10,9 @@
         <item name="kakuro_background_selected">@color/yellow2</item>
         <item name="kakuro_background_not_selected">@color/red4</item>
         <item name="sudoku_cell_selected">@color/red1</item>
-        <item name="sudoku_cell_not_selected">@color/red3</item>
+        <item name="sudoku_cell_not_selected">@color/lightRedTranslucent</item>
         <item name="sudoku_cell_text">@color/orange1</item>
-        <item name="sudoku_hint_color">@color/orange2</item>
+        <item name="sudoku_hint_color">@color/yellow2</item>
 
         <item name="android:windowBackground">@color/lightRedTranslucent</item>
 
@@ -30,9 +30,11 @@
         <item name="android:textColor">@color/button_text_color</item>
     </style>
 
-    <style name="SudokuFrameStyle">
+    <style name="SudokuFrameStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:background">@drawable/md_sudoku_cell_selector</item>
-<!--        <item name="android:textColor">@color/cell_text</item>-->
+        <item name="android:textColor">@color/cell_text</item>
+<!--        <item name="android:textColor">@color/black</item>-->
+<!--        <item name="android:textColorPrimary">@color/orange1</item>-->
     </style>
 
 <!--    <style name="SudokuTextStyle">-->
