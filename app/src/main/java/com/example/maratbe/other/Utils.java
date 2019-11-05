@@ -1,5 +1,7 @@
 package com.example.maratbe.other;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
@@ -37,18 +39,18 @@ public class Utils {
     }
 
     public static void slideToBottom(View view){
-        if (view.getVisibility() == View.VISIBLE)
+        if(view.getVisibility() == View.VISIBLE)
         {
             TranslateAnimation animate = new TranslateAnimation(0,0,0,view.getHeight());
             animate.setDuration(400);
             animate.setFillAfter(true);
             view.startAnimation(animate);
-            setVisibility(view, View.GONE);
+            setVisibility(view, View.INVISIBLE);
         }
     }
 
     public static void slideToTop(View view){
-        if (view.getVisibility() != View.VISIBLE)
+        if(view.getVisibility() != View.VISIBLE)
         {
             TranslateAnimation animate = new TranslateAnimation(0,0,view.getHeight(),0);
             animate.setDuration(400);
@@ -56,7 +58,6 @@ public class Utils {
             view.startAnimation(animate);
             setVisibility(view, View.VISIBLE);
         }
-
     }
 
     private static void setVisibility(View view, int visible) {
@@ -64,14 +65,7 @@ public class Utils {
         BlurLayout lLayout = (BlurLayout) view;
         for (int i = 0; i< lLayout.getChildCount(); i++)
         {
-            for (int j = 0; j< lLayout.getChildCount(); j++)
-            {
-                if (lLayout.getChildAt(i) instanceof  LinearLayout)
-                {
-                    ((LinearLayout)lLayout.getChildAt(i)).getChildAt(j).setVisibility(visible);
-                }
-                lLayout.getChildAt(i).setVisibility(visible);
-            }
+            lLayout.getChildAt(i).setVisibility(visible);
         }
         view.setVisibility(visible);
     }

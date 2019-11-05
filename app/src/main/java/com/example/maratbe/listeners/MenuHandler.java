@@ -1,6 +1,7 @@
 package com.example.maratbe.listeners;
 
 import android.content.res.Configuration;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.maratbe.games.R;
 import com.example.maratbe.other.Constants;
@@ -40,13 +42,6 @@ public abstract class MenuHandler implements Constants, OnClickListener {
     private void buildMenu() {
         LayoutInflater inflater = (LayoutInflater) rLayout.getContext().getSystemService(rLayout.getContext().LAYOUT_INFLATER_SERVICE);
         menuLayout = (BlurLayout) inflater.inflate(R.layout.menu, rLayout.findViewById(R.id.mainMenuLayout));
-        //menuLayout.setBackground(Utils.createGradientBackground(GREEN_4, WHITE));
-//        for (int i = 0; i< menuLayout.getChildCount(); i++)
-//        {
-//            menuLayout.bringChildToFront(menuLayout.getChildAt(i));
-//            menuLayout.child
-//        }
-
 
         if (rLayout.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             addToLayout(ORIENTATION_LANDSCAPE);
@@ -63,7 +58,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
     private void addToLayout(String orientation) {
         if (orientation.equals(ORIENTATION_LANDSCAPE))
         {
-            RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams((int) (MainActivity.getScreenHeight() * 0.5),
+            RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(265*MainActivity.getLogicalDensity(),
                     MainActivity.getScreenWidth());
             lparams.addRule(RelativeLayout.ALIGN_PARENT_END);
             lparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -72,7 +67,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         else
         {
             RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(MainActivity.getScreenWidth(),
-                    MainActivity.getScreenHeight()/2);
+                    390*MainActivity.getLogicalDensity());
             lparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             rLayout.addView(menuLayout, lparams);
         }
@@ -85,24 +80,32 @@ public abstract class MenuHandler implements Constants, OnClickListener {
             for (int j = 0; j < row.getChildCount(); j++)
             {
                 Button b = ((Button) row.getChildAt(j));
-                System.out.println("MeasuredHeight = "+ b.getMeasuredHeight());
-                System.out.println("height = "+ b.getHeight());
                 b.setHeight(33 * MainActivity.getLogicalDensity());
-                System.out.println("correct height = "+ 33 * MainActivity.getLogicalDensity());
             }
         }
     }
 
     void showMenu() {
         Utils.slideToTop(menuLayout);
-        Button startGameButton = rLayout.findViewById(R.id.startButton);
-        Button saveButton = rLayout.findViewById(R.id.saveButton);
-        Button loadButton = rLayout.findViewById(R.id.loadButton);
-        Button backButton = rLayout.findViewById(R.id.backButton);
+        LinearLayout startGameButton = rLayout.findViewById(R.id.startButton);
+        LinearLayout saveButton = rLayout.findViewById(R.id.saveButton);
+        LinearLayout loadButton = rLayout.findViewById(R.id.loadButton);
+        LinearLayout backButton = rLayout.findViewById(R.id.backButton);
         startGameButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         loadButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
+
+        TextView startGameTxt = rLayout.findViewById(R.id.startGameText);
+        TextView saveGameTxt = rLayout.findViewById(R.id.saveGameText);
+        TextView loadGameTxt = rLayout.findViewById(R.id.loadGameText);
+        TextView backTxt = rLayout.findViewById(R.id.returnToGameText);
+        TextView chooseThemeTxt = rLayout.findViewById(R.id.chooseThemeText);
+        startGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        saveGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        loadGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        backTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        chooseThemeTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
     }
 
     @Override

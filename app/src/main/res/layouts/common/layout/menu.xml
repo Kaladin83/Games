@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.alterac.blurkit.BlurLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/mainMenuLayout"
+    android:visibility="invisible"
+    app:blk_fps="0"
+    app:blk_blurRadius="10"
+    app:blk_downscaleFactor="0.12">
+
+    <TableLayout
+        android:weightSum="3"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow android:gravity="center" android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/themeButton"
+                android:gravity="center_horizontal"
+                android:layout_marginEnd="5dp"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/img_themes"/>
+
+                <TextView
+                    style="@style/MenuTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chooseThemeText"
+                    android:text="@string/choose_a_theme" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow android:gravity="center" android:layout_weight="1" >
+            <LinearLayout
+                android:id="@+id/saveButton"
+                android:layout_marginEnd="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/img_save_hollow"
+                    style="@style/MenuButtonStyle" />
+
+                <TextView
+                    style="@style/MenuTextStyle"
+                    android:id="@+id/saveGameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_game"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loadButton"
+                android:gravity="center_horizontal"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/img_load_hollow"
+                    style="@style/MenuButtonStyle" />
+
+                <TextView
+                    style="@style/MenuTextStyle"
+                    android:id="@+id/loadGameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/load_game" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow android:gravity="center" android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/backButton"
+                android:gravity="center_horizontal"
+                android:layout_marginEnd="5dp"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/img_back_to_game"
+                    style="@style/MenuButtonStyle" />
+
+                <TextView
+                    android:id="@+id/returnToGameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MenuTextStyle"
+                    android:text="@string/back_to_game" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/startButton"
+                android:gravity="center_horizontal"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/img_restart_game"
+                    style="@style/MenuButtonStyle" />
+
+                <TextView
+                    style="@style/MenuTextStyle"
+                    android:id="@+id/startGameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start_new_game"/>
+            </LinearLayout>
+
+        </TableRow>
+    </TableLayout>
+</io.alterac.blurkit.BlurLayout>

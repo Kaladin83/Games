@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="50dp"
+    android:paddingBottom="50dp"
     android:background="@drawable/main_page">
 
     <TextView
@@ -42,21 +41,20 @@
                 android:clickable="false"
                 android:id="@+id/tictactoeBtn"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="91dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center"
                 android:background="@drawable/img_tic_tac_toe_logo"
                 android:textAllCaps="false"
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
             <TextView
+                android:id="@+id/tictactoeTxt"
                 android:layout_gravity="center"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/buttonTextSize"
-                android:textStyle="italic|bold"
                 android:text="@string/tic_tac_toe"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -95,14 +93,13 @@
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
             <TextView
+                android:id="@+id/sudokuTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/buttonTextSize"
-                android:textStyle="italic|bold"
-                android:text="@string/sudoku"/>
+                android:text="@string/sudoku" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -113,7 +110,6 @@
         android:layout_above="@+id/tictactoeCardView"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="2dp"
 
         android:clickable="true"
         android:focusable="true"
@@ -141,14 +137,13 @@
                 android:textSize="@dimen/buttonTextSizeLarge" />
 
             <TextView
+                android:id="@+id/kakuroTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:text="@string/kakuro"
-                android:textSize="@dimen/buttonTextSize"
-                android:textStyle="italic|bold" />
+                android:text="@string/kakuro" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

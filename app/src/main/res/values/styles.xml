@@ -14,6 +14,7 @@
         <item name="background_hint_color">@color/yellow2</item>
 
         <item name="android:windowBackground">@color/lightRedTransparent</item>
+        <item name="android:fontFamily">@font/bonzai</item>
 
         <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
@@ -34,28 +35,39 @@
         <item name="background_hint_color">@color/blueTransparent</item>
 
         <item name="android:windowBackground">@color/greenTransparent</item>
+        <item name="android:fontFamily">@font/bonzai</item>
 
         <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
     </style>
 
-    <style name="MyTextViewStyle">
-        <item name="background">@color/transparent</item>
-    </style>
 
     <style name="ControlButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
     </style>
 
     <style name="SudokuFrameStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:background">@drawable/md_sudoku_cell_selector</item>
         <item name="android:textColor">@color/cell_text</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
     </style>
 
     <style name="KakuroButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:background">@drawable/md_kakuro_cell_selector</item>
         <item name="android:textColor">@color/blue1</item>
+    </style>
+
+    <style name="MenuButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="MenuTextStyle">
+        <item name="android:clickable">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:layout_marginBottom">7dp</item>
     </style>
 
 </resources>

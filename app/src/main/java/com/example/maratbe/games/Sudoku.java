@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -305,6 +306,10 @@ public class Sudoku extends AppCompatActivity implements Constants {
         hardRadio = findViewById(R.id.hardRadio);
         hardRadio.setOnClickListener(v ->
                 setDifficulty(DIFFICULTY_START_HARD, DIFFICULTY_RANGE_HARD, true));
+
+        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
+        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
+        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
     }
 
     private void setDifficulty(int start, int range, boolean toReset) {
