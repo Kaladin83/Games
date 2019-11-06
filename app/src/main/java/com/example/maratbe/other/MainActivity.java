@@ -15,17 +15,25 @@ import androidx.room.Room;
 
 import com.example.maratbe.dataBase.DataBase;
 import com.example.maratbe.dataBase.MySharedPreferences;
+import com.example.maratbe.domain.Theme;
 import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
 import com.example.maratbe.games.Sudoku;
 import com.example.maratbe.games.TicTacToe;
 import com.example.maratbe.listeners.MenuListenerImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kotlin.Unit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Constants{
 
-    private static int screenWidth, screenHeight, logicalDensity, toolbarHeight, fontSize, currentTheme;
+    private static int screenWidth, screenHeight, logicalDensity, toolbarHeight;
+
+    private static List<Theme> themes = new ArrayList<>();
+
+    private static Theme currentTheme;
 
     private static DataBase db;
 
@@ -36,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void setDb(DataBase db1) {
-        db = db;
+        db = db1;
     }
 
     public static int getScreenHeight()
@@ -59,26 +67,24 @@ public class MainActivity extends AppCompatActivity {
         return logicalDensity;
     }
 
-    public static int getFontSize() {
-        return fontSize;
+    public static void setCurrentTheme(Theme currentTheme_) {
+        currentTheme = currentTheme_;
     }
 
-    public static void setFontSize(int fontSize) {
-        MainActivity.fontSize = fontSize;
-    }
-
-    public static void setCurrentTheme(int currentTheme) {
-        MainActivity.currentTheme = currentTheme;
+    public static Theme getCurrentTheme()
+    {
+        return currentTheme;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setThemes();
+        setCurrentTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sp = new MySharedPreferences(this);
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "Games database").build();
         setDimensions();
-        getCurrentTheme();
+
 
         CardView ticTacToeBtn = findViewById(R.id.tictactoeCardView);
         ticTacToeBtn.setOnClickListener(v -> {
@@ -102,28 +108,28 @@ public class MainActivity extends AppCompatActivity {
         TextView sudokuTxt = findViewById(R.id.sudokuTxt);
         TextView ticTxt = findViewById(R.id.tictactoeTxt);
 
-        kakuroTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        sudokuTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        ticTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        kakuroTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
+        sudokuTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
+        ticTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
     }
 
-    private void getCurrentTheme() {
+    private void setThemes() {
+        themes.add(new Theme("Summer heat",R.style.SummerHeat,
+                "Summer heat dialog", R.style.SummerHeatDialog, 23));
+        themes.add(new Theme("Spring Blossom",R.style.SpringBlossom,
+                "Spring Blossom dialog", R.style.SpringBlossomDialog, 17));
+    }
+
+    private void setCurrentTheme() {
+        sp = new MySharedPreferences(this);
         currentTheme = sp.getCurrentTheme();
-        if (sp.getCurrentTheme() == 0)
+        if (currentTheme == null)
         {
-            currentTheme = R.style.SummerHeat;
+            currentTheme = themes.get(0);
             sp.saveTheme(currentTheme);
         }
-        fontSize = getFontSize(currentTheme);
-    }
-
-    private int getFontSize(int theme) {
-        switch (theme)
-        {
-            case R.style.SummerHeat:
-                return 23;
-            default: return 18;
-        }
+        setTheme(currentTheme.getThemeId());
+        setCurrentTheme(currentTheme);
     }
 
     public void setDimensions()

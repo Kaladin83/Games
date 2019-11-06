@@ -1,5 +1,6 @@
 package com.example.maratbe.listeners;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
     }
 
     private void buildMenu() {
-        LayoutInflater inflater = (LayoutInflater) rLayout.getContext().getSystemService(rLayout.getContext().LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) rLayout.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         menuLayout = (BlurLayout) inflater.inflate(R.layout.menu, rLayout.findViewById(R.id.mainMenuLayout));
 
         if (rLayout.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -50,7 +51,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         }
     }
 
-    public BlurLayout getBlurLayout()
+    BlurLayout getBlurLayout()
     {
         return menuLayout;
     }
@@ -101,11 +102,11 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         TextView loadGameTxt = rLayout.findViewById(R.id.loadGameText);
         TextView backTxt = rLayout.findViewById(R.id.returnToGameText);
         TextView chooseThemeTxt = rLayout.findViewById(R.id.chooseThemeText);
-        startGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
-        saveGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
-        loadGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
-        backTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
-        chooseThemeTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        startGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        saveGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        loadGameTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        backTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        chooseThemeTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
     }
 
     @Override

@@ -70,4 +70,7 @@ public interface Constants {
     int DIFFICULTY_RANGE_EASY = 2;
     int DIFFICULTY_RANGE_MODERATE = 2;
     int DIFFICULTY_RANGE_HARD = 2;
+
+    int FONT_SIZE_TITLE = 4;
+    int FONT_SIZE_INPUT = 2;
 }

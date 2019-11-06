@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.text.InputType;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,12 +34,13 @@ public class MenuListenerImpl implements Constants, MenuListener {
     private Kakuro kakuro;
     private Sudoku sudoku;
     private TicTacToe ticTacToe;
+    private final String AUTOSAVE = "Autosave";
 
     private enum Tasks{
         FETCH_NAMES, FETCH_DATA
     }
 
-    public MenuListenerImpl(MenuHandler menuHandler, Object gameInstance)
+    MenuListenerImpl(MenuHandler menuHandler, Object gameInstance)
     {
         setMenuListener(menuHandler);
         getContext(gameInstance);
@@ -88,19 +92,19 @@ public class MenuListenerImpl implements Constants, MenuListener {
 //            dialog.setContentView(R.layout.save_game);
 //            dialog.show();
 //        }
-        dialog = new Dialog(context);
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
         dialog.setContentView(R.layout.save_game);
         TextView saveText = dialog.findViewById(R.id.nameToSave);
+        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize()+ FONT_SIZE_TITLE);
         Button saveButton = dialog.findViewById(R.id.saveButton);
         Button cancelButton = dialog.findViewById(R.id.cancelButton);
         EditText editText = dialog.findViewById(R.id.saveNameEdit);
-
         editText.setBackground(Utils.createBorder(10, Color.WHITE, 1, Color.BLACK));
-        editText.setText("Autosave");
-        editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
-        editText.setSelection(0, editText.getText().length());
-        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        editText.setText(AUTOSAVE);
+        editText.setSelectAllOnFocus(true);
+        editText.requestFocus();
 
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize() + FONT_SIZE_INPUT);
 
         editText.setOnTouchListener((view, motionEvent) -> {
             EditText edit = (EditText) view;
@@ -131,7 +135,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
         Button loadButton = dialog.findViewById(R.id.loadButton);
         Button cancelButton = dialog.findViewById(R.id.cancelButton);
 
-        txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+        txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize() + FONT_SIZE_TITLE);
         populateLoadFields(listOfStrings, txtView, spinner, loadButton);
         dialog.show();
         cancelButton.setOnClickListener(view -> dialog.dismiss());

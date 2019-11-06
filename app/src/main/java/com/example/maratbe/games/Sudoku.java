@@ -25,6 +25,7 @@ import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -53,6 +54,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(MainActivity.getCurrentTheme().getThemeId());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sudoku);
         initColorMap();
@@ -307,9 +309,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
         hardRadio.setOnClickListener(v ->
                 setDifficulty(DIFFICULTY_START_HARD, DIFFICULTY_RANGE_HARD, true));
 
-        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
-        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
-        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
+        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
     }
 
     private void setDifficulty(int start, int range, boolean toReset) {
@@ -820,18 +822,11 @@ public class Sudoku extends AppCompatActivity implements Constants {
     }
 
     private void fillUpHintMatrix() {
-        for(int i = 0; i < NUMBER_OF_COLS; i++)
-        {
-            for(int j = 0; j < NUMBER_OF_COLS; j++)
-            {
-                hintMatrix[i][j] = matrix[i][j];
-            }
-        }
+        hintMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
     }
 
     private void colorFrame(Coordinates coordinates, boolean selected, boolean activated) {
         Button b = getButton(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY());
-       // ((FrameLayout) b.getParent()).setBackgroundColor(color);
         b.setSelected(selected);
         b.setActivated(activated);
     }

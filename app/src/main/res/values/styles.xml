@@ -1,7 +1,7 @@
 <resources>
 
     <style name="SummerHeat" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/red2</item>
         <item name="colorPrimaryDark">@color/red1</item>
         <item name="colorAccent">@color/red2</item>
 
@@ -15,6 +15,7 @@
 
         <item name="android:windowBackground">@color/lightRedTransparent</item>
         <item name="android:fontFamily">@font/bonzai</item>
+        <item name="android:textColorHighlight">@color/red1</item>
 
         <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
@@ -22,7 +23,7 @@
     </style>
 
     <style name="SpringBlossom" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/green1</item>
         <item name="colorPrimaryDark">@color/green1</item>
         <item name="colorAccent">@color/green2</item>
 
@@ -35,13 +36,30 @@
         <item name="background_hint_color">@color/blueTransparent</item>
 
         <item name="android:windowBackground">@color/greenTransparent</item>
-        <item name="android:fontFamily">@font/bonzai</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
 
         <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
     </style>
 
+    <style name="SummerHeatDialog">
+        <item name="android:windowBackground">@color/lightRedTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:textColorHighlight">@color/red3</item>
+    </style>
+
+    <style name="SpringBlossomDialog">
+        <item name="android:windowBackground">@color/greenTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:textColorHighlight">@color/green3</item>
+    </style>
 
     <style name="ControlButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/button_text_color</item>

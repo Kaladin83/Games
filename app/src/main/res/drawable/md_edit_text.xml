@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape android:shape="rectangle">
+            <stroke android:color="?attr/sudoku_cell_not_selected" android:width="3px"/>
+
+        </shape>
+    </item>
+
+    <item android:bottom="3px" android:left="3px" android:top="3px" android:right="3px">
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/background_hint_color"/>
+            <stroke android:color="?attr/sudoku_cell_text" android:width="1px"/>
+            <corners android:radius="5dp"/>
+        </shape>
+
+    </item>
+</layer-list>
