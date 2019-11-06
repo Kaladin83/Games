@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.TypedValue;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.example.maratbe.games.R;
 import com.example.maratbe.games.Sudoku;
 import com.example.maratbe.games.TicTacToe;
 import com.example.maratbe.other.Constants;
+import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 import java.util.List;
@@ -88,12 +90,18 @@ public class MenuListenerImpl implements Constants, MenuListener {
 //        }
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.save_game);
+        TextView saveText = dialog.findViewById(R.id.nameToSave);
         Button saveButton = dialog.findViewById(R.id.saveButton);
         Button cancelButton = dialog.findViewById(R.id.cancelButton);
         EditText editText = dialog.findViewById(R.id.saveNameEdit);
+
         editText.setBackground(Utils.createBorder(10, Color.WHITE, 1, Color.BLACK));
         editText.setText("Autosave");
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
         editText.setSelection(0, editText.getText().length());
+        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
+
+
         editText.setOnTouchListener((view, motionEvent) -> {
             EditText edit = (EditText) view;
             edit.setText("");
@@ -122,6 +130,8 @@ public class MenuListenerImpl implements Constants, MenuListener {
         Spinner spinner = dialog.findViewById(R.id.loadSpinner);
         Button loadButton = dialog.findViewById(R.id.loadButton);
         Button cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize());
         populateLoadFields(listOfStrings, txtView, spinner, loadButton);
         dialog.show();
         cancelButton.setOnClickListener(view -> dialog.dismiss());

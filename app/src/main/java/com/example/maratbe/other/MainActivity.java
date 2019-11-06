@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         switch (theme)
         {
             case R.style.SummerHeat:
-                return 24;
+                return 23;
             default: return 18;
         }
     }

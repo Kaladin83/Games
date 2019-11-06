@@ -24,14 +24,14 @@
                 android:id="@+id/themeButton"
                 android:gravity="center_horizontal"
                 android:layout_marginEnd="5dp"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="127dp"
+                android:layout_height="127dp"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:background="@drawable/img_themes"/>
 
                 <TextView
@@ -49,13 +49,13 @@
                 android:id="@+id/saveButton"
                 android:layout_marginEnd="5dp"
                 android:gravity="center_horizontal"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="127dp"
+                android:layout_height="127dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:background="@drawable/img_save_hollow"
                     style="@style/MenuButtonStyle" />
 
@@ -70,13 +70,13 @@
             <LinearLayout
                 android:id="@+id/loadButton"
                 android:gravity="center_horizontal"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="127dp"
+                android:layout_height="127dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:background="@drawable/img_load_hollow"
                     style="@style/MenuButtonStyle" />
 
@@ -95,13 +95,13 @@
                 android:id="@+id/backButton"
                 android:gravity="center_horizontal"
                 android:layout_marginEnd="5dp"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="127dp"
+                android:layout_height="127dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:background="@drawable/img_back_to_game"
                     style="@style/MenuButtonStyle" />
 
@@ -116,13 +116,13 @@
             <LinearLayout
                 android:id="@+id/startButton"
                 android:gravity="center_horizontal"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="127dp"
+                android:layout_height="127dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:background="@drawable/img_restart_game"
                     style="@style/MenuButtonStyle" />
 

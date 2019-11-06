@@ -307,9 +307,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
         hardRadio.setOnClickListener(v ->
                 setDifficulty(DIFFICULTY_START_HARD, DIFFICULTY_RANGE_HARD, true));
 
-        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
-        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
-        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 2);
+        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
+        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
+        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getFontSize() - 1);
     }
 
     private void setDifficulty(int start, int range, boolean toReset) {
