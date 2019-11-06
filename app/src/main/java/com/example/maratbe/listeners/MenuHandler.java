@@ -56,6 +56,11 @@ public abstract class MenuHandler implements Constants, OnClickListener {
     }
 
     private void addToLayout(String orientation) {
+//        if (rLayout.getChildCount() == 5)
+//        {
+//            rLayout.removeViewAt(4);
+//        }
+
         if (orientation.equals(ORIENTATION_LANDSCAPE))
         {
             RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(265*MainActivity.getLogicalDensity(),

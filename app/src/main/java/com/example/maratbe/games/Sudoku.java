@@ -56,10 +56,6 @@ public class Sudoku extends AppCompatActivity implements Constants {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sudoku);
         initColorMap();
-        timeButton = findViewById(R.id.timeBtn);
-        timeButton.setOnClickListener(v ->
-                clickHandler.onTimeButtonClicked(v.isSelected())
-        );
         buildGui(savedInstanceState);
         TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
@@ -265,15 +261,17 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void buildGui(Bundle savedInstanceState) {
+    public void buildGui(Bundle savedInstanceState) {
         sudokuBoard = findViewById(R.id.sudokuBoard);
+        timeButton = findViewById(R.id.timeBtn);
+        timeButton.setOnClickListener(v ->
+                clickHandler.onTimeButtonClicked(v.isSelected())
+        );
         setupClickHandler();
-        createBoard();
+        createBoard(false);
         setRadios();
         if (savedInstanceState != null) {
             getValuesFromBundle(savedInstanceState);
-        } else {
-            resetBoard(false);
         }
         chronometer = findViewById(R.id.chronometer);
         chronometer.setBase(chronometer.getBase()+timeToAdd);
@@ -316,7 +314,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         difficultyStart = start;
         difficultyRange = range;
         if (toReset) {
-            resetBoard(true);
+            createBoard(true);
         }
 
     }
@@ -347,7 +345,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
         opened.add("2,2");
     }
 
-    public void createBoard() {
+    public void createBoard(boolean isToClearBoard) {
+        if (isToClearBoard)
+        {
+            sudokuBoard.removeAllViews();
+        }
+
         for (int i = 0; i < NUMBER_OF_ROWS_PART; i++) {
             TableRow groupRow = new TableRow(this);
             groupRow.setGravity(Gravity.CENTER);
@@ -368,6 +371,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
             }
             sudokuBoard.addView(groupRow);
         }
+
+        resetBoard(isToClearBoard);
     }
 
     private void setTableBackground(int i, int j, TableLayout group, TableRow groupRow) {

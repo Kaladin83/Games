@@ -73,7 +73,8 @@ public class MenuListenerImpl implements Constants, MenuListener {
         }
         else
         {
-            sudoku.resetBoard(true);
+            sudoku.createBoard(true);
+           // sudoku.buildGui(null, true);
         }
     }
 

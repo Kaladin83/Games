@@ -16,6 +16,8 @@
         <item name="android:windowBackground">@color/lightRedTransparent</item>
         <item name="android:fontFamily">@font/bonzai</item>
 
+        <item name="android:textColorHighlight">@color/gray</item>
+        <item name="android:textColorHighlightInverse">@color/gray</item>
         <item name="buttonStyle">@style/ControlButton</item>
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
