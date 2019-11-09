@@ -30,8 +30,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:background="@drawable/img_themes"/>
 
                 <TextView
@@ -54,8 +54,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:background="@drawable/img_save_hollow"
                     style="@style/MenuButtonStyle" />
 
@@ -75,8 +75,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:background="@drawable/img_load_hollow"
                     style="@style/MenuButtonStyle" />
 
@@ -100,8 +100,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:background="@drawable/img_back_to_game"
                     style="@style/MenuButtonStyle" />
 
@@ -121,8 +121,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:background="@drawable/img_restart_game"
                     style="@style/MenuButtonStyle" />
 

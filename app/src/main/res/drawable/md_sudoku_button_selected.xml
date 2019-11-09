@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?attr/sudoku_cell_not_selected"/>
+            <stroke android:color="?attr/sudoku_cell_not_selected" android:width="4px"/>
         </shape>
     </item>
 

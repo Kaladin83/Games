@@ -9,6 +9,7 @@ public interface Constants {
     int GRAY_1 = Color.parseColor("#e0e0e0");
     int GRAY_2 = Color.parseColor("#f2efef");
     int GRAY_3 = Color.parseColor("#e1dede");
+    int GRAY_4 = Color.parseColor("#F5F3F3");
 
     int RED_1 = Color.parseColor("#f7120e");
     int RED_2 = Color.parseColor("#ff3b2d");
@@ -49,6 +50,7 @@ public interface Constants {
 
     String KAKURO = "Kakuro";
     String SUDOKU = "Sudoku";
+    String TIC_TAC_TOE = "Tic tac toe";
 
     String ORIENTATION_LANDSCAPE = "Landscape";
     String ORIENTATION_PORTRAIT = "Portrait";
@@ -64,13 +66,13 @@ public interface Constants {
     int FUNCTION_POPULATE_MATRIX = 7;
     int FUNCTION_MENU_START_GAME = 9;
 
-    int DIFFICULTY_START_EASY = 3;
+    int DIFFICULTY_START_EASY = 1;
     int DIFFICULTY_START_MODERATE = 4;
     int DIFFICULTY_START_HARD = 5;
-    int DIFFICULTY_RANGE_EASY = 2;
+    int DIFFICULTY_RANGE_EASY = 1;
     int DIFFICULTY_RANGE_MODERATE = 2;
     int DIFFICULTY_RANGE_HARD = 2;
 
-    int FONT_SIZE_TITLE = 4;
-    int FONT_SIZE_INPUT = 2;
+    int FONT_SIZE_TITLE = 3;
+    int FONT_SIZE_INPUT = 1;
 }

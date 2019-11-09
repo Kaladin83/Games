@@ -5,24 +5,18 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/nameToLoadTitle"
         style="@style/DialogTitleTextStyle"
+        android:id="@+id/themeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/name_to_load_title"/>
-    <TextView
-        android:id="@+id/nameToLoadBody"
-        style="@style/DialogBodyTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/name_to_load_body"/>
-    <Spinner
-        android:id="@+id/loadSpinner"
-        android:layout_marginHorizontal="20dp"
+        android:text="@string/theme_title"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="100dp"/>
 
     <include layout="@layout/dialog_2_buttons_layout"/>
-
 </LinearLayout>

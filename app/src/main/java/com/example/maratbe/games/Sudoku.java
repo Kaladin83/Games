@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Chronometer;
@@ -141,7 +142,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
                 fillUpTempMatrix(coordinates.getPartRow(), coordinates.getPartCol(), coordinates.getX(), coordinates.getY(),
                         Integer.parseInt(button.getText().toString()));
                 if (checkForVictory()) {
-                    colorGrid();
+
+                    clickHandler.onVictory();
                 }
             }
 
@@ -268,6 +270,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     }
 
     private void buildGui(Bundle savedInstanceState) {
+        setVisibilityToTimeViews();
         sudokuBoard = findViewById(R.id.sudokuBoard);
         setupClickHandler();
         createBoard();
@@ -281,6 +284,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
         chronometer.setBase(chronometer.getBase()+timeToAdd);
         chronometer.start();
         timeButton.setSelected(true);
+    }
+
+    private void setVisibilityToTimeViews() {
+        findViewById(R.id.timeBtn).setVisibility(View.VISIBLE);
+        findViewById(R.id.chronometer).setVisibility(View.VISIBLE);
+        findViewById(R.id.startGameBtn).setVisibility(View.GONE);
     }
 
     @SuppressWarnings("unchecked")
@@ -309,9 +318,9 @@ public class Sudoku extends AppCompatActivity implements Constants {
         hardRadio.setOnClickListener(v ->
                 setDifficulty(DIFFICULTY_START_HARD, DIFFICULTY_RANGE_HARD, true));
 
-        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
-        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
-        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize());
+        easyRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        moderateRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        hardRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
     }
 
     private void setDifficulty(int start, int range, boolean toReset) {

@@ -8,9 +8,8 @@
 
     <TableLayout
         android:id="@+id/sudokuBoard"
-        android:paddingStart="20dp"
-        android:paddingEnd="0dp"
-        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="40dp"
+        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -20,10 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingEnd="10dp"
-        android:paddingStart="0dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/sudokuBoard"
+        android:layout_marginHorizontal="40dp"
+        android:layout_toStartOf="@+id/sudokuBoard"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -34,18 +32,21 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:gravity="center"
+            android:weightSum="3.5"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/easyRadio"
-                android:layout_width="75dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/easy_level" />
 
             <RadioButton
                 android:id="@+id/moderateRadio"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:gravity="center"
@@ -53,7 +54,8 @@
 
             <RadioButton
                 android:id="@+id/hardRadio"
-                android:layout_width="75dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/hard_level" />
@@ -69,8 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="30dp"
+
             android:layout_marginBottom="15dp"
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>

@@ -3,10 +3,9 @@ package com.example.maratbe.listeners;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.AsyncTask;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,13 +14,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.maratbe.dataBase.DataLayer;
+import com.example.maratbe.dataBase.MySharedPreferences;
+import com.example.maratbe.domain.Theme;
 import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
 import com.example.maratbe.games.Sudoku;
 import com.example.maratbe.games.TicTacToe;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
+import com.example.maratbe.other.ThemeAdapter;
 import com.example.maratbe.other.Utils;
 
 import java.util.List;
@@ -34,6 +40,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
     private Kakuro kakuro;
     private Sudoku sudoku;
     private TicTacToe ticTacToe;
+    private ThemeAdapter themeAdapter;
     private final String AUTOSAVE = "Autosave";
 
     private enum Tasks{
@@ -75,6 +82,10 @@ public class MenuListenerImpl implements Constants, MenuListener {
         {
             kakuro.resetBoard();
         }
+        else if (ticTacToe != null)
+        {
+            ticTacToe.resetBoard();
+        }
         else
         {
             sudoku.resetBoard(true);
@@ -95,25 +106,33 @@ public class MenuListenerImpl implements Constants, MenuListener {
         dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
         dialog.setContentView(R.layout.save_game);
         TextView saveText = dialog.findViewById(R.id.nameToSave);
-        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize()+ FONT_SIZE_TITLE);
-        Button saveButton = dialog.findViewById(R.id.saveButton);
-        Button cancelButton = dialog.findViewById(R.id.cancelButton);
+        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+
         EditText editText = dialog.findViewById(R.id.saveNameEdit);
         editText.setBackground(Utils.createBorder(10, Color.WHITE, 1, Color.BLACK));
         editText.setText(AUTOSAVE);
         editText.setSelectAllOnFocus(true);
         editText.requestFocus();
 
-        editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize() + FONT_SIZE_INPUT);
-
         editText.setOnTouchListener((view, motionEvent) -> {
             EditText edit = (EditText) view;
             edit.setText("");
             return false;});
-        dialog.show();
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
-        saveButton.setOnClickListener(view -> dialog.dismiss());
 
+        Button saveButton = dialog.findViewById(R.id.secondButton);
+        Button cancelButton = dialog.findViewById(R.id.firstButton);
+
+        cancelButton.setText(context.getString(R.string.cancel_button));
+        cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        saveButton.setText(context.getString(R.string.save_button));
+        saveButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+        saveButton.setOnClickListener(view -> saveData());
+        dialog.show();
+    }
+
+    private void saveData() {
     }
 
     @Override
@@ -126,30 +145,100 @@ public class MenuListenerImpl implements Constants, MenuListener {
     public void backToGame() {
     }
 
-    private void loadListOfNames() {
-        dialog = new Dialog(context);
-        dialog.setContentView(R.layout.load_games);
+    @Override
+    public void chooseTheme() {
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
+        dialog.setContentView(R.layout.choose_theme);
 
-        TextView txtView = dialog.findViewById(R.id.nameToLoad);
-        Spinner spinner = dialog.findViewById(R.id.loadSpinner);
-        Button loadButton = dialog.findViewById(R.id.loadButton);
-        Button cancelButton = dialog.findViewById(R.id.cancelButton);
+        TextView title = dialog.findViewById(R.id.themeTitle);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        themeAdapter = new ThemeAdapter(MainActivity.getThemes());
+        recyclerView.setAdapter(themeAdapter);
+        DividerItemDecoration decor = new DividerItemDecoration(context,DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(decor);
+        recyclerView.setBackground(Utils.createBorder(10, Color.WHITE, 2, Color.BLACK));
 
-        txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.getCurrentTheme().getFontSize() + FONT_SIZE_TITLE);
-        populateLoadFields(listOfStrings, txtView, spinner, loadButton);
+        Button cancelButton = dialog.findViewById(R.id.firstButton);
+        Button chooseButton = dialog.findViewById(R.id.secondButton);
+
+        cancelButton.setText(context.getString(R.string.cancel_button));
+        cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        chooseButton.setText(context.getString(R.string.choose_button));
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        chooseButton.setOnClickListener(v -> setTheme());
+
         dialog.show();
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
+        dialog.setCanceledOnTouchOutside(false);
     }
 
-    private void populateLoadFields(List<String> listOfNames, TextView txtView, Spinner spinner, Button loadButton) {
+
+    @Override
+    public void onVictory() {
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
+        dialog.setContentView(R.layout.victory);
+
+        TextView title = dialog.findViewById(R.id.victoryTitle);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        TextView body = dialog.findViewById(R.id.victoryBody);
+        body.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        Button returnButton = dialog.findViewById(R.id.firstButton);
+        Button startNewButton = dialog.findViewById(R.id.secondButton);
+
+        returnButton.setText(context.getString(R.string.return_button));
+        returnButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        startNewButton.setText(context.getString(R.string.restart_button));
+        startNewButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        returnButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            restart();
+        });
+        startNewButton.setOnClickListener(v ->{startNewGame(); dialog.dismiss();});
+        dialog.show();
+    }
+
+
+    private void loadListOfNames() {
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
+        dialog.setContentView(R.layout.load_games);
+
+        TextView titleTxt = dialog.findViewById(R.id.nameToLoadTitle);
+        titleTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        TextView bodyTxt = dialog.findViewById(R.id.nameToLoadBody);
+        bodyTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        Spinner spinner = dialog.findViewById(R.id.loadSpinner);
+
+        Button cancelButton = dialog.findViewById(R.id.firstButton);
+        Button loadButton = dialog.findViewById(R.id.secondButton);
+
+        cancelButton.setText(context.getString(R.string.cancel_button));
+        cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        loadButton.setText(context.getString(R.string.load_button));
+        loadButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        loadButton.setOnClickListener(v -> dialog.dismiss());
+
+        populateLoadFields(listOfStrings, titleTxt, bodyTxt, spinner, loadButton);
+        dialog.show();
+    }
+
+    private void populateLoadFields(List<String> listOfNames, TextView title, TextView body, Spinner spinner, Button loadButton) {
         if (listOfNames.isEmpty())
         {
-            txtView.setText(context.getString(R.string.no_loaded_games));
+            title.setText(context.getString(R.string.sorry));
+            body.setText(context.getString(R.string.no_loaded_games));
+            body.setVisibility(View.VISIBLE);
             loadButton.setEnabled(false);
             loadButton.setTextColor(GRAY_1);
         }
         else
         {
+            body.setVisibility(View.GONE);
             loadSpinner(listOfNames, spinner);
             loadButton.setEnabled(true);
         }
@@ -161,6 +250,22 @@ public class MenuListenerImpl implements Constants, MenuListener {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
+
+    private void setTheme() {
+        Theme theme = MainActivity.getThemes().get(themeAdapter.getSelectedPosition());
+        MySharedPreferences sp = new MySharedPreferences(context);
+        sp.saveTheme(theme);
+        restart();
+    }
+
+    private void restart() {
+        Intent i = context.getPackageManager().
+                getLaunchIntentForPackage(context.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
 
     private class AsyncTaskAgent extends AsyncTask<Object, Void, Void> {
 

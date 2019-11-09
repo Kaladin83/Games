@@ -2,16 +2,33 @@ package com.example.maratbe.games;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.SyncStateContract;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.maratbe.domain.Cell;
+import com.example.maratbe.domain.Coordinates;
 import com.example.maratbe.domain.Counters;
+import com.example.maratbe.listeners.ClickHandler;
+import com.example.maratbe.other.Constants;
+import com.example.maratbe.other.MainActivity;
+import com.example.maratbe.other.Utils;
 
-public class TicTacToe extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class TicTacToe extends AppCompatActivity implements Constants {
 
     private Button b00, b01, b02, b10, b11, b12, b20, b21, b22, startGameBtn;
     private RadioGroup signChoiceLayout, aiChoiceLayout;
@@ -22,29 +39,52 @@ public class TicTacToe extends AppCompatActivity {
     private boolean isAi = true;
     private boolean aITurn = false;
     private Counters counters = new Counters();
+    private ClickHandler clickHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(MainActivity.getCurrentTheme().getThemeId());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tic_tac_toe);
 
         buildGui();
-        Button newGameBtn = findViewById(R.id.newGameBtn);
-        newGameBtn.setOnClickListener(v ->
-                resetBoard()
-        );
-
+        findViewById(R.id.startGameBtn).setVisibility(View.VISIBLE);
+        findViewById(R.id.timeBtn).setVisibility(View.GONE);
+        findViewById(R.id.chronometer).setVisibility(View.GONE);
         startGameBtn = findViewById(R.id.startGameBtn);
+        startGameBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
         startGameBtn.setOnClickListener(v ->
                 startGame()
         );
+
+        TextView moreBtn = findViewById(R.id.moreBtn);
+        moreBtn.setOnClickListener(v ->
+                clickHandler.onMenuButtonClicked()
+        );
+        if(savedInstanceState != null)
+        {
+            getValuesFromBundle(savedInstanceState);
+        }
     }
 
-    private void startGame() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArray("victories", victories);
+        outState.putCharArray("cells", counters.getArrayFromMatrix());
+        outState.putIntArray("countersX", counters.getCountersX());
+        outState.putIntArray("counters0", counters.getCounters0());
+        outState.putBoolean("isAiTurn", aITurn);
+        outState.putBoolean("isAi", isAi);
+        outState.putInt("numOfTurns", counters.getNumOfTurns());
+        outState.putChar("choice", choice);
+    }
+
+    public void startGame() {
         if (counters.getNumOfTurns() == 0)
         {
             rollTurn();
-            resetButtons(false, false, Color.BLACK);
+            resetButtons(false, false, GRAY_2);
             if (aITurn && isAi)
             {
                 aiMove(choice);
@@ -86,21 +126,26 @@ public class TicTacToe extends AppCompatActivity {
     }
 
     private void buildGui() {
+        setupClickHandler();
         signChoiceLayout = findViewById(R.id.signChoiceLayout);
         aiChoiceLayout = findViewById(R.id.aiChoiceLayout);
         compRadio = findViewById(R.id.compRadio);
+        compRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         compRadio.setOnClickListener(v ->
             enableRadios(true, true)
         );
         humanRadio = findViewById(R.id.humanRadio);
+        humanRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         humanRadio.setOnClickListener(v ->
                 enableRadios(true, false)
         );
         xRadio = findViewById(R.id.xRadio);
+        xRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         xRadio.setOnClickListener(v ->
             choice = 'X'
         );
         oRadio = findViewById(R.id.oRadio);
+        oRadio.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         oRadio.setOnClickListener(v ->
                 choice = '0'
         );
@@ -152,7 +197,68 @@ public class TicTacToe extends AppCompatActivity {
         enableButtons(false);
     }
 
-    private void resetBoard() {
+    @SuppressWarnings("unchecked")
+    private void getValuesFromBundle(Bundle savedInstanceState) {
+        counters = new Counters();
+        counters.setMatrixFromArray(savedInstanceState.getCharArray("cells"));
+        populateCells();
+        counters.setCounters0(savedInstanceState.getIntArray("counters0"));
+        counters.setCountersX(savedInstanceState.getIntArray("countersX"));
+        isAi = savedInstanceState.getBoolean("isAi");
+        aITurn = savedInstanceState.getBoolean("isAiTurn");
+        choice = savedInstanceState.getChar("choice");
+        String[] v = savedInstanceState.getStringArray("victories");
+        victories = Arrays.copyOf(v, v.length);
+        counters.setNumOfTurns(savedInstanceState.getInt("numOfTurns"));
+        if (counters.getNumOfTurns()>0)
+        {
+            resetButtons(false, false, GRAY_2);
+            enableButtons(true);
+            compRadio.setChecked(isAi);
+            humanRadio.setChecked(!isAi);
+            oRadio.setChecked(choice == '0');
+            xRadio.setChecked(choice == 'X');
+            enableRadios(false, false);
+            colorButtons(!victories[0].equals("dr"));
+        }
+    }
+
+    private void populateCells() {
+        b00.setText(String.valueOf(counters.getMatrix()[0][0]));
+        b01.setText(String.valueOf(counters.getMatrix()[0][1]));
+        b02.setText(String.valueOf(counters.getMatrix()[0][2]));
+        b10.setText(String.valueOf(counters.getMatrix()[1][0]));
+        b11.setText(String.valueOf(counters.getMatrix()[1][1]));
+        b12.setText(String.valueOf(counters.getMatrix()[1][2]));
+        b20.setText(String.valueOf(counters.getMatrix()[2][0]));
+        b21.setText(String.valueOf(counters.getMatrix()[2][1]));
+        b22.setText(String.valueOf(counters.getMatrix()[2][2]));
+    }
+
+    private void setupClickHandler() {
+        RelativeLayout relativeLayout = findViewById(R.id.mainRelativeLayout);
+        clickHandler = new ClickHandler(findViewById(R.id.numbersLayout), findViewById(R.id.revert), findViewById(R.id.hintLayout)) {
+            @Override
+            protected void colorCellsForHints() {
+            }
+
+            @Override
+            protected void updateCellRevertValue(Cell previous) {
+            }
+
+            @Override
+            protected void updateCellNewValue(boolean isPreviousExists) {
+            }
+
+            @Override
+            protected void handleChronometer(boolean isPaused) {
+            }
+        };
+
+        clickHandler.setupMenuLayout(relativeLayout, this);
+    }
+
+    public void resetBoard() {
         clearFields();
         colorButtons(false);
         counters = new Counters();
@@ -199,8 +305,8 @@ public class TicTacToe extends AppCompatActivity {
         counters.setSign(c);
 
         victories = checkVictory();
-        colorButtons(true);
 
+        colorButtons(true);
         choice = choice == 'X'? '0': 'X';
         if (isAi && aITurn && victories[0].equals(""))
         {
@@ -209,29 +315,17 @@ public class TicTacToe extends AppCompatActivity {
     }
 
     private void setFields(Button b0, Button b1, Button b2, boolean isVictory) {
-        int cellColor, textColor;
-
         if (isVictory)
         {
-            cellColor = ContextCompat.getColor(this, R.color.colorPrimary);
-            textColor = Color.WHITE;
             enableButtons(false);
         }
-        else
-        {
-            cellColor = ContextCompat.getColor(this, R.color.green1);
-            textColor = ContextCompat.getColor(this, R.color.lightBlack);
-        }
-        setFields(cellColor, textColor, b0, b1, b2);
+        setFields(isVictory, b0, b1, b2);
     }
 
-    private void setFields(int cellColor, int textColor, Button b0, Button b1, Button b2) {
-        b0.setBackgroundColor(cellColor);
-        b0.setTextColor(textColor);
-        b1.setBackgroundColor(cellColor);
-        b1.setTextColor(textColor);
-        b2.setBackgroundColor(cellColor);
-        b2.setTextColor(textColor);
+    private void setFields(boolean isVictory, Button b0, Button b1, Button b2) {
+        b0.setSelected(isVictory);
+        b1.setSelected(isVictory);
+        b2.setSelected(isVictory);
     }
 
     private String[] checkVictory() {

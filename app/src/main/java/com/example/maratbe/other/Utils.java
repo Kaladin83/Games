@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import io.alterac.blurkit.BlurLayout;
 
-public class Utils {
+public class Utils implements Constants{
 
     public static Drawable createBorder(int radius, int color, int strokeWidth, int strokeColor) {
         GradientDrawable gd;
@@ -114,5 +114,13 @@ public class Utils {
         }
         timeButton.setSelected(!timeButton.isSelected());
         return pauseOffset;
+    }
+
+    public static float getRegularFontSize() {
+        return MainActivity.getCurrentTheme().getFontSize();
+    }
+
+    public static float getTitleFontSize() {
+        return MainActivity.getCurrentTheme().getFontSize() + FONT_SIZE_TITLE;
     }
 }

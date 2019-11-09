@@ -10,25 +10,30 @@
     <color name="lightBlue2">#deebfc</color>
     <color name="lightBlue3">#EFF1FA</color>
     <color name="white">#FCF9F9</color>
-    <color name="red1">#FF262C</color>
+    <color name="red1">#F71E24</color>
     <color name="red2">#FF6669</color>
     <color name="red3">#F8DBDB</color>
     <color name="red4">#FCF2F2</color>
     <color name="lightRedTransparent">#FCF3F3</color>
 <!--    <color name="yellow1">#FD5C1B</color>-->
     <color name="yellow2">#FDFDD1</color>
-    <color name="yellow3">#E2FC9B</color>
-    <color name="orange1">#FD5C1B</color>
+    <color name="yellow1">#FDFDD1</color>
+    <color name="yellow3">#FFFFE2</color>
+    <color name="orange1">#FFA12B</color>
     <color name="orange2">#F8C8B4</color>
-    <color name="gray">#CCC7C5</color>
-    <color name="green1">#3C972A</color>
-    <color name="green2">#56BB40</color>
-    <color name="green3">#BFD4FFBB</color>
+    <color name="gray1">#C4C2C1</color>
+    <color name="gray2">#CCC7C5</color>
+    <color name="green1">#3F9934</color>
+    <color name="green2">#44AC33</color>
+    <color name="green3">#BFB9F397</color>
+    <color name="green4">#BFD4FFBB</color>
     <color name="greenTransparent">#F0F8E8</color>
     <color name="blue1">#3401CF</color>
     <color name="blue2">#328DBD</color>
     <color name="blueTransparent">#EFF8F8</color>
     <color name="transparent">#003401CF</color>
     <color name="cell_text_color">?attr/sudoku_cell_text</color>
+    <color name="color">#F5F3F3</color>
+
 <!--    <item name="cell_text_color" type="color" color="?attr/sudoku_cell_text"/>-->
 </resources>

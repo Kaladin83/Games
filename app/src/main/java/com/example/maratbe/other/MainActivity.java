@@ -29,7 +29,7 @@ import kotlin.Unit;
 
 public class MainActivity extends AppCompatActivity implements Constants{
 
-    private static int screenWidth, screenHeight, logicalDensity, toolbarHeight;
+    private static int screenWidth, screenHeight, logicalDensity;
 
     private static List<Theme> themes = new ArrayList<>();
 
@@ -57,11 +57,6 @@ public class MainActivity extends AppCompatActivity implements Constants{
         return screenWidth;
     }
 
-    public static int getToolbarHeight()
-    {
-        return toolbarHeight;
-    }
-
     public static int getLogicalDensity()
     {
         return logicalDensity;
@@ -74,6 +69,14 @@ public class MainActivity extends AppCompatActivity implements Constants{
     public static Theme getCurrentTheme()
     {
         return currentTheme;
+    }
+
+    public static List<Theme> getThemes() {
+        return themes;
+    }
+
+    public static void setThemes(List<Theme> themes) {
+        MainActivity.themes = themes;
     }
 
     @Override
@@ -108,20 +111,22 @@ public class MainActivity extends AppCompatActivity implements Constants{
         TextView sudokuTxt = findViewById(R.id.sudokuTxt);
         TextView ticTxt = findViewById(R.id.tictactoeTxt);
 
-        kakuroTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
-        sudokuTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
-        ticTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentTheme.getFontSize() + FONT_SIZE_TITLE);
+        kakuroTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        sudokuTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        ticTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
     }
 
     private void setThemes() {
+        themes.clear();
         themes.add(new Theme("Summer heat",R.style.SummerHeat,
-                "Summer heat dialog", R.style.SummerHeatDialog, 23));
+                "Summer heat dialog", R.style.SummerHeatDialog, 24));
         themes.add(new Theme("Spring Blossom",R.style.SpringBlossom,
-                "Spring Blossom dialog", R.style.SpringBlossomDialog, 17));
+                "Spring Blossom dialog", R.style.SpringBlossomDialog, 19));
     }
 
     private void setCurrentTheme() {
         sp = new MySharedPreferences(this);
+        //sp.clearTheme();
         currentTheme = sp.getCurrentTheme();
         if (currentTheme == null)
         {
@@ -145,6 +150,5 @@ public class MainActivity extends AppCompatActivity implements Constants{
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels - navigationBarHeight;
         logicalDensity = (int) metrics.density;
-        toolbarHeight = (int)getResources().getDimension(R.dimen.tool_bar);
     }
 }

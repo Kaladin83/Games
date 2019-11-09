@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <stroke android:width="1px" android:color="@color/lightBlack" />
+            <corners android:radius="0dp" />
+            <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
+        </shape>
+    </item>
+
+    <item android:width="20dp" android:height="20dp" android:gravity="fill_vertical|right" android:right="10dp">
+        <bitmap android:src="@drawable/img_down_arrow_green" />
+    </item>
+
+</layer-list>

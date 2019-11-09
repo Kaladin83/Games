@@ -56,7 +56,7 @@ android {
     }
     sourceSets {
         main {
-            res.srcDirs = ['src/main/res', 'src/main/res/layouts/activities', 'src/main/res/layouts/dialogs', 'src/main/res/layouts/common']
+            res.srcDirs = ['src/main/res', 'src/main/res/layouts/activities', 'src/main/res/layouts/dialogs', 'src/main/res/layouts/common', 'src/main/res/layouts/customs']
         }
     }
 }

@@ -6,11 +6,8 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp"
-        android:textStyle="bold"
+        style="@style/DialogTitleTextStyle"
         android:id="@+id/nameToSave"
-        android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:labelFor="@+id/saveNameEdit"
@@ -19,6 +16,8 @@
     <EditText
         android:id="@+id/saveNameEdit"
         android:inputType="textVisiblePassword"
+        android:fontFamily="@font/news_cycle"
+        android:textSize="18sp"
         android:autofillHints="@string/save_name_hint"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp"
@@ -27,46 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/lightBlack"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/cancelButton"
-            android:padding="5dp"
-            android:textAllCaps="false"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textSize="@dimen/buttonTextSize"
-            android:text="@string/cancel_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textColor="@color/blue2"
-            android:layout_height="wrap_content"/>
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/lightBlack" />
-        <Button
-            android:id="@+id/saveButton"
-            android:focusable="false"
-            android:padding="5dp"
-            android:textAllCaps="false"
-            android:textColor="@color/blue2"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textSize="@dimen/buttonTextSize"
-            android:text="@string/save_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
+    <include layout="@layout/dialog_2_buttons_layout"/>
 
 </LinearLayout>
