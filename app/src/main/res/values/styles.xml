@@ -20,6 +20,7 @@
         <item name="android:fontFamily">@font/bonzai</item>
         <item name="android:textColorHighlight">@color/red1</item>
         <item name="android:dropDownSpinnerStyle">@style/SpinnerStyleRed</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
 
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
@@ -102,14 +103,21 @@
 
     <style name="SpinnerStyleRed" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/md_spinner_red</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="SpinnerStyleGreen" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/md_spinner_green</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/news_cycle</item>
     </style>
 
-    <style name="SpinnerDropDownItemAppTheme" parent="android:Widget.DropDownItem.Spinner">
-        <item name="android:checkMark">@drawable/img_down_arrow_red</item>
+    <style name="SpinnerDropDownItemAppTheme" parent="android:Widget.ListView.DropDown">
+<!--        <item name="android:background">@drawable/md_spinner_item</item>-->
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/news_cycle</item>
+        <item name="android:divider">#d1d1d1</item>
+        <item name="android:dividerHeight">0.5dp</item>
     </style>
 
     <style name="MenuTextStyle">

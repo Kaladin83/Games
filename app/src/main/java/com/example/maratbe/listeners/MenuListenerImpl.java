@@ -223,6 +223,10 @@ public class MenuListenerImpl implements Constants, MenuListener {
         loadButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         loadButton.setOnClickListener(v -> dialog.dismiss());
 
+        listOfStrings.add("String number 1");
+        listOfStrings.add("Saved game number 2");
+        listOfStrings.add("Kvazemodo");
+        listOfStrings.add("I love mmy kids");
         populateLoadFields(listOfStrings, titleTxt, bodyTxt, spinner, loadButton);
         dialog.show();
     }
@@ -246,8 +250,8 @@ public class MenuListenerImpl implements Constants, MenuListener {
 
     private void loadSpinner(List<String> listOfNames, Spinner spinner) {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_item, listOfNames);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.spinner_item_layout, listOfNames);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_item_layout);
         spinner.setAdapter(dataAdapter);
     }
 
