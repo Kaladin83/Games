@@ -1,9 +1,11 @@
 <resources>
 
     <style name="SummerHeat" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/red2</item>
         <item name="colorPrimaryDark">@color/red1</item>
         <item name="colorAccent">@color/red2</item>
+        <item name="colorSecondary">@color/red3</item>
+        <item name="android:textColorSecondary">@color/red4</item>
 
         <item name="controls_background_selected">@color/red2</item>
         <item name="controls_background_not_selected">@color/red3</item>
@@ -11,25 +13,29 @@
         <item name="sudoku_cell_selected">@color/red1</item>
         <item name="sudoku_cell_not_selected">@color/lightRedTransparent</item>
         <item name="sudoku_cell_text">@color/orange1</item>
-        <item name="background_hint_color">@color/yellow2</item>
+        <item name="background_hint_color">@color/yellow3</item>
 
+        <item name="colorControlNormal">@color/lightBlack</item>
         <item name="android:windowBackground">@color/lightRedTransparent</item>
         <item name="android:fontFamily">@font/bonzai</item>
+        <item name="android:textColorHighlight">@color/red1</item>
+<!--        <item name="android:dropDownSpinnerStyle">@drawable/md_spinner_red</item>-->
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>
 
-        <item name="android:textColorHighlight">@color/gray</item>
-        <item name="android:textColorHighlightInverse">@color/gray</item>
-        <item name="buttonStyle">@style/ControlButton</item>
+
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
     </style>
 
     <style name="SpringBlossom" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/green2</item>
         <item name="colorPrimaryDark">@color/green1</item>
         <item name="colorAccent">@color/green2</item>
+        <item name="colorSecondary">@color/green3</item>
 
-        <item name="controls_background_selected">@color/green2</item>
-        <item name="controls_background_not_selected">@color/yellow3</item>
+        <item name="controls_background_selected">?attr/colorPrimary</item>
+        <item name="controls_background_not_selected">@color/green3</item>
         <item name="kakuro_cell_background">@color/greenTransparent</item>
         <item name="sudoku_cell_selected">@color/green1</item>
         <item name="sudoku_cell_not_selected">@color/greenTransparent</item>
@@ -37,17 +43,49 @@
         <item name="background_hint_color">@color/blueTransparent</item>
 
         <item name="android:windowBackground">@color/greenTransparent</item>
-        <item name="android:fontFamily">@font/bonzai</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
+        <item name="android:textColorHighlight">@color/green3</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerStyleGreen</item>
 
-        <item name="buttonStyle">@style/ControlButton</item>
+<!--        <item name="buttonStyle">@style/ControlButton</item>-->
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
         <item name="kakuro_cell">@style/KakuroButtonStyle</item>
     </style>
 
+    <style name="SummerHeatDialog">
+        <item name="android:windowBackground">@color/lightRedTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:textColorHighlight">@color/red3</item>
+    </style>
+
+    <style name="SpringBlossomDialog">
+        <item name="android:windowBackground">@color/greenTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:textColorHighlight">@color/green3</item>
+    </style>
+
+    <style name="GameLogoImageStyle" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:clickable">false</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 
     <style name="ControlButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/button_text_color</item>
         <item name="android:fontFamily">@font/kotta_one</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TicTacToeButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
+        <item name="android:background">@drawable/md_tictactoe_buttons</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="SudokuFrameStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
@@ -65,11 +103,68 @@
         <item name="android:clickable">false</item>
     </style>
 
+    <style name="SpinnerStyleRed" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/md_spinner_red</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SpinnerStyleGreen" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/md_spinner_green</item>
+<!--        <item name="android:textSize">24sp</item>-->
+<!--        <item name="android:fontFamily">sans-serif</item>-->
+    </style>
+
+    <style name="SpinnerDropDownItemStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAlignment">inherit</item>
+        <item name="android:text">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+
+    <style name="SpinnerItemStyle">
+<!--        <item name="android:background">@color/white</item>-->
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAlignment">inherit</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+
     <style name="MenuTextStyle">
         <item name="android:clickable">false</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/lightBlack</item>
         <item name="android:layout_marginBottom">7dp</item>
+    </style>
+
+    <style name="DialogTitleTextStyle">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">2dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <style name="DialogBodyTextStyle">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lightBlack</item>
+    </style>
+
+    <style name="DialogButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@color/white</item>
+        <item name="android:padding">0dp</item>
+<!--        <item name="android:textAllCaps">false</item>-->
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
 </resources>
