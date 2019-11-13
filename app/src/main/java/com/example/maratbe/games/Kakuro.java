@@ -56,13 +56,9 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(MainActivity.getCurrentTheme().getThemeId());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kakuro);
         initColorMap();
-        findViewById(R.id.timeBtn).setVisibility(View.VISIBLE);
-        findViewById(R.id.chronometer).setVisibility(View.VISIBLE);
-        findViewById(R.id.startGameBtn).setVisibility(View.GONE);
         timeButton = findViewById(R.id.timeBtn);
         timeButton.setOnClickListener(v ->
                 clickHandler.onTimeButtonClicked(v.isSelected())

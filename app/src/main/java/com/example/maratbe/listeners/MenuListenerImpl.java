@@ -100,7 +100,8 @@ public class MenuListenerImpl implements Constants, MenuListener {
         }
         else
         {
-            sudoku.resetBoard(true);
+            sudoku.createBoard();
+           // sudoku.buildGui(null, true);
         }
     }
 
@@ -258,10 +259,15 @@ public class MenuListenerImpl implements Constants, MenuListener {
     }
 
     private void loadSpinner(List<String> listOfNames, Spinner spinner) {
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context,
+//                R.layout.spinner_item_layout, listOfNames);
+//        dataAdapter.setDropDownViewResource(R.layout.spinner_item_layout);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_item, listOfNames);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
+//        spinner.setBackground(Utils.createBorder(15, Color.TRANSPARENT, 1, Color.BLACK));
+        //android.R.layout.simple_spinner_dropdown_item
     }
 
     private void setTheme() {

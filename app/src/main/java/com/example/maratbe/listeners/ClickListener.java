@@ -13,6 +13,4 @@ public interface ClickListener {
     void onMenuButtonClicked();
 
     void onTimeButtonClicked(boolean isPaused);
-
-    void onVictory();
 }

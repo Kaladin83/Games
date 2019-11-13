@@ -15,7 +15,6 @@
         android:id="@+id/levelRadioGroup"
         android:gravity="center"
         android:layout_marginHorizontal="35dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:orientation="horizontal">
 

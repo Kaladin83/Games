@@ -11,8 +11,4 @@ public interface MenuListener {
     TransferData loadGame();
 
     void backToGame();
-
-    void chooseTheme();
-
-    void onVictory();
 }

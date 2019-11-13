@@ -336,11 +336,6 @@ public abstract class ClickHandler implements Constants, ClickListener {
     }
 
     @Override
-    public void onVictory() {
-        menuHandler.showVictoryDialog();
-    }
-
-    @Override
     public void onTimeButtonClicked(boolean isPaused) {
         handleChronometer(isPaused);
     }
