@@ -1,5 +1,6 @@
 package com.example.maratbe.listeners;
 
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -7,13 +8,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.maratbe.dataBase.dto.TransferData;
 import com.example.maratbe.domain.Cell;
 import com.example.maratbe.domain.Coordinates;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
+import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Stack;
@@ -31,8 +34,11 @@ public abstract class ClickHandler implements Constants, ClickListener {
     private Stack<Cell> turns = new Stack<>();
     private ArrayList<Cell> listOfCells = new ArrayList<>();
     private HashMap<String, Button> numbersMap = new HashMap<>();
+    private int[][] hintMatrix = new int[0][0];
     private boolean hintPressed = false;
     private MenuHandler menuHandler;
+    private long timeToAdd = 0;
+    private int hintMatrixSize, sudokuLevel;
 
     protected ClickHandler(TableLayout numberLayout, Button revertButton, RelativeLayout hintLayout) {
         this.numberLayout = numberLayout;
@@ -107,10 +113,52 @@ public abstract class ClickHandler implements Constants, ClickListener {
         turns = listOfTurns.stream().collect(Collectors.toCollection(Stack::new));
     }
 
+    public long getTimeToAdd() {
+        return timeToAdd;
+    }
+
+    public void setTimeToAdd(long timeToAdd) {
+        this.timeToAdd = timeToAdd;
+    }
+
+    public void setMatrixSize(int size)
+    {
+        hintMatrixSize = size;
+        hintMatrix = new int[hintMatrixSize][hintMatrixSize];
+    }
+
+    public int[][] getMatrix()
+    {
+        return hintMatrix;
+    }
+
+    public void setMatrix(int[][] matrix)
+    {
+        hintMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
+    }
+
+    public int getSudokuLevel() {
+        return sudokuLevel;
+    }
+
+    public void setSudokuLevel(int sudokuLevel) {
+        this.sudokuLevel = sudokuLevel;
+    }
+
+    public String getPreviousNumber() {
+        return previousNumber;
+    }
+
+    public void setPreviousNumber(String previousNumber) {
+        this.previousNumber = previousNumber;
+        numbersMap.get(previousNumber).setSelected(true);
+    }
+
     public void resetHandler()
     {
         updatePreviousControl();
         setHintPressed(false);
+        hintTextView.setText(String.valueOf(NUMBER_OF_HINTS));
         numbersMap.get("revert").setSelected(false);
         chosenNumber = "";
         previousNumber = "";
@@ -125,9 +173,31 @@ public abstract class ClickHandler implements Constants, ClickListener {
         menuHandler = new MenuHandler(relativeLayout, numberLayout, gameInstance) {
             @Override
             public void saveGame(MenuListener menuListener) {
-                menuListener.saveGame(Collections.singletonList(listOfCells));
+
+                TransferData transferData = populateDataToSave();
+                menuListener.saveGame(transferData);
             }
         };
+    }
+
+    void setFieldsFromTransferData(TransferData loadGame) {
+        resetHandler();
+        Utils.translateListIntoMatrix((ArrayList<Cell>) loadGame.getListOfHints(), hintMatrix);
+        listOfCells = (ArrayList<Cell>) loadGame.getListOfCells();
+        hintTextView.setText(String.valueOf(loadGame.getNumberOfHintsLeft()));
+        timeToAdd = loadGame.getTimeToAdd();
+        sudokuLevel = loadGame.getLevel();
+        menuHandler.setControlButtonsSize();
+    }
+
+    private TransferData populateDataToSave() {
+        TransferData transferData = new TransferData();
+        transferData.setListOfCells(listOfCells);
+        transferData.setListOfHints(Utils.translateMatrixIntoList(hintMatrix, hintMatrixSize));
+        transferData.setNumberOfHintsLeft(Integer.parseInt(hintTextView.getText().toString()));
+        transferData.setTimeToAdd(timeToAdd - SystemClock.elapsedRealtime() );
+        transferData.setLevel(sudokuLevel);
+        return transferData;
     }
 
     public void createControlPanel() {
@@ -157,6 +227,7 @@ public abstract class ClickHandler implements Constants, ClickListener {
 
         hintButton = (Button) hintLayout.getChildAt(0);
         hintTextView = (TextView) hintLayout.getChildAt(1);
+        hintTextView.setText(String.valueOf(NUMBER_OF_HINTS));
         hintButton.setOnClickListener(this::onLayoutControlClicked);
         hintTextView.setOnClickListener(this::onLayoutControlClicked);
     }

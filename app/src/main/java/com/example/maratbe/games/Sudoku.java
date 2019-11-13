@@ -8,8 +8,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.Chronometer;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -26,7 +26,6 @@ import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.Utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -44,14 +43,21 @@ public class Sudoku extends AppCompatActivity implements Constants {
 
     private int conflictNumber = 0, yIndex = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE, numOfHints;
     private int SUDOKU_CELL = 0;
-    private long pauseOffset = 0, timeToAdd = 0;
+    private long pauseOffset = 0;
     private int[][] matrix = new int[9][9];
-    private int[][] hintMatrix = new int[9][9];
     int[] newCoordinatesToCompare = new int[]{-1, -1, -1, -1};
 
     private ClickHandler clickHandler;
 
     private String prevConflict = "No Conflict";
+
+    public ClickHandler getClickHandler() {
+        return clickHandler;
+    }
+
+    public void setClickHandler(ClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         timeButton.setOnClickListener(v ->
                 clickHandler.onTimeButtonClicked(v.isSelected())
         );
-        buildGui(savedInstanceState);
+        buildGui(savedInstanceState, false);
         TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
                 clickHandler.onMenuButtonClicked()
@@ -98,7 +104,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("listOfCells", clickHandler.getListOfCells());
         outState.putParcelableArrayList("turns", clickHandler.getTurns());
-        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(hintMatrix, NUMBER_OF_COLS));
+        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(clickHandler.getMatrix(), NUMBER_OF_COLS));
         outState.putParcelable("currentCell", clickHandler.getCurrentCell());
         outState.putParcelable("previousCell", clickHandler.getPreviousCell());
         outState.putInt("numOfHints", clickHandler.getNumberOfHints());
@@ -106,6 +112,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
         outState.putBoolean("isTimePressed", timeButton.isSelected());
         outState.putLong("timeToAdd", chronometer.getBase() - SystemClock.elapsedRealtime());
         outState.putLong("pauseOffset", pauseOffset);
+        outState.putString("controlChosen", clickHandler.getPreviousNumber());
     }
 
     private void setupClickHandler() {
@@ -154,6 +161,8 @@ public class Sudoku extends AppCompatActivity implements Constants {
         };
 
         clickHandler.createControlPanel();
+        clickHandler.setMatrixSize(NUMBER_OF_COLS);
+        clickHandler.setSudokuLevel(difficultyStart);
         clickHandler.setupMenuLayout(relativeLayout, this);
     }
 
@@ -163,16 +172,12 @@ public class Sudoku extends AppCompatActivity implements Constants {
             chronometer.setBase(SystemClock.elapsedRealtime());
             clickHandler.resetHandler();
         }
+
         setDifficulty(getStartDifficulty(), getRangeDifficulty(), false);
         populateBoard(clearBoard);
-        fillUpHintMatrix();
+        clickHandler.setMatrix(matrix);
         deleteValues();
         populateListOfCells();
-//        if (checkForVictory())
-//        {
-//
-//            colorGrid();
-//        }
     }
 
     private int getStartDifficulty() {
@@ -269,21 +274,51 @@ public class Sudoku extends AppCompatActivity implements Constants {
         }
     }
 
-    private void buildGui(Bundle savedInstanceState) {
+    public void buildGui(Bundle savedInstanceState, boolean isLoadedFromDb) {
         setVisibilityToTimeViews();
         sudokuBoard = findViewById(R.id.sudokuBoard);
-        setupClickHandler();
+        chronometer = findViewById(R.id.chronometer);
+        if (isLoadedFromDb)
+        {
+            sudokuBoard.removeAllViews();
+        }
+        else
+        {
+            setupClickHandler();
+        }
+
         createBoard();
         setRadios();
         if (savedInstanceState != null) {
             getValuesFromBundle(savedInstanceState);
-        } else {
+        }
+        else if(isLoadedFromDb){
+            setRadios(clickHandler.getSudokuLevel());
+            iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE);
+        }
+        else {
             resetBoard(false);
         }
-        chronometer = findViewById(R.id.chronometer);
-        chronometer.setBase(chronometer.getBase()+timeToAdd);
+
+        startChronometer();
+    }
+
+    private void setRadios(int sudokuLevel) {
+        switch (sudokuLevel)
+        {
+            case DIFFICULTY_START_EASY:
+                easyRadio.setChecked(true); break;
+            case DIFFICULTY_START_MODERATE:
+                moderateRadio.setChecked(true); break;
+                default: hardRadio.setChecked(true);
+        }
+    }
+
+    private void startChronometer() {
+        chronometer.setBase(chronometer.getBase()+ clickHandler.getTimeToAdd());
         chronometer.start();
         timeButton.setSelected(true);
+        clickHandler.setTimeToAdd(chronometer.getBase());
     }
 
     private void setVisibilityToTimeViews() {
@@ -295,16 +330,17 @@ public class Sudoku extends AppCompatActivity implements Constants {
     @SuppressWarnings("unchecked")
     private void getValuesFromBundle(Bundle savedInstanceState) {
         clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
-        timeToAdd = (long) savedInstanceState.get("timeToAdd");
+        clickHandler.setTimeToAdd((long) savedInstanceState.get("timeToAdd"));
         timeButton.setSelected((boolean) savedInstanceState.get("isTimePressed"));
         pauseOffset = (long) savedInstanceState.get("pauseOffset");
         clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
         clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
         clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
         clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
-        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
+        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), clickHandler.getMatrix());
         iterateTableView(FUNCTION_READ_LIST_FROM_SAVED_INSTANCE);
         clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
+        clickHandler.setPreviousNumber((String) savedInstanceState.get("controlChosen"));
     }
 
     private void setRadios() {
@@ -511,14 +547,13 @@ public class Sudoku extends AppCompatActivity implements Constants {
         button.setOnClickListener(v ->
                 clickHandler.onCellClick((String) v.getTag()));
         fillUpTempMatrix(c.getPartRow(), c.getPartCol(), c.getX(), c.getY(), 0);
-      //  Button.setBackgroundColor(WHITE);
         clickHandler.getListOfCells().stream().filter(c1 -> c1.getCoordinates().equals(c)).
                 forEach(c1 -> populateBoard(button, c1));
     }
 
     private void populateBoard(Button button , Cell c) {
         button.setText(c.getValue().get(c.getValue().size() - 1) == 0? "": String.valueOf(c.getValue().get(c.getValue().size() - 1)));
-       // Button.setActivated(c.getColor() != Color.BLACK);
+        colorFrame(c.getCoordinates(), false, c.isEnabled());
         Coordinates c1 = c.getCoordinates();
         fillUpTempMatrix(c1.getPartRow(), c1.getPartCol(), c1.getX(), c1.getY(), c.getValue().get(c.getValue().size() - 1));
         if (clickHandler.getCurrentCell() != null && clickHandler.getCurrentCell().isEnabled() &&
@@ -827,11 +862,7 @@ public class Sudoku extends AppCompatActivity implements Constants {
     {
         int x = partColumn * 3 + j;
         int y = partRow * 3 + i;
-        return String.valueOf(hintMatrix[y][x]);
-    }
-
-    private void fillUpHintMatrix() {
-        hintMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
+        return String.valueOf(clickHandler.getMatrix()[y][x]);
     }
 
     private void colorFrame(Coordinates coordinates, boolean selected, boolean activated) {

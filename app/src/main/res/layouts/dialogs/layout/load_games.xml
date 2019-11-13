@@ -20,9 +20,10 @@
         android:id="@+id/loadSpinner"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
-    <include layout="@layout/dialog_2_buttons_layout"/>
+    <include layout="@layout/dialog_2_buttons_template"/>
 
 </LinearLayout>

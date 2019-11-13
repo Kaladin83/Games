@@ -31,16 +31,23 @@
     <string name="name_to_load_body">""</string>
     <string name="name_to_load_title">Please choose a game to load</string>
     <string name="theme_title">Please choose a theme</string>
-    <string name="victory_title">Hooray!!! You have made it!</string>
     <string name="victory_body">Do you want to start a new game?</string>
+    <string name="hi_there">He there,</string>
+    <string name="game_exists_body">The name you have entered already exists.\nWould you lke to override it or rename it?</string>
     <string name="save_name_hint">game name</string>
     <string name="save_button">Save</string>
     <string name="choose_button">Choose</string>
     <string name="load_button">Load</string>
     <string name="cancel_button">Cancel</string>
+    <string name="ok">Ok</string>
     <string name="return_button">No, thanks</string>
     <string name="restart_button">let\'s go!</string>
     <string name="sorry">We are sorry,</string>
+    <string name="something_went_wrong">Something went wrong, please try again.</string>
+    <string name="override_button">Override</string>
+    <string name="rename_button">Rename</string>
+    <string name="well_done">Well done!</string>
     <string name="no_loaded_games">There are no saved games yet...</string>
+    <string name="loaded_successfully">The game was Loaded successfully!!!</string>
     <string name="number_of_hints">5</string>
 </resources>

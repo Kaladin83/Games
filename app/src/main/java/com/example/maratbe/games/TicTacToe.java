@@ -84,7 +84,7 @@ public class TicTacToe extends AppCompatActivity implements Constants {
         if (counters.getNumOfTurns() == 0)
         {
             rollTurn();
-            resetButtons(false, false, GRAY_2);
+            resetButtons(false, false, GRAY_1);
             if (aITurn && isAi)
             {
                 aiMove(choice);
@@ -212,7 +212,7 @@ public class TicTacToe extends AppCompatActivity implements Constants {
         counters.setNumOfTurns(savedInstanceState.getInt("numOfTurns"));
         if (counters.getNumOfTurns()>0)
         {
-            resetButtons(false, false, GRAY_2);
+            resetButtons(false, false, GRAY_1);
             enableButtons(true);
             compRadio.setChecked(isAi);
             humanRadio.setChecked(!isAi);

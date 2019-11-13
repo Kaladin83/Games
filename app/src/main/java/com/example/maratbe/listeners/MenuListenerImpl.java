@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maratbe.dataBase.DataLayer;
 import com.example.maratbe.dataBase.MySharedPreferences;
+import com.example.maratbe.dataBase.dto.SavedGame;
+import com.example.maratbe.dataBase.dto.TransferData;
 import com.example.maratbe.domain.Theme;
 import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
@@ -30,27 +33,33 @@ import com.example.maratbe.other.MainActivity;
 import com.example.maratbe.other.ThemeAdapter;
 import com.example.maratbe.other.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuListenerImpl implements Constants, MenuListener {
     private Dialog dialog;
     private Context context;
     private static Tasks task;
-    private List<String> listOfStrings;
+    private List<String> listOfStrings = new ArrayList<>();
     private Kakuro kakuro;
     private Sudoku sudoku;
     private TicTacToe ticTacToe;
     private ThemeAdapter themeAdapter;
     private final String AUTOSAVE = "Autosave";
+    private Object gameInstance;
+    private String game;
+    Spinner spinner;
+    private TransferData transferData = new TransferData();
 
     private enum Tasks{
-        FETCH_NAMES, FETCH_DATA
+        FETCH_NAMES, SAVE_DATA, FETCH_DATA, IS_NAME_EXISTS
     }
 
     MenuListenerImpl(MenuHandler menuHandler, Object gameInstance)
     {
+        this.gameInstance = gameInstance;
         setMenuListener(menuHandler);
-        getContext(gameInstance);
+        getContext();
     }
 
     private void setMenuListener(MenuHandler menuHandler) {
@@ -58,21 +67,24 @@ public class MenuListenerImpl implements Constants, MenuListener {
 
     }
 
-    private void getContext(Object gameInstance) {
+    private void getContext() {
         if (gameInstance instanceof Kakuro)
         {
             kakuro = (Kakuro)gameInstance;
             context = kakuro;
+            game = KAKURO;
         }
         else if (gameInstance instanceof Sudoku)
         {
             sudoku = (Sudoku)gameInstance;
             context = sudoku;
+            game = SUDOKU;
         }
         else
         {
             ticTacToe = (TicTacToe)gameInstance;
             context = ticTacToe;
+            game = TIC_TAC_TOE;
         }
     }
 
@@ -94,7 +106,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void saveGame(List<Object> list) {
+    public void saveGame(TransferData transferData) {
 //        if (gameInstance instanceof Kakuro)
 //        {
 //            //Kakuro kakuro = (Kakuro) gameInstance;
@@ -128,17 +140,25 @@ public class MenuListenerImpl implements Constants, MenuListener {
         saveButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
 
         cancelButton.setOnClickListener(view -> dialog.dismiss());
-        saveButton.setOnClickListener(view -> saveData());
+        saveButton.setOnClickListener(view -> saveData(transferData, editText.getText().toString()));
         dialog.show();
     }
 
-    private void saveData() {
+    private void saveData(TransferData transferData, String nameToSave) {
+        dialog.dismiss();
+        if (!nameToSave.equals(""))
+        {
+            transferData.setChosenName(nameToSave);
+            task = Tasks.IS_NAME_EXISTS;
+            new AsyncTaskAgent().execute(transferData, nameToSave);
+        }
     }
 
     @Override
-    public void loadGame() {
+    public TransferData loadGame() {
         task = Tasks.FETCH_NAMES;
-        new AsyncTaskAgent().execute(KAKURO);
+        new AsyncTaskAgent().execute();
+        return transferData;
     }
 
     @Override
@@ -178,28 +198,10 @@ public class MenuListenerImpl implements Constants, MenuListener {
 
     @Override
     public void onVictory() {
-        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
-        dialog.setContentView(R.layout.victory);
-
-        TextView title = dialog.findViewById(R.id.victoryTitle);
-        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
-        TextView body = dialog.findViewById(R.id.victoryBody);
-        body.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
-
-        Button returnButton = dialog.findViewById(R.id.firstButton);
-        Button startNewButton = dialog.findViewById(R.id.secondButton);
-
-        returnButton.setText(context.getString(R.string.return_button));
-        returnButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
-        startNewButton.setText(context.getString(R.string.restart_button));
-        startNewButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
-
-        returnButton.setOnClickListener(v -> {
-            dialog.dismiss();
-            restart();
-        });
-        startNewButton.setOnClickListener(v ->{startNewGame(); dialog.dismiss();});
-        dialog.show();
+        Button[] buttons = build2ButtonsMessageDialog(R.string.well_done, R.string.victory_body,
+                R.string.return_button, R.string.restart_button);
+        buttons[0].setOnClickListener(v ->{restart(); dialog.dismiss();});
+        buttons[1].setOnClickListener(v ->{startNewGame(); dialog.dismiss();});
     }
 
 
@@ -211,7 +213,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
         titleTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
         TextView bodyTxt = dialog.findViewById(R.id.nameToLoadBody);
         bodyTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
-        Spinner spinner = dialog.findViewById(R.id.loadSpinner);
+        spinner = dialog.findViewById(R.id.loadSpinner);
 
         Button cancelButton = dialog.findViewById(R.id.firstButton);
         Button loadButton = dialog.findViewById(R.id.secondButton);
@@ -221,7 +223,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         loadButton.setText(context.getString(R.string.load_button));
         loadButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
-        loadButton.setOnClickListener(v -> dialog.dismiss());
+        loadButton.setOnClickListener(v -> loadSelectedGame());
 
         listOfStrings.add("String number 1");
         listOfStrings.add("Saved game number 2");
@@ -229,6 +231,13 @@ public class MenuListenerImpl implements Constants, MenuListener {
         listOfStrings.add("I love mmy kids");
         populateLoadFields(listOfStrings, titleTxt, bodyTxt, spinner, loadButton);
         dialog.show();
+    }
+
+    private void loadSelectedGame() {
+        dialog.dismiss();
+        String selectedName = spinner.getSelectedItem().toString();
+        task = Tasks.FETCH_DATA;
+        new AsyncTaskAgent().execute(selectedName);
     }
 
     private void populateLoadFields(List<String> listOfNames, TextView title, TextView body, Spinner spinner, Button loadButton) {
@@ -250,8 +259,8 @@ public class MenuListenerImpl implements Constants, MenuListener {
 
     private void loadSpinner(List<String> listOfNames, Spinner spinner) {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context,
-                R.layout.spinner_item_layout, listOfNames);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_item_layout);
+                android.R.layout.simple_spinner_item, listOfNames);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
 
@@ -270,29 +279,133 @@ public class MenuListenerImpl implements Constants, MenuListener {
         context.startActivity(i);
     }
 
+    private void handleNameValidation(boolean isNameExists, TransferData dataToSave) {
+        if(isNameExists)
+        {
+            Button[] buttons = build2ButtonsMessageDialog(R.string.hi_there, R.string.game_exists_body,
+                    R.string.rename_button, R.string.override_button);
+            buttons[0].setOnClickListener(v -> dialog.dismiss());
+            buttons[1].setOnClickListener(v -> saveTheGame(dataToSave));
+        }
+        else {
+            saveTheGame(dataToSave);
+        }
+    }
+
+    private void saveTheGame(TransferData dataToSave) {
+        task = Tasks.SAVE_DATA;
+        new AsyncTaskAgent().execute(dataToSave);
+        dialog.dismiss();
+    }
+
+
+    private TransferData handleLoadedData(TransferData loadedData) {
+        if (loadedData.getListOfHints().size() > 0)
+        {
+            Button button = build1ButtonMessageDialog(R.string.well_done, R.string.loaded_successfully,
+                    R.string.ok);
+            button.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (gameInstance instanceof Sudoku)
+                {
+                    sudoku.getClickHandler().setFieldsFromTransferData(loadedData);
+                    sudoku.buildGui(null, true);
+                }
+                else
+                {
+                    kakuro.getClickHandler().setFieldsFromTransferData(loadedData);
+                    kakuro.buildGui(null, true);
+                }
+
+                });
+        }
+        else
+        {
+            Button button = build1ButtonMessageDialog(R.string.sorry, R.string.something_went_wrong,
+                    R.string.ok);
+            button.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        return loadedData;
+    }
+
+    private Button build1ButtonMessageDialog(int titleTxt, int bodyTxt, int button1Txt) {
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
+        dialog.setContentView(R.layout.dialog_1_button_message_template);
+
+        TextView title = dialog.findViewById(R.id.messageTemplateTitle);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        title.setText(dialog.getContext().getString(titleTxt));
+        TextView body = dialog.findViewById(R.id.messageTemplateBody);
+        body.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        body.setText(dialog.getContext().getString(bodyTxt));
+
+        Button firstButton = dialog.findViewById(R.id.firstButton);
+
+        firstButton.setText(context.getString(button1Txt));
+        firstButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        dialog.show();
+        return firstButton;
+    }
+    private Button[] build2ButtonsMessageDialog(int titleTxt, int bodyTxt, int button1Txt, int button2Txt) {
+        dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
+        dialog.setContentView(R.layout.dialog_2_buttons_message_template);
+
+        TextView title = dialog.findViewById(R.id.messageTemplateTitle);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getTitleFontSize());
+        title.setText(dialog.getContext().getString(titleTxt));
+        TextView body = dialog.findViewById(R.id.messageTemplateBody);
+        body.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        body.setText(dialog.getContext().getString(bodyTxt));
+
+        Button firstButton = dialog.findViewById(R.id.firstButton);
+        Button secondButton = dialog.findViewById(R.id.secondButton);
+
+        firstButton.setText(context.getString(button1Txt));
+        firstButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+        secondButton.setText(context.getString(button2Txt));
+        secondButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
+
+        dialog.show();
+        return new Button[]{firstButton, secondButton};
+    }
 
     private class AsyncTaskAgent extends AsyncTask<Object, Void, Void> {
-
+        private boolean isNameExists = false;
         @Override
         protected Void doInBackground(Object... object) {
             DataLayer dl = new DataLayer();
             switch (task)
             {
+                case IS_NAME_EXISTS:
+                    transferData = (TransferData) object[0];
+                    isNameExists = dl.isNameExists(game, (String)object[1]); break;
                 case FETCH_NAMES:
-                    String game = (String) object[0];
                     listOfStrings = dl.loadAllGameNames(game); break;
+                case SAVE_DATA:
+                    dl.saveGame(game, (TransferData)object[0]); break;
+                case FETCH_DATA:
+                    transferData = dl.loadGame(game, (String)object[0]); break;
             }
 
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             switch (task)
             {
+                case IS_NAME_EXISTS:
+                    handleNameValidation(isNameExists, transferData);break;
                 case FETCH_NAMES:
                     loadListOfNames(); break;
+                case SAVE_DATA:
+                    dialog.dismiss();break;
+                case FETCH_DATA:
+                    handleLoadedData(transferData);break;
             }
         }
     }

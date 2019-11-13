@@ -1,16 +1,11 @@
 package com.example.maratbe.dataBase;
 
-import android.os.AsyncTask;
-
-import com.example.maratbe.dataBase.dto.KakuroTable;
-import com.example.maratbe.dataBase.dto.SavedGames;
-import com.example.maratbe.domain.Cell;
+import com.example.maratbe.dataBase.dto.SavedGame;
+import com.example.maratbe.dataBase.dto.TransferData;
 import com.example.maratbe.other.Constants;
 import com.example.maratbe.other.MainActivity;
-import com.example.maratbe.translators.KakuroTranslator;
+import com.example.maratbe.translators.ObjectTranslator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DataLayer implements Constants {
@@ -18,33 +13,27 @@ public class DataLayer implements Constants {
 
 
     public boolean isNameExists(String name, String gameName){
+        //db.savedGamesDao().deleteAllGames();
         Integer id = db.savedGamesDao().getId(name, gameName);
-        return id != null;
+        return id != 0;
     }
 
-    public void saveKakuroGame(String name, HashMap<String, Cell> mapOfCells)
-    {
-        db.savedGamesDao().saveGame(new SavedGames(name, KAKURO));
-        int id = db.savedGamesDao().getId(name, KAKURO);
-        ArrayList<KakuroTable> lisOfCells = new ArrayList<>();
-        KakuroTranslator translator = new KakuroTranslator();
-        for (HashMap.Entry<String, Cell> entry : mapOfCells.entrySet())
-        {
-            lisOfCells.add(translator.daoObjectFromKakuroCell(entry.getValue(), id));
-        }
-        db.kakuroDao().insertAll(lisOfCells);
+    public void saveGame(String game, TransferData transferData){
+        ObjectTranslator translator = new ObjectTranslator();
+        SavedGame savedGame = translator.savedGameFromTransferData(transferData, game);
+        db.savedGamesDao().saveGame(savedGame);
     }
 
-    public HashMap<String, Cell> loadKakuroGame(String name)
+    public TransferData loadGame(String game, String nameToLoad)
     {
-        HashMap<String, Cell> mapOfCells = new HashMap<>();
-        List<KakuroTable> listOfKakuroCells = db.kakuroDao().getAllCellsByName(name);
-        KakuroTranslator translator = new KakuroTranslator();
-        for (KakuroTable kakuroCell: listOfKakuroCells)
+        TransferData data = new TransferData();
+        SavedGame savedGame = db.savedGamesDao().getAllCellsByName(game ,nameToLoad);
+        if (savedGame != null)
         {
-            mapOfCells.put("r"+kakuroCell.getX()+"b"+kakuroCell.getY() ,translator.cellFromDaoObject(kakuroCell));
+            ObjectTranslator translator = new ObjectTranslator();
+            data = translator.transferDataFromSavedGame(savedGame);
         }
-        return mapOfCells;
+        return data;
     }
 
     public List<String> loadAllGameNames(String game)

@@ -19,7 +19,7 @@
         <item name="android:windowBackground">@color/lightRedTransparent</item>
         <item name="android:fontFamily">@font/bonzai</item>
         <item name="android:textColorHighlight">@color/red1</item>
-        <item name="android:dropDownSpinnerStyle">@style/SpinnerStyleRed</item>
+        <item name="android:spinnerItemStyle">@style/spinnerItemStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
 
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
@@ -43,7 +43,8 @@
         <item name="android:windowBackground">@color/greenTransparent</item>
         <item name="android:fontFamily">@font/kotta_one</item>
         <item name="android:textColorHighlight">@color/green3</item>
-        <item name="android:dropDownSpinnerStyle">@style/SpinnerStyleGreen</item>
+        <item name="android:spinnerItemStyle">@style/spinnerItemStyle</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
 
 <!--        <item name="buttonStyle">@style/ControlButton</item>-->
         <item name="sudoku_cell">@style/SudokuFrameStyle</item>
@@ -95,29 +96,36 @@
     <style name="KakuroButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:background">@drawable/md_kakuro_cell_selector</item>
         <item name="android:textColor">@color/blue1</item>
+        <item name="android:fontFamily">@font/kotta_one</item>
     </style>
 
     <style name="MenuButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:clickable">false</item>
     </style>
 
-    <style name="SpinnerStyleRed" parent="android:Widget.Spinner">
-        <item name="android:background">@drawable/md_spinner_red</item>
+    <style name="spinnerItemStyle">
+        <item name="android:singleLine">true</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAlignment">inherit</item>
+        <item name="android:paddingHorizontal">15dp</item>
     </style>
 
-    <style name="SpinnerStyleGreen" parent="android:Widget.Spinner">
+    <style name="SpinnerStyleGreen">
         <item name="android:background">@drawable/md_spinner_green</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:fontFamily">@font/news_cycle</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="SpinnerDropDownItemAppTheme" parent="android:Widget.ListView.DropDown">
-<!--        <item name="android:background">@drawable/md_spinner_item</item>-->
+    <style name="SpinnerDropDownItemAppTheme">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAlignment">inherit</item>
+        <item name="android:singleLine">true</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/news_cycle</item>
-        <item name="android:divider">#d1d1d1</item>
-        <item name="android:dividerHeight">0.5dp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:paddingHorizontal">15dp</item>
     </style>
 
     <style name="MenuTextStyle">

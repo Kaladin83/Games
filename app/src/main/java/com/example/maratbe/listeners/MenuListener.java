@@ -1,14 +1,14 @@
 package com.example.maratbe.listeners;
 
-import java.util.List;
+import com.example.maratbe.dataBase.dto.TransferData;
 
 public interface MenuListener {
 
     void startNewGame();
 
-    void saveGame(List<Object> list);
+    void saveGame(TransferData transferData);
 
-    void loadGame();
+    TransferData loadGame();
 
     void backToGame();
 

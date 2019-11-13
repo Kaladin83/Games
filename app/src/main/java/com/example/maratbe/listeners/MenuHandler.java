@@ -1,6 +1,5 @@
 package com.example.maratbe.listeners;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.TypedValue;
@@ -14,6 +13,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.maratbe.dataBase.dto.TransferData;
 import com.example.maratbe.games.R;
 import com.example.maratbe.games.TicTacToe;
 import com.example.maratbe.other.Constants;
@@ -82,7 +82,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
       return gameInstance instanceof TicTacToe? 2*125: 3*125;
     }
 
-    private void setControlButtonsSize() {
+    void setControlButtonsSize() {
         for (int i = 0; i < numberLayout.getChildCount(); i++)
         {
             TableRow row = (TableRow) numberLayout.getChildAt(i);
@@ -139,7 +139,7 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         {
             case R.id.startButton: menuListener.startNewGame(); break;
             case R.id.saveButton: saveGame(menuListener); break;
-            case R.id.loadButton: menuListener.loadGame(); break;
+            case R.id.loadButton: handleLoadedData(); break;
             case R.id.themeButton: menuListener.chooseTheme(); break;
             default: menuListener.backToGame(); break;
         }
@@ -148,6 +148,10 @@ public abstract class MenuHandler implements Constants, OnClickListener {
         {
             setControlButtonsSize();
         }
+    }
+
+    private void handleLoadedData() {
+        menuListener.loadGame();
     }
 
     public abstract void saveGame(MenuListener menuListener);

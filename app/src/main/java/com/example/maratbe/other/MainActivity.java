@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements Constants{
         themes.add(new Theme("Summer heat",R.style.SummerHeat,
                 "Summer heat dialog", R.style.SummerHeatDialog, 24));
         themes.add(new Theme("Spring Blossom",R.style.SpringBlossom,
-                "Spring Blossom dialog", R.style.SpringBlossomDialog, 19));
+                "Spring Blossom dialog", R.style.SpringBlossomDialog, 18));
     }
 
     private void setCurrentTheme() {

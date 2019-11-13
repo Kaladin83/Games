@@ -38,14 +38,21 @@ public class Kakuro extends AppCompatActivity implements Constants {
     private Coordinates cor = new Coordinates();
     private int conflictNumber = 0, difficultyStart = DIFFICULTY_START_MODERATE, difficultyRange = DIFFICULTY_RANGE_MODERATE;
     private int emptyCells = 0;
-    private long pauseOffset, timeToAdd;
+    private long pauseOffset;
 
     private int MAX_COLS = 10, KAKURO_CELL;
     private int[][] matrix = new int[MAX_COLS][MAX_COLS];
-    private int[][] hintMatrix = new int[MAX_COLS][MAX_COLS];
     private ClickHandler clickHandler;
 
     private String prevConflict = "No Conflict";
+
+    public ClickHandler getClickHandler() {
+        return clickHandler;
+    }
+
+    public void setClickHandler(ClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         timeButton.setOnClickListener(v ->
                 clickHandler.onTimeButtonClicked(v.isSelected())
         );
-        buildGui(savedInstanceState);
+        buildGui(savedInstanceState, false);
 
         TextView moreBtn = findViewById(R.id.moreBtn);
         moreBtn.setOnClickListener(v ->
@@ -83,7 +90,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("listOfCells", clickHandler.getListOfCells());
         outState.putParcelableArrayList("turns", clickHandler.getTurns());
-        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(hintMatrix, MAX_COLS));
+        outState.putParcelableArrayList("hintMatrix", Utils.translateMatrixIntoList(clickHandler.getMatrix(), MAX_COLS));
         outState.putParcelable("currentCell", clickHandler.getCurrentCell());
         outState.putParcelable("previousCell", clickHandler.getPreviousCell());
         outState.putInt("numOfHints", clickHandler.getNumberOfHints());
@@ -91,6 +98,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
         outState.putBoolean("isTimePressed", timeButton.isSelected());
         outState.putLong("timeToAdd", chronometer.getBase() - SystemClock.elapsedRealtime());
         outState.putLong("pauseOffset", pauseOffset);
+        outState.putString("controlChosen", clickHandler.getPreviousNumber());
     }
 
     private void setupClickHandler() {
@@ -128,6 +136,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
             }
         };
         clickHandler.setupMenuLayout(relativeLayout, this);
+        clickHandler.setMatrixSize(MAX_COLS);
         clickHandler.createControlPanel();
     }
 
@@ -156,11 +165,13 @@ public class Kakuro extends AppCompatActivity implements Constants {
     }
 
     public void resetBoard() {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        clickHandler.resetHandler();
         initGlobalVariables();
         outlineBoard();
         createBoard(false);
         populateButtons();
-        fillUpHintMatrix();
+        clickHandler.setMatrix(matrix);
         populateSums();
         deleteValues();
     }
@@ -399,18 +410,31 @@ public class Kakuro extends AppCompatActivity implements Constants {
         }
     }
 
-    private void buildGui(Bundle savedInstanceState) {
+    public void buildGui(Bundle savedInstanceState, boolean isLoadedFromDb) {
         kakuroBoard = findViewById(R.id.kakuroBoard);
+        chronometer = findViewById(R.id.chronometer);
         KAKURO_CELL = calculateCellSize(MainActivity.getScreenWidth());
-        setupClickHandler();
-        if (savedInstanceState != null) {
-            getValuesFromBundle(savedInstanceState);
-        } else {
-            resetBoard();
+
+        if (!isLoadedFromDb)
+        {
+            setupClickHandler();
         }
 
-        chronometer = findViewById(R.id.chronometer);
-        chronometer.setBase(chronometer.getBase()+timeToAdd);
+        if (savedInstanceState != null) {
+            getValuesFromBundle(savedInstanceState);
+        }
+        else if (isLoadedFromDb)
+        {
+            createBoard(true);
+        }
+        else {
+            resetBoard();
+        }
+        setChronometer();
+    }
+
+    private void setChronometer() {
+        chronometer.setBase(chronometer.getBase()+clickHandler.getTimeToAdd());
         chronometer.start();
         timeButton.setSelected(true);
     }
@@ -418,17 +442,18 @@ public class Kakuro extends AppCompatActivity implements Constants {
     @SuppressWarnings("unchecked")
     private void getValuesFromBundle(Bundle savedInstanceState) {
         clickHandler.setNumberOfHints((int) savedInstanceState.get("numOfHints"));
-        timeToAdd = (long) savedInstanceState.get("timeToAdd");
+        clickHandler.setTimeToAdd((long) savedInstanceState.get("timeToAdd"));
         timeButton.setSelected((boolean) savedInstanceState.get("isTimePressed"));
         pauseOffset = (long) savedInstanceState.get("pauseOffset");
         clickHandler.setCurrentCell((Cell) savedInstanceState.get("currentCell"));
         clickHandler.setPreviousCell((Cell) savedInstanceState.get("previousCell"));
         clickHandler.setListOfCells((ArrayList<Cell>) savedInstanceState.get("listOfCells"));
         clickHandler.setTurns((ArrayList<Cell>) savedInstanceState.get("turns"));
-        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), hintMatrix);
+        Utils.translateListIntoMatrix((ArrayList<Cell>) savedInstanceState.get("hintMatrix"), clickHandler.getMatrix());
 
         createBoard(true);
         clickHandler.setHintPressed((boolean) savedInstanceState.get("isHintPressed"));
+        clickHandler.setPreviousNumber((String) savedInstanceState.get("controlChosen"));
     }
 
     private void initAllNumbers() {
@@ -858,17 +883,7 @@ public class Kakuro extends AppCompatActivity implements Constants {
 
     private String getValueFromHintMatrix(int i, int j)
     {
-        return String.valueOf(hintMatrix[i][j]);
-    }
-
-    private void fillUpHintMatrix() {
-        for(int i = 0; i < NUMBER_OF_COLS; i++)
-        {
-            for(int j = 0; j < NUMBER_OF_COLS; j++)
-            {
-                hintMatrix[i][j] = matrix[i][j];
-            }
-        }
+        return String.valueOf(clickHandler.getMatrix()[i][j]);
     }
 
     private void initColorMap() {
@@ -881,19 +896,5 @@ public class Kakuro extends AppCompatActivity implements Constants {
         numberColors.put("7", BLUE_3);
         numberColors.put("8", ORANGE);
         numberColors.put("9", RED_3);
-    }
-
-    private boolean checkForVictory() {
-        for (int i = 0; i < 9; i++) {
-            int sum = 0;
-            for (int j = 0; j < 9; j++) {
-                sum += matrix[i][j];
-            }
-
-            if (sum != 45) {
-                return false;
-            }
-        }
-        return true;
     }
 }

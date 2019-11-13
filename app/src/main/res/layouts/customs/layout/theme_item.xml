@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/themeName"
-        android:fontFamily="@font/news_cycle"
+        android:fontFamily="sans-serif"
         android:textAlignment="textStart"
         android:textSize="18sp"
         android:clickable="false"

@@ -33,7 +33,7 @@
     <color name="blueTransparent">#EFF8F8</color>
     <color name="transparent">#003401CF</color>
     <color name="cell_text_color">?attr/sudoku_cell_text</color>
-    <color name="color">#F5F3F3</color>
+    <color name="color">#f2efef</color>
 
 <!--    <item name="cell_text_color" type="color" color="?attr/sudoku_cell_text"/>-->
 </resources>
