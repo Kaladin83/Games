@@ -1,17 +1,10 @@
 package com.example.maratbe.other;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.room.Room;
 
 import com.example.maratbe.dataBase.DataBase;
 import com.example.maratbe.dataBase.MySharedPreferences;
@@ -20,12 +13,13 @@ import com.example.maratbe.games.Kakuro;
 import com.example.maratbe.games.R;
 import com.example.maratbe.games.Sudoku;
 import com.example.maratbe.games.TicTacToe;
-import com.example.maratbe.listeners.MenuListenerImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.Unit;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity implements Constants{
 
@@ -121,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements Constants{
         themes.add(new Theme("Summer heat",R.style.SummerHeat,
                 "Summer heat dialog", R.style.SummerHeatDialog, 24));
         themes.add(new Theme("Spring Blossom",R.style.SpringBlossom,
-                "Spring Blossom dialog", R.style.SpringBlossomDialog, 18));
+                "Spring Blossom dialog", R.style.SpringBlossomDialog, 17));
     }
 
     private void setCurrentTheme() {

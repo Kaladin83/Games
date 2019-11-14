@@ -13,15 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maratbe.dataBase.DataLayer;
 import com.example.maratbe.dataBase.MySharedPreferences;
-import com.example.maratbe.dataBase.dto.SavedGame;
 import com.example.maratbe.dataBase.dto.TransferData;
 import com.example.maratbe.domain.Theme;
 import com.example.maratbe.games.Kakuro;
@@ -36,6 +30,10 @@ import com.example.maratbe.other.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class MenuListenerImpl implements Constants, MenuListener {
     private Dialog dialog;
     private Context context;
@@ -45,10 +43,9 @@ public class MenuListenerImpl implements Constants, MenuListener {
     private Sudoku sudoku;
     private TicTacToe ticTacToe;
     private ThemeAdapter themeAdapter;
-    private final String AUTOSAVE = "Autosave";
     private Object gameInstance;
     private String game;
-    Spinner spinner;
+    private Spinner spinner;
     private TransferData transferData = new TransferData();
 
     private enum Tasks{
@@ -107,14 +104,6 @@ public class MenuListenerImpl implements Constants, MenuListener {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void saveGame(TransferData transferData) {
-//        if (gameInstance instanceof Kakuro)
-//        {
-//            //Kakuro kakuro = (Kakuro) gameInstance;
-//           // kakuro.setMenuListener(this);
-//            dialog = new Dialog(context);
-//            dialog.setContentView(R.layout.save_game);
-//            dialog.show();
-//        }
         dialog = new Dialog(context, MainActivity.getCurrentTheme().getThemeDialogId());
         dialog.setContentView(R.layout.save_game);
         TextView saveText = dialog.findViewById(R.id.nameToSave);
@@ -225,10 +214,6 @@ public class MenuListenerImpl implements Constants, MenuListener {
         loadButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.getRegularFontSize());
         loadButton.setOnClickListener(v -> loadSelectedGame());
 
-        listOfStrings.add("String number 1");
-        listOfStrings.add("Saved game number 2");
-        listOfStrings.add("Kvazemodo");
-        listOfStrings.add("I love mmy kids");
         populateLoadFields(listOfStrings, titleTxt, bodyTxt, spinner, loadButton);
         dialog.show();
     }
@@ -307,7 +292,7 @@ public class MenuListenerImpl implements Constants, MenuListener {
     }
 
 
-    private TransferData handleLoadedData(TransferData loadedData) {
+    private void handleLoadedData(TransferData loadedData) {
         if (loadedData.getListOfHints().size() > 0)
         {
             Button button = build1ButtonMessageDialog(R.string.well_done, R.string.loaded_successfully,
@@ -333,8 +318,6 @@ public class MenuListenerImpl implements Constants, MenuListener {
                     R.string.ok);
             button.setOnClickListener(v -> dialog.dismiss());
         }
-
-        return loadedData;
     }
 
     private Button build1ButtonMessageDialog(int titleTxt, int bodyTxt, int button1Txt) {

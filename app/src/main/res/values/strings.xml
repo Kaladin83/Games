@@ -49,5 +49,6 @@
     <string name="well_done">Well done!</string>
     <string name="no_loaded_games">There are no saved games yet...</string>
     <string name="loaded_successfully">The game was Loaded successfully!!!</string>
+    <string name="Saved_successfully">The game was Saved successfully!!!</string>
     <string name="number_of_hints">5</string>
 </resources>

@@ -77,4 +77,6 @@ public interface Constants {
 
     int FONT_SIZE_TITLE = 3;
     int FONT_SIZE_INPUT = 1;
+
+    String AUTOSAVE = "Autosave";
 }
