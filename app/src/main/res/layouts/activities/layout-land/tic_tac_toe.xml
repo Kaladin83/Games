@@ -9,13 +9,15 @@
     android:orientation="vertical">
 
     <RadioGroup
-        android:layout_width="250dp"
+        android:layout_width="260dp"
         android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
+        android:layout_toStartOf="@+id/tiTacToeBoard"
+        android:layout_alignTop="@+id/tiTacToeBoard"
         android:id="@+id/aiChoiceLayout"
         android:gravity="center"
+        android:paddingTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_gravity="center"
+        android:layout_marginHorizontal="30dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -37,13 +39,13 @@
     </RadioGroup>
 
     <RadioGroup
-        android:layout_width="250dp"
+        android:layout_width="260dp"
         android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
+        android:layout_toStartOf="@+id/tiTacToeBoard"
         android:layout_below="@+id/aiChoiceLayout"
         android:id="@+id/signChoiceLayout"
         android:gravity="center"
-        android:layout_gravity="center"
+        android:layout_marginHorizontal="30dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -68,9 +70,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="30dp"
         android:id="@+id/tiTacToeBoard">
 
         <TableRow android:gravity="center">
@@ -152,11 +155,13 @@
         </TableRow>
     </TableLayout>
 
-    <include layout="@layout/time_and_menu"
+    <include
+        layout="@layout/time_and_menu"
         android:layout_width="match_parent"
         android:layout_height="25dp"
+        android:layout_toStartOf="@+id/tiTacToeBoard"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginBottom="22dp" />
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.example.maratbe.domain;
 
+import java.util.Arrays;
+
 public class Counters {
     private char sign = ' ';
     private int i;
@@ -21,6 +23,68 @@ public class Counters {
                 matrix[i][j] = ' ';
             }
         }
+    }
+
+    public void setNumOfTurns(int counter) {
+        this.counter = counter;
+    }
+
+    public void setCountersX(int[] counters)
+    {
+        countersX = Arrays.copyOf(counters, counters.length);
+    }
+
+    public int[] getCountersX()
+    {
+        return countersX;
+    }
+
+    public void setCounters0(int[] counters)
+    {
+        counters0 = Arrays.copyOf(counters, counters.length);
+    }
+
+    public int[] getCounters0()
+    {
+        return counters0;
+    }
+
+    public char[][] getMatrix()
+    {
+        return matrix;
+    }
+
+    public char[] getArrayFromMatrix()
+    {
+        char[] arrayToReturn = new char[9];
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                arrayToReturn[getPosition(i,j)] = matrix[i][j];
+            }
+        }
+        return arrayToReturn;
+    }
+
+    public void setMatrixFromArray(char[] array)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            int[] result = getPosition(i);
+            matrix[result[0]][result[1]] = array[i];
+        }
+    }
+
+    private int[] getPosition(int i) {
+        int[] result = new int[2];
+        result[0] = i / 3;
+        result[1] = i % 3;
+        return result;
+    }
+
+    private int getPosition(int i, int j) {
+        return i * 3 + j;
     }
 
     public void setI(int i) {
