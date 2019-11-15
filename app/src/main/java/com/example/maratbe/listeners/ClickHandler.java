@@ -151,7 +151,10 @@ public abstract class ClickHandler implements Constants, ClickListener {
 
     public void setPreviousNumber(String previousNumber) {
         this.previousNumber = previousNumber;
-        numbersMap.get(previousNumber).setSelected(true);
+        if (!previousNumber.equals(""))
+        {
+            numbersMap.get(previousNumber).setSelected(true);
+        }
     }
 
     public void resetHandler()
@@ -274,8 +277,8 @@ public abstract class ClickHandler implements Constants, ClickListener {
     public void onCellClick(String name) {
         currentCell = getCoordinatesFromList(name);
 
-        if ((currentCell.isEnabled() && (!chosenNumber.equals("")))||
-                (hintPressed && currentCell.getValue().get(currentCell.getValue().size()-1).toString().equals("") )) {
+        if ((currentCell.isEnabled() && (!chosenNumber.equals(""))) ||
+                (hintPressed && currentCell.getValue().get(currentCell.getValue().size()-1).toString().equals("0") )) {
             boolean isPreviousExists = false;
             if (!turns.isEmpty()) {
                 previousCell = turns.get(turns.size()-1);
