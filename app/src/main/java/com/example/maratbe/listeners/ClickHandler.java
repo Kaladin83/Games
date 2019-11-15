@@ -274,7 +274,8 @@ public abstract class ClickHandler implements Constants, ClickListener {
     public void onCellClick(String name) {
         currentCell = getCoordinatesFromList(name);
 
-        if (currentCell.isEnabled() && (!chosenNumber.equals("") || hintPressed)) {
+        if ((currentCell.isEnabled() && (!chosenNumber.equals("")))||
+                (hintPressed && currentCell.getValue().get(currentCell.getValue().size()-1).toString().equals("") )) {
             boolean isPreviousExists = false;
             if (!turns.isEmpty()) {
                 previousCell = turns.get(turns.size()-1);
@@ -285,10 +286,15 @@ public abstract class ClickHandler implements Constants, ClickListener {
             if (hintPressed)
             {
                 updateHints(true);
+                listOfCells.get(currentCell.getIndex()).getValue().add(Integer.parseInt(chosenNumber));
+                chosenNumber = "";
+            }
+            else
+            {
+                listOfCells.get(currentCell.getIndex()).getValue().add(Integer.parseInt(chosenNumber));
             }
 
             currentCell.setColor(BLUE_1);
-            listOfCells.get(currentCell.getIndex()).getValue().add(Integer.parseInt(chosenNumber));
             turns.push(currentCell);
         }
     }
