@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.example.maratbe.games"
         minSdkVersion 26
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,9 +24,14 @@ android {
         exclude 'META-INF/proguard/coroutines.pro'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+//    compileOptions {
+//        sourceCompatibility JavaVersion.
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(16))
+        }
     }
     dexOptions {
         javaMaxHeapSize '4096m'
@@ -39,6 +44,10 @@ android {
         main {
             res.srcDirs = ['src/main/res', 'src/main/res/layouts/activities', 'src/main/res/layouts/dialogs', 'src/main/res/layouts/common', 'src/main/res/layouts/customs', 'src/main/res/layouts/templates']
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_16
+        targetCompatibility JavaVersion.VERSION_16
     }
 }
 
@@ -53,9 +62,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha02'
+    implementation 'com.google.android.material:material:1.10.0-alpha01'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.wang.avi:library:2.1.3'
